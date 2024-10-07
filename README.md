@@ -4,7 +4,7 @@ This is the project work for the datascientest bootcamp DS-Engineer started in S
 
 ## Challenge
 
-[BrisT1D Blood Glucose Prediction Competition](https://www.kaggle.com/competitions/brist1d-blood-glucose-prediction)
+[BrisT1D Blood Glucose Prediction Competition](https://www.kaggle.com/competitions/brist1d)
 
 ## Goal
 
