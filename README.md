@@ -23,6 +23,30 @@ www.kaggle.com/competitions/brist1d/overview/$citation
 
 ## Installation
 
+Make sure you have [pyenv](https://github.com/pyenv/pyenv) installed. You can install it with your favorite package manager.
+
+On Linux with apt:
+```
+$ sudo apt-get install pyenv
+```
+
+On Mac with brew:
+```
+$ brew install pyenv
+```
+
+On Windows with choco:
+```
+$ choco install pyenv-win
+```
+
+The project contains a `.python-version` file that specifies the Python version to use. 
+You can install it with pyenv:
+
+```
+$ pyenv install
+```
+
 There is a makefile that can be used to install the project.
 All make commands are in the Makefile.
 
