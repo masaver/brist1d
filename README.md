@@ -97,6 +97,8 @@ Project Organization
     ├── reports            <- The reports that you'll make during this project as PDF
     │   └── figures        <- Generated graphics and figures to be used in reporting
     │
+    ├── .python-version    <- The Python version to used in the project by pyenv
+    │
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
     │                         generated with `pip freeze > requirements.txt`
     │
