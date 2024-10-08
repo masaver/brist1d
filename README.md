@@ -23,21 +23,22 @@ www.kaggle.com/competitions/brist1d/overview/$citation
 
 ## Installation
 
-Make sure you have [pyenv](https://github.com/pyenv/pyenv) installed. You can install it with your favorite package manager.
+Make sure you have [pyenv](https://github.com/pyenv/pyenv) and `unzip` installed. 
+You can install it with your favorite package manager.
 
 On Linux with apt:
 ```
-$ sudo apt-get install pyenv
+$ sudo apt-get install pyenv unzip
 ```
 
 On Mac with brew:
 ```
-$ brew install pyenv
+$ brew install pyenv unzip
 ```
 
 On Windows with choco:
 ```
-$ choco install pyenv-win
+$ choco install pyenv-win unzip
 ```
 
 The project contains a `.python-version` file that specifies the Python version to use. 
