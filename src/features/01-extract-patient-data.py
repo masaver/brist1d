@@ -168,24 +168,31 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
 
 
 if __name__ == '__main__':
+    print(f'{bcolors.OKGREEN}{get_time()} - Cleanup interim folder{bcolors.ENDC}')
+    print(f'{bcolors.OKGREEN}{"=" * 50}{bcolors.ENDC}')
+    for file in os.listdir(interim_folder):
+        if file.endswith(".csv"):
+            os.remove(os.path.join(interim_folder, file))
+            print(f'{bcolors.OKCYAN}{get_time()} - Delete {file}{bcolors.ENDC}')
+
     print()
     print(f'{bcolors.OKGREEN}{get_time()} - Extracting patient data{bcolors.ENDC}')
     print(f'{bcolors.OKGREEN}{"=" * 50}{bcolors.ENDC}')
-    print()
-    print(f'{bcolors.OKGREEN}{get_time()} - Reading test-data data{bcolors.ENDC}')
+    print(f'{bcolors.OKCYAN}{get_time()} - Loading train.csv{bcolors.ENDC}')
     df = pd.read_csv(os.path.join(src_folder, 'train.csv'), na_values=np.nan, low_memory=False)
     patients = df['p_num'].unique()
-    print(f'{bcolors.OKGREEN}{"-" * 50}{bcolors.ENDC}')
     print(f'{bcolors.OKCYAN}{get_time()} - Found {len(patients)} patients{bcolors.ENDC}')
     print()
 
     print(f'{bcolors.OKGREEN}{get_time()} - Processing patients{bcolors.ENDC}')
     print(f'{bcolors.OKGREEN}{"=" * 50}{bcolors.ENDC}')
-    print()
+
+    df_all = pd.DataFrame()
 
     for patient in patients:
         print(f'{bcolors.OKGREEN}{get_time()} - Processing patient {patient}{bcolors.ENDC}')
-        print(f'{bcolors.OKGREEN}{"-" * 50}{bcolors.ENDC}')
+        print(f'{bcolors.OKCYAN}{"-" * 50}{bcolors.ENDC}')
+
         patient_data = extract_patient_data(df, patient, datetime(2020, 1, 1))
         if patient_data is None:
             print(f'{bcolors.FAIL}{get_time()} - Error: Patient {patient} not found{bcolors.ENDC}')
@@ -194,11 +201,16 @@ if __name__ == '__main__':
         print(f'{bcolors.OKCYAN}{get_time()} - Start date: {patient_data.index.min()}{bcolors.ENDC}')
         print(f'{bcolors.OKCYAN}{get_time()} - End date: {patient_data.index.max()}{bcolors.ENDC}')
         print(f'{bcolors.OKCYAN}{get_time()} - Number of rows: {len(patient_data)}{bcolors.ENDC}')
-
-        print(bcolors.OKCYAN)
-        print(patient_data.describe())
-        print(bcolors.ENDC)
-
-        patient_data.to_csv(os.path.join(interim_folder, f'{patient}.csv'))
-        print(f'{bcolors.OKCYAN}{get_time()} - {patient}.csv stored to interim folder{bcolors.ENDC}')
         print()
+        print(f'{bcolors.OKCYAN}----- Details {patient} -----------------------------------------------{bcolors.ENDC}')
+        print(f'{bcolors.OKCYAN}{patient_data.describe()}{bcolors.ENDC}')
+        print(f'{bcolors.OKCYAN}-----------------------------------------------------------------{bcolors.ENDC}')
+
+        patient_data.to_csv(os.path.join(interim_folder, f'{patient}_train.csv'))
+        print(f'{bcolors.OKCYAN}{get_time()} - {patient}_train.csv stored to interim folder{bcolors.ENDC}')
+        print()
+
+        df_all = pd.concat([df_all, patient_data])
+
+    print(f'{bcolors.OKGREEN}{get_time()} - Save data for all patients into all_train.csv{bcolors.ENDC}')
+    df_all.to_csv(os.path.join(interim_folder, 'all_train.csv'))
