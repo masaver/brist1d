@@ -57,6 +57,11 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     df_patient.set_index("datetime", inplace=True)
     df_patient = df_patient.drop(columns=["date", "time", "id"])
 
+    # get resolution of the data
+    initial_resolution_in_seconds = (df_patient.index[1] - df_patient.index[0]).seconds
+    initial_resolution_in_minutes = initial_resolution_in_seconds / 60
+    initial_resolution = f"{int(initial_resolution_in_minutes)}min"
+
     # change the frequency to 5 minutes
     full_date_range = pd.date_range(start=df_patient.index.min(), end=df_patient.index.max(), freq='5min')
     df_patient = df_patient.reindex(full_date_range)
@@ -65,6 +70,7 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     # drop the id column and add the patient number
     df_patient = df_patient.copy()
     df_patient.loc[:, "p_num"] = patient_num
+    df_patient['initial_resolution'] = initial_resolution
 
     # organize the columns
     parameters = ['bg', 'insulin', 'carbs', 'hr', 'steps', 'cals', 'activity']
@@ -161,7 +167,7 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
             df_patient = df_patient.drop(columns=[f'{parameter}{t_diff}'])
 
     # order the columns
-    new_column_order = ['p_num'] + parameters + ['bg+1:00']
+    new_column_order = ['p_num'] + parameters + ['initial_resolution', 'bg+1:00']
     df_patient = df_patient[new_column_order]
 
     return df_patient
