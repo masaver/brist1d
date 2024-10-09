@@ -46,3 +46,9 @@ reset: .activate
 list: .activate
 	pip list
 .PHONY: list
+
+## Preprocess data
+preprocess: .activate
+	python src/features/01-extract-patient-data.py
+	$(done)
+.PHONY: preprocess
