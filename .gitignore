@@ -163,6 +163,8 @@ cython_debug/
 .vscode/
 
 # data files which are not .zip files
+/data/interim/*
+!/data/interim/.gitkeep
 /data/processed/*
 !/data/processed/.gitkeep
 /data/raw/*

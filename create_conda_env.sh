@@ -17,6 +17,12 @@ pyenv install 3.9.10
 
 Create a virtual environment called myproject-env using Python 3.9.10:
 
+#Stesps to set up py env
+
+#Install via brew
+brew update && brew install pyenv
+
+# install also this extra plug in ?g
 bash
 
 pyenv virtualenv 3.9.10 myproject-env
