@@ -51,3 +51,4 @@ list: .activate
 preprocess: .activate
 	python src/features/01-extract-patient-data.py
 	$(done)
+.PHONY: preprocess
