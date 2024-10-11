@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from ftplib import print_line
 from os.path import dirname
 
 import numpy as np
@@ -26,6 +25,21 @@ interim_folder = os.path.join(script_directory, '..', '..', 'data', 'interim')
 
 def get_time() -> str:
     return datetime.now().strftime("%H:%M:%S")
+
+
+def parse_time_diff(time_diff_str: str) -> timedelta:
+    # get a string in the format of -HH:MM and return a timedelta object
+    is_negative = time_diff_str[0] == '-'
+
+    if time_diff_str[0] in ['+', '-']:
+        time_diff_str = time_diff_str[1:]
+
+    hours, minutes = time_diff_str.split(':')
+    if is_negative:
+        hours = -int(hours)
+        minutes = -int(minutes)
+
+    return timedelta(hours=int(hours), minutes=int(minutes))
 
 
 def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetime) -> pd.DataFrame | None:
@@ -55,7 +69,9 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     df_patient.loc[:, "date"] = assigned_dates
     df_patient.loc[:, "datetime"] = df_patient.apply(lambda row: datetime.combine(row['date'], row['time']), axis=1)
     df_patient.set_index("datetime", inplace=True)
-    df_patient = df_patient.drop(columns=["date", "time", "id"])
+    df_patient = df_patient.drop(columns=["date", "time"])
+    df_patient.to_csv(os.path.join(interim_folder, f'{patient_num}_train_raw.csv'))
+    df_patient = df_patient.drop(columns=["id"])
 
     # get resolution of the data
     initial_resolution_in_seconds = (df_patient.index[1] - df_patient.index[0]).seconds
@@ -66,11 +82,6 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     full_date_range = pd.date_range(start=df_patient.index.min(), end=df_patient.index.max(), freq='5min')
     df_patient = df_patient.reindex(full_date_range)
     df_patient.index.name = "datetime"
-
-    # drop the id column and add the patient number
-    df_patient = df_patient.copy()
-    df_patient.loc[:, "p_num"] = patient_num
-    df_patient['initial_resolution'] = initial_resolution
 
     # organize the columns
     parameters = ['bg', 'insulin', 'carbs', 'hr', 'steps', 'cals', 'activity']
@@ -149,28 +160,36 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
         '-5:55'
     ]
 
+    df_patient_combined_values = df_patient[['p_num'] + [f"{parameter}{time_diffs[0]}" for parameter in parameters] + ['bg+1:00']].copy()
+    df_patient_combined_values = df_patient_combined_values.rename(columns={f"{parameter}{time_diffs[0]}": f"{parameter}" for parameter in parameters})
+    df_patient_combined_values = df_patient_combined_values.reindex(
+        pd.date_range(start=df_patient.index.min() + parse_time_diff(time_diffs[-1]), end=df_patient.index.max(), freq='5min')
+    )
+
     for parameter in parameters:
-        for time_diff_id, t_diff in enumerate(time_diffs):
-            if time_diff_id == 0:
-                df_patient.loc[:, parameter] = df_patient[f'{parameter}-0:00']
-                df_patient = df_patient.drop(columns=[f'{parameter}-0:00'])
-                continue
-            if not df_patient.columns.str.contains(f"{parameter}{t_diff}").any():
+        for time_diff_id, time_diff_str in enumerate(time_diffs):
+            if time_diff_str == '-0:00':
                 continue
 
-            # shift the columns by the time difference and fill the last values with nan
-            df_patient.loc[:, f"{parameter}{t_diff}"] = df_patient[f"{parameter}{t_diff}"].shift(-time_diff_id)
-            df_patient.loc[df_patient.index[-time_diff_id:], f"{parameter}{t_diff}"] = np.nan
+            if not df_patient.columns.str.contains(f"{parameter}{time_diff_str}").any():
+                continue
 
-            # fill the parameter column with the first non-nan value
-            df_patient[parameter] = df_patient[f'{parameter}'].combine_first(df_patient[f'{parameter}{t_diff}'])
-            df_patient = df_patient.drop(columns=[f'{parameter}{t_diff}'])
+            time_diff = parse_time_diff(time_diff_str)
+            values = df_patient[f"{parameter}{time_diff_str}"].copy()
+            values.index = values.index + time_diff
+            df_patient_combined_values[parameter] = df_patient_combined_values[parameter].combine_first(values)
+
+    print(df_patient_combined_values.columns)
 
     # order the columns
-    new_column_order = ['p_num'] + parameters + ['initial_resolution', 'bg+1:00']
-    df_patient = df_patient[new_column_order]
+    column_order = ['p_num'] + parameters + ['bg+1:00']
+    df_patient_combined_values = df_patient_combined_values[column_order]
 
-    return df_patient
+    # set patient number and initial resolution
+    df_patient_combined_values['p_num'] = patient_num
+    df_patient_combined_values['initial_resolution'] = initial_resolution
+
+    return df_patient_combined_values
 
 
 if __name__ == '__main__':
