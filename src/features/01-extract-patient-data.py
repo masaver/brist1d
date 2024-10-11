@@ -69,7 +69,9 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     df_patient.loc[:, "date"] = assigned_dates
     df_patient.loc[:, "datetime"] = df_patient.apply(lambda row: datetime.combine(row['date'], row['time']), axis=1)
     df_patient.set_index("datetime", inplace=True)
-    df_patient = df_patient.drop(columns=["date", "time", "id"])
+    df_patient = df_patient.drop(columns=["date", "time"])
+    df_patient.to_csv(os.path.join(interim_folder, f'{patient_num}_train_raw.csv'))
+    df_patient = df_patient.drop(columns=["id"])
 
     # get resolution of the data
     initial_resolution_in_seconds = (df_patient.index[1] - df_patient.index[0]).seconds
