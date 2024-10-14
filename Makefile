@@ -1,6 +1,8 @@
 .SILENT:
 .PHONY: help
 
+SHELL=/bin/bash
+
 done = printf "\e[32m ✔ Done\e[0m\n\n";
 
 ## This help screen
