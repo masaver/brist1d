@@ -63,13 +63,14 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
             current_date = current_date + timedelta(days=1)
 
         assigned_dates.append(current_date)
+
         last_time = row["time"]
 
     df_patient = df_patient.copy()
     df_patient.loc[:, "date"] = assigned_dates
     df_patient.loc[:, "datetime"] = df_patient.apply(lambda row: datetime.combine(row['date'], row['time']), axis=1)
-    df_patient.set_index("datetime", inplace=True)
-    df_patient = df_patient.drop(columns=["date", "time"])
+    df_patient = df_patient.set_index("datetime")
+    df_patient = df_patient.drop(columns=["date"])
     df_patient.to_csv(os.path.join(interim_folder, f'{patient_num}_train_raw.csv'))
     df_patient = df_patient.drop(columns=["id"])
 
@@ -84,6 +85,7 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     df_patient.index.name = "datetime"
 
     # organize the columns
+    meta_columns = ['p_num']
     parameters = ['bg', 'insulin', 'carbs', 'hr', 'steps', 'cals', 'activity']
     time_diffs = [
         '-0:00',
@@ -159,8 +161,9 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
         '-5:50',
         '-5:55'
     ]
+    target_columns = ['bg+1:00'] if 'bg+1:00' in df_patient.columns else []
 
-    df_patient_combined_values = df_patient[['p_num'] + [f"{parameter}{time_diffs[0]}" for parameter in parameters] + ['bg+1:00']].copy()
+    df_patient_combined_values = df_patient[meta_columns + [f"{parameter}{time_diffs[0]}" for parameter in parameters] + target_columns].copy()
     df_patient_combined_values = df_patient_combined_values.rename(columns={f"{parameter}{time_diffs[0]}": f"{parameter}" for parameter in parameters})
     df_patient_combined_values = df_patient_combined_values.reindex(
         pd.date_range(start=df_patient.index.min() + parse_time_diff(time_diffs[-1]), end=df_patient.index.max(), freq='5min')
@@ -179,15 +182,16 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
             values.index = values.index + time_diff
             df_patient_combined_values[parameter] = df_patient_combined_values[parameter].combine_first(values)
 
-    print(df_patient_combined_values.columns)
-
-    # order the columns
-    column_order = ['p_num'] + parameters + ['bg+1:00']
-    df_patient_combined_values = df_patient_combined_values[column_order]
-
     # set patient number and initial resolution
     df_patient_combined_values['p_num'] = patient_num
     df_patient_combined_values['initial_resolution'] = initial_resolution
+    df_patient_combined_values['days_since_start'] = (df_patient_combined_values.index - df_patient_combined_values.index.min()).days
+    df_patient_combined_values['time'] = df_patient_combined_values.index.time
+
+    # order the columns
+    meta_columns = meta_columns + ['days_since_start', 'time', 'initial_resolution']
+    column_order = meta_columns + parameters + target_columns
+    df_patient_combined_values = df_patient_combined_values[column_order]
 
     return df_patient_combined_values
 
