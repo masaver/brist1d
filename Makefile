@@ -54,3 +54,10 @@ preprocess: .activate
 	python src/features/01-extract-patient-data.py
 	$(done)
 .PHONY: preprocess
+
+## Build documentation
+build-docs: .activate
+	jupyter-book clean  reports/rendering-1
+	jupyter-book build reports/rendering-1
+	$(done)
+.PHONY: doc
