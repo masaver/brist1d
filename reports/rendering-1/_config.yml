@@ -1,8 +1,8 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Rendering 1 - Data exploration, data visualisation and pre-processing report
-author: Grinman, Svetlana; Junghanns, Ralf;
+title: DataScientest Project - Rendering 1
+author: Svetlana Grinman, Ralf Junghanns, Mathias Andres Saver Cortes and Christian Weiland
 logo: logo.png
 
 # Force re-execution of notebooks on each build.

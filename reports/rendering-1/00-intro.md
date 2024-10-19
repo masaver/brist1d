@@ -1,4 +1,4 @@
-# BrisT1D Blood Glucose Prediction Competition
+# DataScientest Project - Brist1D
 
 ## Overview
 
