@@ -1,6 +1,8 @@
 .SILENT:
 .PHONY: help
 
+SHELL=/bin/bash
+
 done = printf "\e[32m ✔ Done\e[0m\n\n";
 
 ## This help screen
@@ -20,7 +22,7 @@ PROJECT = brist1d
 VENV_PATH = .venv
 
 .activate:
-	test -d "$(VENV_PATH)" || python -m venv "$(VENV_PATH)" && source "$(VENV_PATH)/bin/activate"
+	test -d "$(VENV_PATH)" || python -m venv "$(VENV_PATH)"
 
 ## Install
 install:
@@ -32,7 +34,7 @@ install:
 ## Update project
 update: .activate
 	echo "Updating project"
-	pip install --upgrade -r requirements.txt
+	source "$(VENV_PATH)/bin/activate" && pip install --upgrade -r requirements.txt
 	$(done)
 .PHONY: update
 
@@ -44,11 +46,24 @@ reset: .activate
 
 ## List installed packages
 list: .activate
-	pip list
+	source "$(VENV_PATH)/bin/activate" && pip list
 .PHONY: list
 
 ## Preprocess data
 preprocess: .activate
-	python src/features/01-extract-patient-data.py
+	source "$(VENV_PATH)/bin/activate" && python src/features/01-extract-patient-data.py
 	$(done)
 .PHONY: preprocess
+
+## Build documentation
+build-docs: .activate
+	source "$(VENV_PATH)/bin/activate" && jupyter-book clean  reports/rendering-1
+	source "$(VENV_PATH)/bin/activate" && jupyter-book build reports/rendering-1
+	$(done)
+.PHONY: doc
+
+## Deploy documentation
+deploy-docs:
+	rsync -avz --delete reports/rendering-1/_build/html/ ssh-w0190139@w0190139.kasserver.com:/www/htdocs/w0190139/brist1d.junghanns.it/
+	$(done)
+.PHONY: deploy-docs
