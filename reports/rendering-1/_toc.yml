@@ -4,8 +4,16 @@
 format: jb-book
 root: 00-intro
 chapters:
-  - file: 01-context
-  - file: 02-dataset-description
-  - file: 03.00-data-exploration
+  - file: 01.00-context-and-scope
     sections:
-      - file: 03.01-data-consistency
+      - file: 01.01-kaggle-challenge
+      - file: 01.02-diabetes-type-1
+      - file: 01.03-literature-review
+  - file: 02.00-exploratory-data-analysis
+    sections:
+      - file: 02.01-dataset-description-and-structure
+      - file: 02.02-dataset-consistency
+      - file: 02.03-dataset-validation-and-cleaning
+      - file: 02.04-data-correlation
+      - file: 02.05-data-distribution
+      - file: 02.06-preprocessing
