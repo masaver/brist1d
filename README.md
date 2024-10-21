@@ -23,15 +23,16 @@ www.kaggle.com/competitions/brist1d/overview/$citation
 
 ## Installation
 
-Make sure you have [pyenv](https://github.com/pyenv/pyenv) and `unzip` installed. 
+Make sure you have [pyenv](https://github.com/pyenv/pyenv) and `unzip` installed.
 You can install it with your favorite package manager.
 
 On Mac with brew:
+
 ```
 $ brew install pyenv unzip
 ```
 
-The project contains a `.python-version` file that specifies the Python version to use. 
+The project contains a `.python-version` file that specifies the Python version to use.
 You can install it with pyenv:
 
 ```
@@ -77,11 +78,35 @@ To run the preprocessing script, use the following command:
 $ make preprocess
 ```
 
-or 
+or
 
 ```bash
 python src/features/01-extract-patient-data.py
 ```
+
+## Documentation and Reports
+
+The reports can be found in the `reports` folder.   
+We use [juptyer-book](https://jupyterbook.org/intro.html) to create the reports.
+
+To build the reports, run the following command:
+
+```bash
+$ make build-docs
+```
+
+or
+
+```bash
+$ jupyter-book clean reports/rendering-1
+$ jupyter-book build reports/rendering-1
+```
+
+To view the reports, open the `ìndex.html` file from the build folder in your browser.
+
+`reports/rendering-1/_build/html/index.html`
+
+
 
 Project Organization
 ------------
