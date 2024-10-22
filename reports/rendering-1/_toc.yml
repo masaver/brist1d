@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: 00-intro/intro
+root: intro
 chapters:
   - file: 01-context-and-scope/00-intro
     sections:
@@ -22,3 +22,4 @@ chapters:
       - file: 02-exploratory-data-analysis/03-patient-timeseries-overview
       - file: 02-exploratory-data-analysis/04-data-distribution
       - file: 02-exploratory-data-analysis/05-data-correlation
+  - file: bibliography
