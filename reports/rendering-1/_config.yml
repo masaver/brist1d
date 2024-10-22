@@ -17,6 +17,7 @@ html:
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: auto
+  timeout: 600
 
 # Define the name of the latex output file for PDF builds
 #latex:
