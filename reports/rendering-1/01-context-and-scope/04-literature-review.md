@@ -16,5 +16,3 @@ A meta study by [1] provides a comprehensive overview of the existing research o
 - Future research directions
 - The study concludes that blood glucose prediction is a challenging task due to the complex nature of the underlying physiological processes and the high variability of blood glucose levels.
 
-
-

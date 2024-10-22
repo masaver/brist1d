@@ -40,7 +40,7 @@ Long-term complications of unmanaged diabetes include:
 
 ## Blood Glucose Fluctuation over a day
 
-![img.png](../figures/bg-fluctuation.png)
+![img.png](../../figures/bg-fluctuation.png)
 
 ##  
 
@@ -50,7 +50,7 @@ https://www.diabetes.co.uk/diabetes_care/blood-sugar-level-ranges.html
 
 - add the table here in markdown -
 
-![img.png](../figures/recommended-target-blood-glucose-levels.png)
+![img.png](../../figures/recommended-target-blood-glucose-levels.png)
 
 ## Factors Influencing Blood Glucose Levels
 
