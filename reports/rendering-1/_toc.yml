@@ -2,18 +2,23 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: 00-intro
+root: 00-intro/intro
 chapters:
-  - file: 01.00-context-and-scope
+  - file: 01-context-and-scope/00-intro
     sections:
-      - file: 01.01-kaggle-challenge
-      - file: 01.02-diabetes-type-1
-      - file: 01.03-literature-review
-  - file: 02.00-exploratory-data-analysis
+      - file: 01-context-and-scope/01-kaggle-competition
+      - file: 01-context-and-scope/02-diabetes-type-1
+      - file: 01-context-and-scope/03-factors-influencing-blood-glucose-levels
+      - file: 01-context-and-scope/04-literature-review
+  - file: 02-exploratory-data-analysis/00-intro
     sections:
-      - file: 02.01-dataset-description-and-structure
-      - file: 02.02-dataset-consistency
-      - file: 02.03-dataset-validation-and-cleaning
-      - file: 02.04-data-correlation
-      - file: 02.05-data-distribution
-      - file: 02.06-preprocessing
+      - file: 02-exploratory-data-analysis/01-dataset-description-and-structure
+      - file: 02-exploratory-data-analysis/02.00-dataset-consistency-and-validation
+        sections:
+          - file: 02-exploratory-data-analysis/02.01-quality-control-and-assurance
+          - file: 02-exploratory-data-analysis/02.02-outliers-and-anomalies
+          - file: 02-exploratory-data-analysis/02.03-missing-values
+          - file: 02-exploratory-data-analysis/02.04-further-dataset-difficulties-and-biases
+      - file: 02-exploratory-data-analysis/03-patient-timeseries-overview
+      - file: 02-exploratory-data-analysis/04-data-distribution
+      - file: 02-exploratory-data-analysis/05-data-correlation
