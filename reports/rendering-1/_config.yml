@@ -3,7 +3,15 @@
 
 title: DataScientest Project - Rendering 1
 author: Svetlana Grinman, Ralf Junghanns, Mathias Andres Saver Cortes and Christian Weiland
+copyright: 2024
 logo: logo.png
+
+html:
+  extra_footer: |
+    <p style="text-align:right">
+      Version:<strong> __VERSION__ </strong> ❤️<br>
+      Last change: <strong>__DATE__</strong> at <strong>__TIME__</strong>
+    </p
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
