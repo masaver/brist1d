@@ -54,12 +54,13 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     current_date = start_date
     assigned_dates = []
     last_time = None
+    ids_with_date_change = ['p11_4307']
 
     for i, row in df_patient.iterrows():
         if last_time is None:
             last_time = row["time"]
 
-        if row["time"] < last_time:
+        if row["time"] < last_time or row["id"] in ids_with_date_change:
             current_date = current_date + timedelta(days=1)
 
         assigned_dates.append(current_date)

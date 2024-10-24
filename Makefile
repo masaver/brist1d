@@ -68,6 +68,6 @@ deploy-docs:
 	sed "s/__VERSION__/$(shell git describe --tags --always --dirty=+)/g; s/__DATE__/$(shell git log -1 --format=%cd --date=format:%Y-%m-%d)/g; s/__TIME__/$(shell git log -1 --format=%cd --date=format:%H:%M)/g" reports/rendering-1/_config.yml > reports/rendering-1/_config.yml.tmp
 	source "$(VENV_PATH)/bin/activate" && jupyter-book build reports/rendering-1 --config reports/rendering-1/_config.yml.tmp
 	rm reports/rendering-1/_config.yml.tmp
-	rsync -avz --delete reports/rendering-1/_build/html/ ssh-w0190139@w0190139.kasserver.com:/www/htdocs/w0190139/brist1d.junghanns.it/
+	rsync -avz --delete --exclude={'.htaccess','.htpasswd'} reports/rendering-1/_build/html/ ssh-w0190139@w0190139.kasserver.com:/www/htdocs/w0190139/brist1d.junghanns.it/
 	$(done)
 .PHONY: deploy-docs
