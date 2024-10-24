@@ -8,8 +8,7 @@ chapters:
     sections:
       - file: 01-context-and-scope/01-kaggle-competition
       - file: 01-context-and-scope/02-diabetes-type-1
-      - file: 01-context-and-scope/03-factors-influencing-blood-glucose-levels
-      - file: 01-context-and-scope/04-literature-review
+      - file: 01-context-and-scope/03-literature-review
   - file: 02-exploratory-data-analysis/00-intro
     sections:
       - file: 02-exploratory-data-analysis/01-dataset-description-and-structure

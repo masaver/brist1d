@@ -38,23 +38,29 @@ Long-term complications of unmanaged diabetes include:
 * Eye damage
 * Foot damage
 
-## Blood Glucose Fluctuation over a day
+## Blood Glucose Fluctuation over a day {cite}`Wikipedia_2024_diabetes`
 
 ![img.png](../../figures/bg-fluctuation.png)
 
-##  
+## Target Blood Glucose Levels and Ranges in Type 1 Diabetes {cite}`Seery_2022`
 
-## Target Blood Glucose Levels and Ranges in Type 1 Diabetes
-
-https://www.diabetes.co.uk/diabetes_care/blood-sugar-level-ranges.html
-
-- add the table here in markdown -
+The following figure shows the recommended target blood glucose levels for people with type 1 diabetes.
+For diabetes type 1, the target range is usually between 4.0 and 7.0 mmol/L before meals and less than 9 mmol/L 90 minutes after meals.
 
 ![img.png](../../figures/recommended-target-blood-glucose-levels.png)
 
-## Factors Influencing Blood Glucose Levels
+## Factors Influencing Blood Glucose Levels {cite}`Brown_2022`
 
---- Mathias had a nice slide on this
+In the following figure, we see a list of factors that can influence blood glucose levels. 
+The arrows above show the general effect these factors seem to have on blood glucose.
+A sideways arrow indicates a neutral effect.
+
+![img.png](../../figures/factors-that-affect-blood-glucose-levels.png)
+
+Not every individual will respond in the same way (and even within the same person, you may be different from day-to-day or over time).
+Certain factors may also apply more to type 1 vs. type 2 diabetes (or the other way around).
+Factors with up and down arrows are of course the most challenging.
+The best way to see how a factor affects you is through personal experience.
 
 ## The importance of Blood Glucose Prediction
 
