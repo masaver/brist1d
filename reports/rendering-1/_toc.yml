@@ -22,8 +22,8 @@ chapters:
       - file: 02-exploratory-data-analysis/04-data-distribution
       - file: 02-exploratory-data-analysis/05-data-correlation
       - file: 02-exploratory-data-analysis/06-eda-conclusions
-  - file: 03-preprocessing-and-modelling/03.00-modelling
+  - file: 03-preprocessing-and-modelling/00-intro
     sections:
-      - file: 03-preprocessing-and-modelling/03.01-preprocessing-steps
-      - file: 03-preprocessing-and-modelling/03.02-preliminary-modelling
+      - file: 03-preprocessing-and-modelling/01-preprocessing-steps
+      - file: 03-preprocessing-and-modelling/02-preliminary-modelling
   - file: bibliography
