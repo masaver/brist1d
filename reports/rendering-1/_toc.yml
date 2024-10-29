@@ -17,3 +17,8 @@ chapters:
       - file: 02.04-data-correlation
       - file: 02.05-data-distribution
       - file: 02.06-preprocessing
+      - file: 02.07-eda-conlusions
+  - file: 03.00-modelling
+    sections:
+      - file: 03.01-preprocessing-steps
+      - file: 03.02-preliminary-modelling
