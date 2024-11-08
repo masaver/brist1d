@@ -83,10 +83,10 @@ How = Literal['mean', 'median', 'zero', 'interpolate']
 
 
 class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
-    _parameter: Parameter
-    _hows: list[How]
+    _parameter: Parameter | str
+    _hows: list[How] | list[str]
 
-    def __init__(self, parameter: Parameter, how: How | list[How] = 'median'):
+    def __init__(self, parameter: Parameter | str, how: How | list[How] | str | list[str] = 'median'):
         if not parameter in parameters:
             raise ValueError(f'parameter must be one of {parameters}')
 
