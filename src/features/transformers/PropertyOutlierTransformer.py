@@ -44,6 +44,6 @@ class PropertyOutlierTransformer(BaseEstimator, TransformerMixin):
         X = X.copy()
         columns = self._get_affection_columns(X)
         for column in columns:
-            X[column] = X[column].apply(lambda x: self._fill_outlier(x, X, column) if self._filter_function(x) else None)
+            X[column] = X[column].apply(lambda x: self._fill_outlier(x, X, column) if self._filter_function(x) else x)
 
         return X

@@ -4,11 +4,17 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 class DropColumnsTransformer(BaseEstimator, TransformerMixin):
     _columns_to_delete: list[str]
-    _starts_with: str | None
+    _starts_with: list[str] | str | None
 
-    def __init__(self, columns_to_delete: list | None = None, starts_with: str | None = None):
+    def __init__(self, columns_to_delete: list | None = None, starts_with: list[str] | str | None = None):
         self._columns_to_delete = columns_to_delete if columns_to_delete is not None else []
-        self._starts_with = starts_with
+        self._starts_with = []
+
+        if starts_with is not None:
+            if type(starts_with) == str:
+                self._starts_with = [starts_with]
+            if type(starts_with) == list:
+                self._starts_with = starts_with
 
     def fit(self, X: pd.DataFrame, y=None):
         return self
@@ -19,8 +25,9 @@ class DropColumnsTransformer(BaseEstimator, TransformerMixin):
             if col in self._columns_to_delete:
                 columns_to_delete.append(col)
                 continue
-            if self._starts_with is not None and col.startswith(self._starts_with):
+            if any([col.startswith(starts_with) for starts_with in self._starts_with]):
                 columns_to_delete.append(col)
+                continue
 
         return columns_to_delete
 
