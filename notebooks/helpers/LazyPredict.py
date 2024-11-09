@@ -28,5 +28,8 @@ regressors_whitelist = [
 ]
 
 
-def get_lazy_regressor(verbose=0, ignore_warnings=True, custom_metric=None):
-    return LazyRegressor(verbose=0, ignore_warnings=True, custom_metric=None, regressors=regressors_whitelist)
+def get_lazy_regressor(verbose=0, ignore_warnings=True, custom_metric=None, exclude: list[str]=None):
+    whitelist = regressors_whitelist
+    if exclude:
+        whitelist = [regressor for regressor in regressors_whitelist if regressor.__name__ not in exclude]
+    return LazyRegressor(verbose=0, ignore_warnings=True, custom_metric=None, regressors=whitelist)
