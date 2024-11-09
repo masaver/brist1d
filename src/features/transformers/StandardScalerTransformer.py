@@ -16,8 +16,8 @@ class StandardScalerTransformer(BaseEstimator, TransformerMixin):
         columns (list): List of columns to apply StandardScaler to. If None, no scaling is applied.
         types (list, optional): List of data types of the columns. Defaults to None.
         """
-        self._columns = columns if columns is not None else [np.number]
-        self._types = types
+        self._columns = columns 
+        self._types = types if types is not None else [np.number]
         self._scaler = StandardScaler()
 
     def fit(self, X, y=None):
