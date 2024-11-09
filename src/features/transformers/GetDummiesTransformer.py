@@ -16,4 +16,4 @@ class GetDummiesTransformer(BaseEstimator, TransformerMixin):
         if len(columns_to_apply) == 0:
             return X
 
-        return pd.get_dummies(X, columns=self._columns, drop_first=True)
+        return pd.get_dummies(X, columns=self._columns, drop_first=True, dtype=int )

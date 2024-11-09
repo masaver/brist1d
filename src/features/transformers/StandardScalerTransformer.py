@@ -1,6 +1,6 @@
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import StandardScaler
-
+import pandas as pd
 
 class StandardScalerTransformer(BaseEstimator, TransformerMixin):
     _columns = None
@@ -11,7 +11,9 @@ class StandardScalerTransformer(BaseEstimator, TransformerMixin):
         Initializes the ColumnScaler with the specified columns to scale.
 
         Parameters:
-        columns (list): List of columns to apply StandardScaler to. If None, no scaling is applied.
+        columns (list): List of columns to apply StandardScaler to. 
+        
+        MS mod: If  collumns = None, assumes all columns to be numeric, and Standarizes them
         """
         self._columns = columns
         self._scaler = StandardScaler()
@@ -27,8 +29,12 @@ class StandardScalerTransformer(BaseEstimator, TransformerMixin):
         Returns:
         self: Fitted transformer.
         """
+        if self._columns is None:
+             self._scaler.fit(X)
+
         if self._columns is not None:
             self._scaler.fit(X[self._columns])
+
         return self
 
     def transform(self, X):
@@ -41,7 +47,13 @@ class StandardScalerTransformer(BaseEstimator, TransformerMixin):
         Returns:
         DataFrame: Transformed DataFrame with scaled specified columns.
         """
+
         X_copy = X.copy()
+
+        if self._columns is None:
+             X_copy = pd.DataFrame( self._scaler.transform( X_copy ) , index = X_copy.index , columns = X_copy.columns )
+
         if self._columns is not None:
             X_copy[self._columns] = self._scaler.transform(X[self._columns])
+
         return X_copy
