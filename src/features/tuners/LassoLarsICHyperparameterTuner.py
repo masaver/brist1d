@@ -1,28 +1,28 @@
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from sklearn.linear_model import RidgeCV
+from sklearn.linear_model import LassoLarsIC
 from skopt import BayesSearchCV
 from sklearn.metrics import root_mean_squared_error, r2_score, PredictionErrorDisplay
-from skopt.space import Integer, Categorical
+from skopt.space import Integer, Real, Categorical
 
 param_spaces = {
     'default': {
-        'cv': Integer(3, 10),  # Number of cross-validation folds for LassoCV
-        'fit_intercept': Categorical([True, False]),  # Whether to fit an intercept
-        'gcv_mode': Categorical(['auto', 'eigen', 'svd']),  # GCV mode for cross-validation
-        'scoring': Categorical(['neg_mean_squared_error']),  # Scoring metric
+        'criterion': Categorical(['aic', 'bic']),  # Criterion for model selection
+        'eps': Real(1e-5, 1e-1),  # Length of the path
+        'max_iter': Integer(1000, 5000),  # Maximum number of iterations
+        'noise_variance': Real(1e-6, 1e-2),  # Noise variance
+        'positive': Categorical([True, False]),  # Restrict coefficients to be positive
     }
 }
 
-
-class RidgeCVHyperparameterTuner:
+class LassoLarsICHyperparameterTuner:
     _search_space: str
-    _best_model: RidgeCV | None
+    _best_model: LassoLarsIC | None
     _best_params: dict | None
     _y_train: pd.Series | None
     _y_pred: pd.Series | None
-    __name__ = RidgeCV.__name__
+    __name__ = LassoLarsIC.__name__
 
     def __init__(self, search_space='default'):
         self._search_space = param_spaces[search_space] if search_space in param_spaces.keys() else param_spaces['default']
@@ -30,17 +30,16 @@ class RidgeCVHyperparameterTuner:
     def fit(self, X, y):
         np.int = int
         search_cv = BayesSearchCV(
-            estimator=RidgeCV(),
+            estimator=LassoLarsIC(),
             search_spaces=self._search_space,
             n_iter=30,
             scoring='neg_mean_squared_error',
             cv=5,
             n_jobs=-1,
-            random_state=42
         )
         search_cv.fit(X=X, y=y)
 
-        regressor = RidgeCV(**search_cv.best_params_)
+        regressor = LassoLarsIC(**search_cv.best_params_)
         regressor.fit(X=X, y=y)
 
         self._best_model = regressor
