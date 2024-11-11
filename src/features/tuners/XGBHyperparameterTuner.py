@@ -1,11 +1,7 @@
-import numpy as np
-import pandas as pd
-from matplotlib import pyplot as plt
-from skopt import BayesSearchCV
 from xgboost import XGBRegressor
 from skopt.space import Integer, Real
-import shap
-from sklearn.metrics import root_mean_squared_error, r2_score, PredictionErrorDisplay
+
+from src.features.tuners.BaseHyperparameterTuner import BaseHyperparameterTuner
 
 param_spaces = {
     'default': {
@@ -43,131 +39,16 @@ param_spaces = {
 }
 
 
-class XGBHyperparameterTuner:
-    _search_space: str
-    _best_model: XGBRegressor | None
-    _best_params: dict | None
-    _y_train: pd.Series | None
-    _y_pred: pd.Series | None
+class XGBHyperparameterTuner(BaseHyperparameterTuner):
     __name__ = 'XGBRegressor'
 
-    def __init__(self,  n = None , search_space = 'default' ):
-        self._n = n
-        self._search_space = param_spaces[search_space] if search_space in param_spaces.keys() else param_spaces['default']
+    @staticmethod
+    def regressor() -> XGBRegressor:
+        return XGBRegressor(objective='reg:squarederror', random_state=42, tree_method='hist')
+
+    @staticmethod
+    def param_space(search_space: str) -> dict:
+        return param_spaces[search_space] if search_space in param_spaces.keys() else param_spaces['default']
 
     def fit(self, X, y):
-        # np.int = int
-        
-        # Fit athe base model
-        estimator = XGBRegressor(objective='reg:squarederror', random_state=42, tree_method='hist')
-        estimator.fit(X,y)
-
-        # # Do a SHAP analysis
-        explainer = shap.Explainer( estimator )
-        shap_values = explainer( X )
-        self._shap_values = shap_values
-
-        # Get the Top n best features
-        mean_abs_shap_values = np.abs( self._shap_values.values ).mean(axis=0)
-        feature_importance_df = pd.DataFrame({
-            'feature': X.columns, 
-            'mean_abs_shap_value': mean_abs_shap_values
-        })
-
-        feature_importance_df = feature_importance_df.sort_values(by='mean_abs_shap_value', ascending=False)
-        
-        # Get the top-N features (for example, top 10 features)
-        if self._n is not None:
-            feature_importance_df = feature_importance_df.head( self._n )
-            self.top_n_features = list( feature_importance_df['feature'] )
-
-        #
-        search_cv = BayesSearchCV(
-            estimator=XGBRegressor(objective='reg:squarederror', random_state=42, tree_method='hist'),
-            search_spaces=self._search_space,
-            n_iter=30,
-            scoring='neg_mean_squared_error',
-            cv=5,
-            n_jobs=-1,
-            random_state=42
-        )
-        
-        if self._n is not None:
-            search_cv.fit( X = X[self.top_n_features] , y = y )
-            regressor = XGBRegressor(**search_cv.best_params_, objective='reg:squarederror', random_state=42, tree_method='hist')
-            regressor.fit(X=X[self.top_n_features], y=y)
-            self._y_pred = regressor.predict(X=X[self.top_n_features])
-
-        
-        if self._n is None:
-            search_cv.fit( X = X , y = y )
-            regressor = XGBRegressor(**search_cv.best_params_, objective='reg:squarederror', random_state=42, tree_method='hist')
-            regressor.fit(X=X, y=y)
-            self._y_pred = regressor.predict(X=X)
-
-        self._best_model = regressor
-        self._best_params = search_cv.best_params_
-        self._y_train = y
-        
-    def get_params(self):
-        if self._best_params is None:
-            raise ValueError('No model has been fitted yet')
-
-        return self._best_params
-
-    def get_r2_score(self):
-        if self._y_pred is None or self._y_train is None:
-            raise ValueError('No model has been fitted yet')
-        return r2_score(y_true=self._y_train, y_pred=self._y_pred)
-
-    def get_rmse(self):
-        if self._y_pred is None or self._y_train is None:
-            raise ValueError('No model has been fitted yet')
-        return root_mean_squared_error(y_true=self._y_train, y_pred=self._y_pred)
-
-    def get_best_model(self):
-        if self._best_model is None:
-            raise ValueError('No model has been fitted yet')
-        return self._best_model
-    
-    def get_best_features(self):
-        if self._n is None:
-            raise ValueError('No features selected based on SHAP')
-        return self.top_n_features
-
-    def show_chart(self):
-        if self._best_model is None:
-            raise ValueError('No model has been fitted yet')
-
-        fig, axs = plt.subplots(ncols=2, figsize=(8, 4))
-        PredictionErrorDisplay.from_predictions(
-            y_true=self._y_train,
-            y_pred=self._y_pred,
-            kind="actual_vs_predicted",
-            subsample=100,
-            ax=axs[0],
-            random_state=0,
-        )
-        axs[0].set_title("Actual vs. Predicted values")
-        PredictionErrorDisplay.from_predictions(
-            y_true=self._y_train,
-            y_pred=self._y_pred,
-            kind="residual_vs_predicted",
-            subsample=100,
-            ax=axs[1],
-            random_state=0,
-        )
-        axs[1].set_title("Residuals vs. Predicted Values")
-        fig.suptitle("Plotting cross-validated predictions")
-        plt.tight_layout()
-        plt.show()
-
-    def show_shap(self):
-        if self._best_model is None:
-            raise ValueError('No model has been fitted yet')
-        
-        if self._n is not None:
-            shap.plots.beeswarm( self._shap_values[:,self.top_n_features] , max_display = len( self.top_n_features ) )
-        
-        if self._n is None:
-            shap.plots.beeswarm( self._shap_values[:,self.top_n_features] )
+        super().fit(X=X, y=y)
