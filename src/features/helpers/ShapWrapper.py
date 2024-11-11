@@ -4,10 +4,9 @@ import shap
 
 
 class ShapWrapper:
-    def __init__(self, model, X, model_type):
+    def __init__(self, model, X):
         self.model = model
         self.X = X
-        self.model_type = model_type
         self.explainer = shap.TreeExplainer(model)
         self.shap_values = self.explainer.shap_values(X)
         self.expected_value = self.explainer.expected_value
@@ -19,9 +18,6 @@ class ShapWrapper:
         }).sort_values(by='mean_abs_shap_value', ascending=False)
 
         return feature_importances['feature'].head(n).tolist()
-
-    def show_shap(self, n: int = 10):
-        return shap.plots.beeswarm(self.shap_values[:self.get_top_features(n)], max_display=n)
 
     def get_shap_values(self):
         return self.shap_values
@@ -35,12 +31,6 @@ class ShapWrapper:
     def get_shap_dependence_plot(self, feature_name):
         return shap.dependence_plot(feature_name, self.shap_values, self.X)
 
-    def get_shap_force_plot(self, index):
-        return shap.force_plot(self.expected_value, self.shap_values[index], self.X.iloc[index])
-
-    def get_shap_waterfall_plot(self, index):
-        return shap.waterfall_plot(self.expected_value, self.shap_values[index], self.X.iloc[index])
-
     def get_shap_decision_plot(self, index):
         return shap.decision_plot(self.expected_value, self.shap_values[index], self.X.iloc[index])
 
@@ -48,13 +38,10 @@ class ShapWrapper:
         return shap.summary_plot(self.shap_values, self.X, plot_type='bar')
 
     def get_shap_dependence_plot_bar(self, feature_name):
-        return shap.dependence_plot(feature_name, self.shap_values, self.X, interaction_index=None, show=False, plot_type='bar')
+        return shap.dependence_plot(feature_name, self.shap_values, self.X, interaction_index=None, show=False)
 
     def get_shap_force_plot_bar(self, index):
         return shap.force_plot(self.expected_value, self.shap_values[index], self.X.iloc[index], show=False, matplotlib=True, text_rotation=0)
-
-    def get_shap_waterfall_plot_bar(self, index):
-        return shap.waterfall_plot(self.expected_value, self.shap_values[index], self.X.iloc[index], show=False)
 
     def get_shap_decision_plot_bar(self, index):
         return shap.decision_plot(self.expected_value, self.shap_values[index], self.X.iloc[index], show=False)
