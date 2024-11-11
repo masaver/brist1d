@@ -125,6 +125,6 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
                 X[columns] = X[columns].fillna(0)
 
             if how == 'interpolate':
-                X[columns] = X[columns].interpolate(axis=1).ffill().bfill()
+                X[columns] = X[columns].interpolate(axis=1).ffill(axis=1).bfill(axis=1)
 
         return X
