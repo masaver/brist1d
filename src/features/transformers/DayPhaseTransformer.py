@@ -21,6 +21,8 @@ class DayPhaseTransformer(BaseEstimator, TransformerMixin):
             return 'afternoon'
         elif 18 <= hour <= 21:
             return 'evening'
+        elif 22 <= hour <= 24:
+            return 'late_evening'
         else:
             return 'night'
 
