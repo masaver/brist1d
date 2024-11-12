@@ -17,12 +17,15 @@ class ShapWrapper:
         self.expected_value = self.explainer.expected_value
 
     def get_top_features(self, n: int | None = None):
+        return self.get_top_features_df(n).feature.tolist()
+
+    def get_top_features_df(self, n: int | None = None):
         n = n if n is not None else len(self.X.columns)
         feature_importances = pd.DataFrame({
             'feature': self.X.columns,
             'mean_abs_shap_value': np.abs(self.shap_values).mean(axis=0)
         }).sort_values(by='mean_abs_shap_value', ascending=False)
-        return feature_importances['feature'].head(n).tolist()
+        return feature_importances.head(n)
 
     def get_shap_values(self):
         return self.shap_values
