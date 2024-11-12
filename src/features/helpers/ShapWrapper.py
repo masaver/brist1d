@@ -1,22 +1,27 @@
 import numpy as np
 import pandas as pd
 import shap
+from shap.utils._exceptions import InvalidModelError
 
 
 class ShapWrapper:
     def __init__(self, model, X):
         self.model = model
         self.X = X
-        self.explainer = shap.TreeExplainer(model)
+        try:
+            self.explainer = shap.TreeExplainer(model, X)
+        except InvalidModelError as e:
+            self.explainer = shap.Explainer(model, X)
+
         self.shap_values = self.explainer.shap_values(X)
         self.expected_value = self.explainer.expected_value
 
-    def get_top_features(self, n: int = 10):
+    def get_top_features(self, n: int | None = None):
+        n = n if n is not None else len(self.X.columns)
         feature_importances = pd.DataFrame({
             'feature': self.X.columns,
             'mean_abs_shap_value': np.abs(self.shap_values).mean(axis=0)
         }).sort_values(by='mean_abs_shap_value', ascending=False)
-
         return feature_importances['feature'].head(n).tolist()
 
     def get_shap_values(self):
