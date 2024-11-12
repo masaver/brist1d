@@ -22,7 +22,7 @@ param_spaces = {
         'min_child_weight': Integer(1, 10),  # Minimum sum of instance weight (hessian) needed in a child
         'subsample': Real(0.5, 1.0),  # Subsample ratio of the training instances
         'colsample_bytree': Real(0.3, 1.0),  # Subsample ratio of columns when constructing each tree
-        'gamma': Integer(0, 10),  # Minimum loss reduction required to make a further partition on a leaf node
+        'gamma': Integer(0, 5),  # Minimum loss reduction required to make a further partition on a leaf node
         'alpha': Real(1e-10, 10.0, 'log-uniform'),  # L1 regularization term on weights
         'lambda': Real(1e-10, 10.0, 'log-uniform'),  # L2 regularization term on weights
         'scale_pos_weight': Integer(1, 100),  # Controls balance of positive and negative weights, often used for imbalanced classes
