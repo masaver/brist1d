@@ -85,6 +85,8 @@ How = Literal['mean', 'median', 'zero', 'interpolate']
 class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
     _parameter: Parameter | str
     _hows: list[How] | list[str]
+    _mean: None | float
+    _median: None | float
 
     def __init__(self, parameter: Parameter | str, how: How | list[How] | str | list[str] = 'median'):
         if not parameter in parameters:
@@ -99,6 +101,8 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
         self._hows = hows
 
     def fit(self, X: pd.DataFrame, y=None):
+        self._mean = X[self._get_affection_columns(X=X)].stack().mean(numeric_only=True)
+        self._median = X[self._get_affection_columns(X=X)].stack().median(numeric_only=True)
         return self
 
     def _get_affection_columns(self, X: pd.DataFrame):
@@ -116,10 +120,10 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
         columns = self._get_affection_columns(X)
         for how in self._hows:
             if how == 'mean':
-                X[columns] = X[columns].fillna(X[columns].mean())
+                X[columns] = X[columns].fillna(self._mean)
 
             if how == 'median':
-                X[columns] = X[columns].fillna(X[columns].median())
+                X[columns] = X[columns].fillna(self._median)
 
             if how == 'zero':
                 X[columns] = X[columns].fillna(0)
