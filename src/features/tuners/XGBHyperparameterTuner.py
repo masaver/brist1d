@@ -11,7 +11,7 @@ param_spaces = {
         'min_child_weight': Integer(1, 5),  # Moderate range to allow small variations in regularization
         'subsample': Real(0.7, 0.85),  # Light subsampling for diversity while preserving data
         'colsample_bytree': Real(0.7, 0.85),  # Common column sampling range
-        'gamma': Integer(0, 3),  # Small gamma range for light regularization
+        'gamma': Integer(0, 5),  # Small gamma range for light regularization
         'alpha': Real(1e-3, 0.1, 'log-uniform'),  # Default L1 regularization
         'lambda': Real(1e-3, 0.1, 'log-uniform'),  # Default L2 regularization
     },

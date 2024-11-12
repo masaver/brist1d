@@ -1,4 +1,6 @@
-from sklearn.tree import ExtraTreeRegressor
+from sklearn.ensemble import ExtraTreesRegressor
+from skopt.space import Integer, Real, Categorical
+
 from src.features.tuners.BaseHyperparameterTuner import BaseHyperparameterTuner
 
 param_spaces = {
@@ -26,11 +28,11 @@ param_spaces = {
 
 
 class ExtraTreesHyperparameterTuner(BaseHyperparameterTuner):
-    __name__ = 'ExtraTreeRegressor'
+    __name__ = ExtraTreesRegressor.__name__
 
     @staticmethod
     def regressor():
-        return ExtraTreeRegressor()
+        return ExtraTreesRegressor()
 
     @staticmethod
     def param_space(search_space: str) -> dict:

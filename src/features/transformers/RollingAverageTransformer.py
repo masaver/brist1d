@@ -1,0 +1,115 @@
+import pandas as pd
+from sklearn.base import BaseEstimator, TransformerMixin
+from typing import Literal
+
+parameters = ['bg', 'insulin', 'carbs', 'hr', 'steps', 'cals', 'activity']
+time_diffs = [
+    '-0:00',
+    '-0:05',
+    '-0:10',
+    '-0:15',
+    '-0:20',
+    '-0:25',
+    '-0:30',
+    '-0:35',
+    '-0:40',
+    '-0:45',
+    '-0:50',
+    '-0:55',
+    '-1:00',
+    '-1:05',
+    '-1:10',
+    '-1:15',
+    '-1:20',
+    '-1:25',
+    '-1:30',
+    '-1:35',
+    '-1:40',
+    '-1:45',
+    '-1:50',
+    '-1:55',
+    '-2:00',
+    '-2:05',
+    '-2:10',
+    '-2:15',
+    '-2:20',
+    '-2:25',
+    '-2:30',
+    '-2:35',
+    '-2:40',
+    '-2:45',
+    '-2:50',
+    '-2:55',
+    '-3:00',
+    '-3:05',
+    '-3:10',
+    '-3:15',
+    '-3:20',
+    '-3:25',
+    '-3:30',
+    '-3:35',
+    '-3:40',
+    '-3:45',
+    '-3:50',
+    '-3:55',
+    '-4:00',
+    '-4:05',
+    '-4:10',
+    '-4:15',
+    '-4:20',
+    '-4:25',
+    '-4:30',
+    '-4:35',
+    '-4:40',
+    '-4:45',
+    '-4:50',
+    '-4:55',
+    '-5:00',
+    '-5:05',
+    '-5:10',
+    '-5:15',
+    '-5:20',
+    '-5:25',
+    '-5:30',
+    '-5:35',
+    '-5:40',
+    '-5:45',
+    '-5:50',
+    '-5:55'
+]
+
+Parameter = Literal['bg', 'insulin', 'carbs', 'hr', 'steps', 'cals', 'activity']
+
+
+class RollingAverageTransformer(BaseEstimator, TransformerMixin):
+    _parameter: Parameter | str
+    _window: int
+
+    def __init__(self, parameter: Parameter | str, window: int = 3):
+        if not parameter in parameters:
+            raise ValueError(f'parameter must be one of {parameters}')
+
+        self._parameter = parameter
+        self._window = window
+
+    def fit(self, X: pd.DataFrame, y=None):
+        return self
+
+    def _get_affection_columns(self, X: pd.DataFrame):
+        columns = X.columns
+        affected_columns = []
+        for time_diff in time_diffs:
+            affected_column = f'{self._parameter}{time_diff}'
+            if affected_column in columns:
+                affected_columns.append(affected_column)
+
+        return affected_columns
+
+    def transform(self, X: pd.DataFrame):
+        X = X.copy()
+        columns = self._get_affection_columns(X)
+        # Rolling average will be calculated for each row, so we need to transpose the dataframe to calculate the rolling average for each column
+        # And then transpose it back to the original
+        X[columns] = X[columns].T.rolling(window=self._window, min_periods=1).mean().T
+
+        return X
