@@ -4,6 +4,7 @@ from .HistGradientBoostingHyperparameterTuner import HistGradientBoostingHyperpa
 from .KNeighborsHyperparameterTuner import KNeighborsHyperparameterTuner
 from .LassoCVHyperparameterTuner import LassoCVHyperparameterTuner
 from .LassoLarsICHyperparameterTuner import LassoLarsICHyperparameterTuner
+from .LGBMHyperparameterTuner import LGBMHyperparameterTuner
 from .RidgeCVHyperparameterTuner import RidgeCVHyperparameterTuner
 from .XGBHyperparameterTuner import XGBHyperparameterTuner
 
@@ -14,6 +15,7 @@ __all__ = [
     'KNeighborsHyperparameterTuner',
     'LassoCVHyperparameterTuner',
     'LassoLarsICHyperparameterTuner',
+    'LGBMHyperparameterTuner',
     'RidgeCVHyperparameterTuner',
     'XGBHyperparameterTuner'
 ]
