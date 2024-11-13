@@ -30,6 +30,7 @@ class DayPhaseTransformer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X: pd.DataFrame):
+        X = X.copy()
         X[self._result_column] = pd.to_datetime(X[self._time_column], format=self._time_format).dt.hour.apply(self._get_day_phase)
 
         # reorder result column directly after time column
