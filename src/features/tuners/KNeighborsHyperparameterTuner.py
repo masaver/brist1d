@@ -20,7 +20,9 @@ class KNeighborsHyperparameterTuner(BaseHyperparameterTuner):
         return KNeighborsRegressor()
 
     @staticmethod
-    def param_space(search_space: str) -> dict:
+    def param_space(search_space: str | None) -> dict | None:
+        if search_space is None:
+            return None
         return param_spaces[search_space] if search_space in param_spaces.keys() else param_spaces['default']
 
     def fit(self, X, y):
