@@ -1,5 +1,5 @@
 from sklearn.ensemble import ExtraTreesRegressor
-from skopt.space import Integer, Real
+from skopt.space import Integer, Real, Categorical
 
 from src.features.tuners.BaseHyperparameterTuner import BaseHyperparameterTuner
 

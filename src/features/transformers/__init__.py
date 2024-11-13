@@ -5,6 +5,7 @@ from .FillPropertyNaNsTransformer import FillPropertyNaNsTransformer
 from .GetDummiesTransformer import GetDummiesTransformer
 from .MinMaxScalerTransformer import MinMaxScalerTransformer
 from .PropertyOutlierTransformer import PropertyOutlierTransformer
+from .RollingAverageTransformer import RollingAverageTransformer
 from .StandardScalerTransformer import StandardScalerTransformer
 
 __all__ = [
@@ -15,5 +16,6 @@ __all__ = [
     'GetDummiesTransformer',
     'MinMaxScalerTransformer',
     'PropertyOutlierTransformer',
+    'RollingAverageTransformer',
     'StandardScalerTransformer'
 ]

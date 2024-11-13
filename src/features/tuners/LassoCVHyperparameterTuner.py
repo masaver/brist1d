@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from sklearn.linear_model import LarsCV
+from sklearn.linear_model import LassoCV
 from skopt import BayesSearchCV
 from sklearn.metrics import root_mean_squared_error, r2_score, PredictionErrorDisplay
 from skopt.space import Integer, Real
@@ -9,19 +9,18 @@ from skopt.space import Integer, Real
 param_spaces = {
     'default': {
         'eps': Real(1e-5, 1e-2, prior='log-uniform'),  # Length of the path
-        'max_iter': Integer(1000, 5000),  # Max iterations for convergence
-        'max_n_alphas': Integer(100, 1000),  # Maximum number of alphas along the regularization path
+        'max_iter': Integer(1000, 5000)  # Max iterations for convergence
     }
 }
 
 
 class LassoCVHyperparameterTuner:
     _search_space: str
-    _best_model: LarsCV | None
+    _best_model: LassoCV | None
     _best_params: dict | None
     _y_train: pd.Series | None
     _y_pred: pd.Series | None
-    __name__ = LarsCV.__name__
+    __name__ = LassoCV.__name__
 
     def __init__(self, search_space='default'):
         self._search_space = param_spaces[search_space] if search_space in param_spaces.keys() else param_spaces['default']
@@ -29,7 +28,7 @@ class LassoCVHyperparameterTuner:
     def fit(self, X, y):
         np.int = int
         search_cv = BayesSearchCV(
-            estimator=LarsCV(),
+            estimator=LassoCV(),
             search_spaces=self._search_space,
             n_iter=30,
             scoring='neg_mean_squared_error',
@@ -38,7 +37,7 @@ class LassoCVHyperparameterTuner:
         )
         search_cv.fit(X=X, y=y)
 
-        regressor = LarsCV(**search_cv.best_params_)
+        regressor = LassoCV(**search_cv.best_params_)
         regressor.fit(X=X, y=y)
 
         self._best_model = regressor
