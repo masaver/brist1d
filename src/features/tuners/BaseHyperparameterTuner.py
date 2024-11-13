@@ -5,10 +5,11 @@ from matplotlib import pyplot as plt
 from sklearn.base import RegressorMixin
 from sklearn.metrics import root_mean_squared_error, r2_score, PredictionErrorDisplay
 from skopt import BayesSearchCV
+from sklearn.model_selection import KFold, GridSearchCV
 
 
 class BaseHyperparameterTuner:
-    _search_space: dict
+    _param_space: dict | None
     _best_model: RegressorMixin | None
     _best_params: dict | None
     _X_train: pd.DataFrame | None
@@ -21,33 +22,48 @@ class BaseHyperparameterTuner:
         raise NotImplementedError
 
     @staticmethod
-    def param_space(search_space: str) -> dict:
+    def param_space(search_space: str | None) -> dict | None:
         raise NotImplementedError
 
     def __init__(self, search_space='default'):
-        self._search_space = self.param_space(search_space)
+        self._param_space = self.param_space(search_space)
 
     def fit(self, X, y):
         np.int = int
+        self._X_train = X
+        self._y_train = y
+
+        # when the search space is not defined use the default model without hyperparameter tuning
+        cv = KFold(n_splits=5, shuffle=True, random_state=42)
+        if self._param_space is None:
+            search_cv = GridSearchCV(
+                estimator=self.regressor(),
+                param_grid={},
+                scoring='neg_mean_squared_error',
+                cv=cv,
+                n_jobs=-1,
+            )
+            search_cv.fit(X=X, y=y)
+            self._best_model = search_cv.best_estimator_
+            self._best_params = search_cv.best_params_
+            self._y_pred = search_cv.predict(X=X)
+            return
+
+        cv = KFold(n_splits=5, shuffle=True, random_state=42)
         search_cv = BayesSearchCV(
             estimator=self.regressor(),
-            search_spaces=self._search_space,
+            search_spaces=self._param_space,
             n_iter=30,
             scoring='neg_mean_squared_error',
-            cv=5,
+            cv=cv,
             n_jobs=-1,
             random_state=42
         )
         search_cv.fit(X=X, y=y)
 
-        regressor = self.regressor().set_params(**search_cv.best_params_)
-        regressor.fit(X=X, y=y)
-
-        self._best_model = regressor
+        self._best_model = search_cv.best_estimator_
         self._best_params = search_cv.best_params_
-        self._X_train = X
-        self._y_train = y
-        self._y_pred = regressor.predict(X=X)
+        self._y_pred = search_cv.predict(X=X)
 
     def get_params(self):
         if self._best_params is None:
