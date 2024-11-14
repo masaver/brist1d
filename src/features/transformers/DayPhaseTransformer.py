@@ -6,11 +6,12 @@ class DayPhaseTransformer(BaseEstimator, TransformerMixin):
     _result_column: str
     _time_column: str
 
-    def __init__(self, time_column: str, time_format: str, result_column: str, drop_time_column: bool = False):
+    def __init__(self, time_column: str, time_format: str, result_column: str, drop_time_column: bool = False, ignore_errors: bool = False):
         self._time_column = time_column
         self._time_format = time_format
         self._result_column = result_column
         self._drop_time_column = drop_time_column
+        self._ignore_errors = ignore_errors
 
     def _get_day_phase(self, hour: int):
         if 6 <= hour <= 9:
@@ -31,6 +32,11 @@ class DayPhaseTransformer(BaseEstimator, TransformerMixin):
 
     def transform(self, X: pd.DataFrame):
         X = X.copy()
+        if not self._time_column in X.columns:
+            if self._ignore_errors:
+                return X
+            raise ValueError('time_column must be set')
+
         X[self._result_column] = pd.to_datetime(X[self._time_column], format=self._time_format).dt.hour.apply(self._get_day_phase)
 
         # reorder result column directly after time column

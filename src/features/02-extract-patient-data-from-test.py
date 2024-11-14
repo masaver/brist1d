@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 from os.path import dirname
-
 import numpy as np
 import os
 import pandas as pd
+from transformers import FillPropertyNaNsTransformer
 
 
 class bcolors:
@@ -21,6 +21,82 @@ class bcolors:
 script_directory = dirname(os.path.abspath(__file__))
 src_folder = os.path.join(script_directory, '..', '..', 'data', 'raw')
 interim_folder = os.path.join(script_directory, '..', '..', 'data', 'interim')
+
+parameters = ['bg', 'insulin', 'carbs', 'hr', 'steps', 'cals', 'activity']
+time_diffs = [
+    '-0:00',
+    '-0:05',
+    '-0:10',
+    '-0:15',
+    '-0:20',
+    '-0:25',
+    '-0:30',
+    '-0:35',
+    '-0:40',
+    '-0:45',
+    '-0:50',
+    '-0:55',
+    '-1:00',
+    '-1:05',
+    '-1:10',
+    '-1:15',
+    '-1:20',
+    '-1:25',
+    '-1:30',
+    '-1:35',
+    '-1:40',
+    '-1:45',
+    '-1:50',
+    '-1:55',
+    '-2:00',
+    '-2:05',
+    '-2:10',
+    '-2:15',
+    '-2:20',
+    '-2:25',
+    '-2:30',
+    '-2:35',
+    '-2:40',
+    '-2:45',
+    '-2:50',
+    '-2:55',
+    '-3:00',
+    '-3:05',
+    '-3:10',
+    '-3:15',
+    '-3:20',
+    '-3:25',
+    '-3:30',
+    '-3:35',
+    '-3:40',
+    '-3:45',
+    '-3:50',
+    '-3:55',
+    '-4:00',
+    '-4:05',
+    '-4:10',
+    '-4:15',
+    '-4:20',
+    '-4:25',
+    '-4:30',
+    '-4:35',
+    '-4:40',
+    '-4:45',
+    '-4:50',
+    '-4:55',
+    '-5:00',
+    '-5:05',
+    '-5:10',
+    '-5:15',
+    '-5:20',
+    '-5:25',
+    '-5:30',
+    '-5:35',
+    '-5:40',
+    '-5:45',
+    '-5:50',
+    '-5:55'
+]
 
 
 def get_time() -> str:
@@ -53,32 +129,18 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
 
     current_date = start_date
     assigned_dates = []
-    last_time = None
-    ids_with_date_change = ['p11_4307']
 
     for i, row in df_patient.iterrows():
-        if last_time is None:
-            last_time = row["time"]
-
-        if row["time"] < last_time or row["id"] in ids_with_date_change:
-            current_date = current_date + timedelta(days=1)
-
+        # each row gets a new date
+        current_date = current_date + timedelta(days=1)
         assigned_dates.append(current_date)
-
-        last_time = row["time"]
 
     df_patient = df_patient.copy()
     df_patient.loc[:, "date"] = assigned_dates
     df_patient.loc[:, "datetime"] = df_patient.apply(lambda row: datetime.combine(row['date'], row['time']), axis=1)
     df_patient = df_patient.set_index("datetime")
     df_patient = df_patient.drop(columns=["date"])
-    df_patient.to_csv(os.path.join(interim_folder, f'{patient_num}_train_raw.csv'))
     df_patient = df_patient.drop(columns=["id"])
-
-    # get resolution of the data
-    initial_resolution_in_seconds = (df_patient.index[1] - df_patient.index[0]).seconds
-    initial_resolution_in_minutes = initial_resolution_in_seconds / 60
-    initial_resolution = f"{int(initial_resolution_in_minutes)}min"
 
     # change the frequency to 5 minutes
     full_date_range = pd.date_range(start=df_patient.index.min(), end=df_patient.index.max(), freq='5min')
@@ -185,12 +247,10 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
 
     # set patient number and initial resolution
     df_patient_combined_values['p_num'] = patient_num
-    df_patient_combined_values['initial_resolution'] = initial_resolution
-    df_patient_combined_values['days_since_start'] = (df_patient_combined_values.index - df_patient_combined_values.index.min()).days
     df_patient_combined_values['time'] = df_patient_combined_values.index.time
 
     # order the columns
-    meta_columns = meta_columns + ['days_since_start', 'time', 'initial_resolution']
+    meta_columns = meta_columns + ['time']
     column_order = meta_columns + parameters + target_columns
     df_patient_combined_values = df_patient_combined_values[column_order]
 
@@ -198,18 +258,13 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
 
 
 if __name__ == '__main__':
-    #print(f'{bcolors.OKGREEN}{get_time()} - Cleanup interim folder{bcolors.ENDC}')
-    print(f'{bcolors.OKGREEN}{"=" * 50}{bcolors.ENDC}')
-    #for file in os.listdir(interim_folder):
-    #    if file.endswith(".csv"):
-    #        os.remove(os.path.join(interim_folder, file))
-    #        print(f'{bcolors.OKCYAN}{get_time()} - Delete {file}{bcolors.ENDC}')
-
-    print()
     print(f'{bcolors.OKGREEN}{get_time()} - Extracting patient data{bcolors.ENDC}')
     print(f'{bcolors.OKGREEN}{"=" * 50}{bcolors.ENDC}')
     print(f'{bcolors.OKCYAN}{get_time()} - Loading train.csv{bcolors.ENDC}')
-    df = pd.read_csv(os.path.join(src_folder, 'train.csv'), na_values=np.nan, low_memory=False)
+
+    df = pd.read_csv(os.path.join(src_folder, 'test.csv'), na_values=np.nan, low_memory=False)
+    df = FillPropertyNaNsTransformer(parameter='bg', how=['interpolate', 'median'], precision=2).fit_transform(df)
+
     patients = df['p_num'].unique()
     print(f'{bcolors.OKCYAN}{get_time()} - Found {len(patients)} patients{bcolors.ENDC}')
     print()
@@ -235,12 +290,60 @@ if __name__ == '__main__':
         print(f'{bcolors.OKCYAN}----- Details {patient} -----------------------------------------------{bcolors.ENDC}')
         print(f'{bcolors.OKCYAN}{patient_data.describe()}{bcolors.ENDC}')
         print(f'{bcolors.OKCYAN}-----------------------------------------------------------------{bcolors.ENDC}')
-
-        patient_data.to_csv(os.path.join(interim_folder, f'{patient}_train.csv'))
-        print(f'{bcolors.OKCYAN}{get_time()} - {patient}_train.csv stored to interim folder{bcolors.ENDC}')
         print()
 
         df_all = pd.concat([df_all, patient_data])
 
-    print(f'{bcolors.OKGREEN}{get_time()} - Save data for all patients into all_train.csv{bcolors.ENDC}')
-    df_all.to_csv(os.path.join(interim_folder, 'all_train.csv'))
+    print(f'{bcolors.OKGREEN}{get_time()} - Save data for all patients into all_test_combined.csv{bcolors.ENDC}')
+    df_all.to_csv(os.path.join(interim_folder, 'all_test_combined.csv'))
+
+    print(f'{bcolors.OKGREEN}{get_time()} - Create lag feature data{bcolors.ENDC}')
+    print(f'{bcolors.OKGREEN}{"=" * 50}{bcolors.ENDC}')
+
+    # Drop all rows where bg is NaN
+    df_all = df_all.dropna(subset=['bg'])
+
+    # create lagged columns
+    # Convert the dictionary to a DataFrame and concatenate with the original
+    patient_ids = df_all['p_num'].unique()
+    result_df = None
+    for patient_id in patient_ids:
+        new_columns = {}
+        patient_data = df_all[df_all['p_num'] == patient_id]
+        new_columns['bg+1:00'] = patient_data['bg'].shift(periods=-1, freq="1h")
+        for parameter in parameters:
+            for time_diff in time_diffs:
+                col_name = f"{parameter}{time_diff}"
+                new_columns[col_name] = patient_data[parameter].shift(periods=-1, freq=parse_time_diff(time_diff))
+
+        new_data = pd.DataFrame(new_columns)
+        patient_data = pd.concat([patient_data, new_data], axis=1)
+        if result_df is None:
+            result_df = patient_data
+        else:
+            result_df = pd.concat([result_df, patient_data])
+
+    # drop all parameter columns
+    result_df = result_df.drop(columns=parameters)
+
+    # read columns from the original train
+    columns = pd.read_csv(os.path.join(src_folder, 'train.csv'), low_memory=False, index_col=0).columns
+    result_df = result_df[columns]
+
+    # drop all rows where bg-0:00 or bg+1:00 is NaN
+    result_df = result_df.dropna(subset=['bg+1:00', 'bg-0:00'])
+
+    result_df_5h = result_df.dropna(subset=['bg-5:00'])
+    result_df_5h.to_csv(os.path.join(interim_folder, 'all_test_5h.csv'), index=False)
+
+    result_df_4h = result_df.dropna(subset=['bg-4:00'])
+    result_df_4h.to_csv(os.path.join(interim_folder, 'all_test_4h.csv'), index=False)
+
+    result_df_3h = result_df.dropna(subset=['bg-3:00'])
+    result_df_3h.to_csv(os.path.join(interim_folder, 'all_test_3h.csv'), index=False)
+
+    result_df_2h = result_df.dropna(subset=['bg-2:00'])
+    result_df_2h.to_csv(os.path.join(interim_folder, 'all_test_2h.csv'), index=False)
+
+    result_df_1h = result_df.dropna(subset=['bg-1:00'])
+    result_df_1h.to_csv(os.path.join(interim_folder, 'all_test_1h.csv'), index=False)

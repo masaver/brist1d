@@ -87,8 +87,9 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
     _hows: list[How] | list[str]
     _mean: None | float
     _median: None | float
+    _precision: None | int
 
-    def __init__(self, parameter: Parameter | str, how: How | list[How] | str | list[str] = 'median'):
+    def __init__(self, parameter: Parameter | str, how: How | list[How] | str | list[str] = 'median', precision: int | None = None):
         if not parameter in parameters:
             raise ValueError(f'parameter must be one of {parameters}')
 
@@ -99,6 +100,7 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
 
         self._parameter = parameter
         self._hows = hows
+        self._precision = precision
 
     def fit(self, X: pd.DataFrame, y=None):
         self._mean = X[self._get_affection_columns(X=X)].stack().mean(numeric_only=True)
@@ -130,5 +132,7 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
 
             if how == 'interpolate':
                 X[columns] = X[columns].interpolate(axis=1).ffill(axis=1).bfill(axis=1)
+                if self._precision:
+                    X[columns] = X[columns].round(self._precision)
 
         return X
