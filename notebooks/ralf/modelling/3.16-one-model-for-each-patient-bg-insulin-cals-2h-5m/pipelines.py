@@ -1,7 +1,7 @@
 from sklearn.pipeline import Pipeline
 
 from src.features.transformers import DayPhaseTransformer, DropColumnsTransformer, ExtractColumnsTransformer, FillPropertyNaNsTransformer, GetDummiesTransformer, \
-    PropertyOutlierTransformer, StandardScalerTransformer
+    PropertyOutlierTransformer, StandardScalerTransformer, Log1pTransformer
 
 columns_to_extract = [
     'p_num',
@@ -96,6 +96,7 @@ preprocessing_pipeline = Pipeline(steps=[
 
 standardization_pipeline = Pipeline(steps=[
     ('get_dummies', GetDummiesTransformer(columns=['day_phase'])),
+    ('log_transformer', Log1pTransformer(columns=columns_to_extract[2:-1])),
     ('standard_scaler', StandardScalerTransformer(columns=columns_to_extract[2:-1]))
 ])
 
