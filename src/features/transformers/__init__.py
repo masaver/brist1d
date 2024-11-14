@@ -1,3 +1,4 @@
+from .DateTimeTransformer import DateTimeTransformer
 from .DayPhaseTransformer import DayPhaseTransformer
 from .DropColumnsTransformer import DropColumnsTransformer
 from .ExtractColumnsTransformer import ExtractColumnsTransformer
@@ -10,6 +11,7 @@ from .RollingAverageTransformer import RollingAverageTransformer
 from .StandardScalerTransformer import StandardScalerTransformer
 
 __all__ = [
+    'DateTimeTransformer',
     'DayPhaseTransformer',
     'DropColumnsTransformer',
     'ExtractColumnsTransformer',
