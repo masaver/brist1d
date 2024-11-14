@@ -9,11 +9,12 @@ class ShapWrapper:
         self.model = model
         self.X = X
         try:
-            self.explainer = shap.TreeExplainer(model, X)
+            self.explainer = shap.TreeExplainer(model)
+            self.shap_values = self.explainer.shap_values(X)
         except InvalidModelError as e:
             self.explainer = shap.Explainer(model, X)
-
-        self.shap_values = self.explainer.shap_values(X)
+            self.shap_values = self.explainer(X)
+            
         self.expected_value = self.explainer.expected_value
 
     def get_top_features(self, n: int | None = None):
