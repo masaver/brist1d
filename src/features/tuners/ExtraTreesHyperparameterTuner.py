@@ -14,11 +14,12 @@ param_spaces = {
         'min_impurity_decrease': Real(0, 0.1, 'uniform'),  # Minimum impurity decrease to split a node
         'random_state': [42],  # Random seed for reproducibility
     },
+
     'deep': {
-        'n_estimators': Integer(100, 1000),  # Wider range for number of trees
-        'max_depth': Integer(5, 50),  # Deeper trees if desired
-        'min_samples_split': Integer(2, 50),  # Higher minimum split values
-        'min_samples_leaf': Integer(1, 50),  # Higher range for min samples at leaf
+        'n_estimators': Integer(100, 1000),                 # Wider range for number of trees
+        'max_depth': Integer(5, 50),                        # Deeper trees if desired
+        'min_samples_split': Integer(2, 50),                # Higher minimum split values
+        'min_samples_leaf': Integer(1, 50),                 # Higher range for min samples at leaf
         'max_features': Categorical(['sqrt', 'log2', None]),  # Standard feature options
         'bootstrap': Categorical([True, False]),  # Bootstrap sampling option
         'max_leaf_nodes': Integer(10, 1000),  # Maximum number of leaf nodes per tree
