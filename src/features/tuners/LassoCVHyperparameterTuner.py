@@ -6,8 +6,12 @@ from src.features.tuners.BaseHyperparameterTuner import BaseHyperparameterTuner
 param_spaces = {
     'default': {
         'eps': Real(1e-5, 1e-2, prior='log-uniform'),  # Length of the path
-        'max_iter': Integer(1000, 5000)  # Max iterations for convergence
-    }
+        'n_alphas': Integer(100, 1000),  # Number of alphas along the regularization path
+        'max_iter': Integer(1000, 5000),  # The maximum number of iterations
+        'tol': Real(1e-5, 1e-2, prior='log-uniform'),  # The tolerance for the optimization
+        'cv': Integer(2, 10),  # Number of folds in the cross
+        'n_jobs': [-1],  # Number of jobs to run in parallel
+    },
 }
 
 

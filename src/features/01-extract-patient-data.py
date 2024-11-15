@@ -198,12 +198,12 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
 
 
 if __name__ == '__main__':
-    print(f'{bcolors.OKGREEN}{get_time()} - Cleanup interim folder{bcolors.ENDC}')
+    #print(f'{bcolors.OKGREEN}{get_time()} - Cleanup interim folder{bcolors.ENDC}')
     print(f'{bcolors.OKGREEN}{"=" * 50}{bcolors.ENDC}')
-    for file in os.listdir(interim_folder):
-        if file.endswith(".csv"):
-            os.remove(os.path.join(interim_folder, file))
-            print(f'{bcolors.OKCYAN}{get_time()} - Delete {file}{bcolors.ENDC}')
+    #for file in os.listdir(interim_folder):
+    #    if file.endswith(".csv"):
+    #        os.remove(os.path.join(interim_folder, file))
+    #        print(f'{bcolors.OKCYAN}{get_time()} - Delete {file}{bcolors.ENDC}')
 
     print()
     print(f'{bcolors.OKGREEN}{get_time()} - Extracting patient data{bcolors.ENDC}')
