@@ -131,7 +131,12 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     assigned_dates = []
 
     for i, row in df_patient.iterrows():
-        # each row gets a new date
+        # add two days it time is before 6:00
+        if row['time'] < datetime.strptime("06:00:00", "%H:%M:%S").time():
+            current_date = current_date + timedelta(days=2)
+            assigned_dates.append(current_date)
+            continue
+
         current_date = current_date + timedelta(days=1)
         assigned_dates.append(current_date)
 
@@ -199,11 +204,12 @@ if __name__ == '__main__':
 
     df_all = pd.DataFrame()
 
-    for patient in patients:
+    start_year = 2000
+    for i, patient in enumerate(patients):
         print(f'{bcolors.OKGREEN}{get_time()} - Processing patient {patient}{bcolors.ENDC}')
         print(f'{bcolors.OKCYAN}{"-" * 50}{bcolors.ENDC}')
 
-        patient_data = extract_patient_data(df, patient, datetime(2020, 1, 1))
+        patient_data = extract_patient_data(df, patient, datetime(start_year + i, 1, 1))
         if patient_data is None:
             print(f'{bcolors.FAIL}{get_time()} - Error: Patient {patient} not found{bcolors.ENDC}')
             continue
@@ -233,25 +239,26 @@ if __name__ == '__main__':
     patient_ids = df_all['p_num'].unique()
     result_df = None
     for patient_id in patient_ids:
-        new_columns = {}
         patient_data = df_all[df_all['p_num'] == patient_id]
-        new_columns['bg+1:00'] = patient_data['bg'].shift(periods=-1, freq="1h")
+        patient_data_lag_features = patient_data.copy()
+        patient_data_lag_features['bg+1:00'] = patient_data['bg'].shift(periods=-1, freq="1h")
         for parameter in parameters:
             for time_diff in time_diffs:
                 col_name = f"{parameter}{time_diff}"
-                new_columns[col_name] = patient_data[parameter].shift(periods=-1, freq=parse_time_diff(time_diff))
+                patient_data_lag_features[col_name] = patient_data[parameter].shift(periods=-1, freq=parse_time_diff(time_diff))
 
-        new_data = pd.DataFrame(new_columns)
-        patient_data = pd.concat([patient_data, new_data], axis=1)
         if result_df is None:
-            result_df = patient_data
-        else:
-            result_df = pd.concat([result_df, patient_data])
+            result_df = patient_data_lag_features.copy()
+            continue
+
+        result_df = pd.concat([result_df, patient_data])
 
     # drop all parameter columns
     result_df = result_df.drop(columns=parameters)
 
-    # read columns from the original train
+    result_df.to_csv(os.path.join(interim_folder, 'all_result_df.csv'))
+
+    # read columns from the original train file to ensure the same order
     columns = pd.read_csv(os.path.join(src_folder, 'train.csv'), low_memory=False, index_col=0).columns
     result_df = result_df[columns]
 
@@ -259,16 +266,16 @@ if __name__ == '__main__':
     result_df = result_df.dropna(subset=['bg+1:00', 'bg-0:00'])
 
     result_df_5h = result_df.dropna(subset=['bg-5:00'])
-    result_df_5h.to_csv(os.path.join(interim_folder, 'all_test_5h.csv'), index=False)
+    result_df_5h.to_csv(os.path.join(interim_folder, 'all_test_5h.csv'))
 
     result_df_4h = result_df.dropna(subset=['bg-4:00'])
-    result_df_4h.to_csv(os.path.join(interim_folder, 'all_test_4h.csv'), index=False)
+    result_df_4h.to_csv(os.path.join(interim_folder, 'all_test_4h.csv'))
 
     result_df_3h = result_df.dropna(subset=['bg-3:00'])
-    result_df_3h.to_csv(os.path.join(interim_folder, 'all_test_3h.csv'), index=False)
+    result_df_3h.to_csv(os.path.join(interim_folder, 'all_test_3h.csv'))
 
     result_df_2h = result_df.dropna(subset=['bg-2:00'])
-    result_df_2h.to_csv(os.path.join(interim_folder, 'all_test_2h.csv'), index=False)
+    result_df_2h.to_csv(os.path.join(interim_folder, 'all_test_2h.csv'))
 
     result_df_1h = result_df.dropna(subset=['bg-1:00'])
-    result_df_1h.to_csv(os.path.join(interim_folder, 'all_test_1h.csv'), index=False)
+    result_df_1h.to_csv(os.path.join(interim_folder, 'all_test_1h.csv'))

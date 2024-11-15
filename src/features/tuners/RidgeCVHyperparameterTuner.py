@@ -5,8 +5,7 @@ from src.features.tuners.BaseHyperparameterTuner import BaseHyperparameterTuner
 
 param_spaces = {
     'default': {
-        'alphas': Real(1e-4, 1.0, prior='log-uniform'),  # Regularization strength; range of values to search over
-        'cv': Integer(3, 10)  # Number of cross-validation folds
+        'alphas': Categorical([0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0]),  # Array of alpha values to try
     }
 }
 
