@@ -6,6 +6,7 @@ from .LassoCVHyperparameterTuner import LassoCVHyperparameterTuner
 from .LassoLarsICHyperparameterTuner import LassoLarsICHyperparameterTuner
 from .LGBMHyperparameterTuner import LGBMHyperparameterTuner
 from .RidgeCVHyperparameterTuner import RidgeCVHyperparameterTuner
+from .RidgeHyperparameterTuner import RidgeHyperparameterTuner
 from .XGBHyperparameterTuner import XGBHyperparameterTuner
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     'LassoLarsICHyperparameterTuner',
     'LGBMHyperparameterTuner',
     'RidgeCVHyperparameterTuner',
+    'RidgeHyperparameterTuner',
     'XGBHyperparameterTuner'
 ]
