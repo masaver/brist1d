@@ -4,20 +4,20 @@ In this section we outline the pre-processing steps that we think will be requir
 
 ## Transformers
 
-We wrote a bunch of [transformers](src/features/transformers) highly adapted to our data. We will use them to preprocess the data before modelling and before predicting.
+We wrote a bunch of [transformers](https://scikit-learn.org/stable/data_transforms.html) highly adapted to our data. We will use them to preprocess the data before modelling and before predicting.
 
-* [DateTimeHourTransformer.py](../../../src/features/transformers/DateTimeHourTransformer.py)
-* [DateTimeTransformer.py](../../../src/features/transformers/DateTimeTransformer.py)
-* [DayPhaseTransformer.py](../../../src/features/transformers/DayPhaseTransformer.py)
-* [DropColumnsTransformer.py](../../../src/features/transformers/DropColumnsTransformer.py)
-* [ExtractColumnsTransformer.py](../../../src/features/transformers/ExtractColumnsTransformer.py)
-* [FillPropertyNaNsTransformer.py](../../../src/features/transformers/FillPropertyNaNsTransformer.py)
-* [GetDummiesTransformer.py](../../../src/features/transformers/GetDummiesTransformer.py)
-* [Log1pTransformer.py](../../../src/features/transformers/Log1pTransformer.py)
-* [MinMaxScalerTransformer.py](../../../src/features/transformers/MinMaxScalerTransformer.py)
-* [PropertyOutlierTransformer.py](../../../src/features/transformers/PropertyOutlierTransformer.py)
-* [RollingAverageTransformer.py](../../../src/features/transformers/RollingAverageTransformer.py)
-* [StandardScalerTransformer.py](../../../src/features/transformers/StandardScalerTransformer.py)
+* DataTimeHourTransformer
+* DateTimeTransformer
+* DayPhaseTransformer
+* DropColumnsTransformer
+* ExtractColumnsTransformer
+* FillPropertyNaNsTransformer
+* GetDummiesTransformer
+* Log1pTransformer
+* MinMaxScalerTransformer
+* PropertyOutlierTransformer
+* RollingAverageTransformer
+* StandardScalerTransformer
 
 In each model we can combine these transformers freely in a `preprocessing pipeline` and a `scaling pipeline`.
 
