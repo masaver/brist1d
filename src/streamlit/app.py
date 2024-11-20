@@ -22,11 +22,13 @@ pages=["Kaggle Challenge", "Data Exploration", "Data Vizualization", "Modelling"
 page=st.sidebar.radio("Go to", pages)
 
 # load the data
-#base_dir = os.path.abspath(os.path.join("..", "..", "data", "raw"))
-#file_path = os.path.join(base_dir, "train.csv") # initial raw dataset
+@st.cache_data
+def load_data(): 
+  return pd.read_csv(file_path, low_memory=False)
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(current_dir, "..", "..", "data", "raw", "train.csv")
-patients = pd.read_csv(file_path, low_memory=False)
+patients = load_data()
 
 # Transform the data using the Helper class
 patients = FakeDateCreator.create_pseudo_datetime(patients)
@@ -44,7 +46,7 @@ if page == pages[1] :
   specific_day = '2020-01-02'  # Replace with another Streamlit input widget
 
   # 1. Dropdown for p_num
-  available_patients = patients['p_num'].unique()  # Get all unique patient IDs
+  available_patients = list(patients['p_num'].unique()) + ["all"] # Get all unique patient IDs and additional 'all' option
   patient_id = st.selectbox("Select patient ID", options=available_patients, index=0)
 
   # 2. Calendar widget for `specific_day`
@@ -78,8 +80,6 @@ if page == pages[1] :
   else:
       st.write(f"No data available for patient {patient_id} on {specific_day}.")
 
-
-  st.write("*Dataset Description and Structure*")
 
 if page == pages[2] : 
   st.write("### Data Vizualization")
