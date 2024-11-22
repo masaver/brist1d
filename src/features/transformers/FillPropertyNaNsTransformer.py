@@ -88,10 +88,17 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
     _mean: None | float
     _median: None | float
     _precision: None | int
-    _ffill: bool
-    _bfill: bool
+    _ffill: bool | int
+    _bfill: bool | int
+    _interpolate: bool | int
 
-    def __init__(self, parameter: Parameter | str, how: How | list[How] | str | list[str] = 'median', precision: int | None = None, ffill: bool = True, bfill: bool = True):
+    def __init__(self,
+                 parameter: Parameter | str,
+                 how: How | list[How] | str | list[str] = 'median',
+                 precision: int | None = None,
+                 ffill: bool | int = True,
+                 bfill: bool | int = True,
+                 interpolate: bool | int = True):
         if not parameter in parameters:
             raise ValueError(f'parameter must be one of {parameters}')
 
@@ -105,6 +112,7 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
         self._precision = precision
         self._ffill = ffill
         self._bfill = bfill
+        self._interpolate = interpolate
 
     def fit(self, X: pd.DataFrame, y=None):
         self._mean = X[self._get_affection_columns(X=X)].stack().mean(numeric_only=True)
@@ -135,13 +143,16 @@ class FillPropertyNaNsTransformer(BaseEstimator, TransformerMixin):
                 X[columns] = X[columns].fillna(0)
 
             if how == 'interpolate':
-                X[columns] = X[columns].interpolate(axis=1)
+                limit = self._interpolate if type(self._interpolate) == int else None
+                X[columns] = X[columns].interpolate(axis=1, limit=limit)
 
                 if self._ffill:
-                    X[columns] = X[columns].ffill(axis=1)
+                    limit = self._ffill if type(self._ffill) == int else None
+                    X[columns] = X[columns].ffill(axis=1, limit=limit)
 
                 if self._bfill:
-                    X[columns] = X[columns].bfill(axis=1)
+                    limit = self._bfill if type(self._bfill) == int else None
+                    X[columns] = X[columns].bfill(axis=1, limit=limit)
 
                 if self._precision:
                     X[columns] = X[columns].round(self._precision)
