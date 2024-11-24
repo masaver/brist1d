@@ -5,8 +5,7 @@ from src.features.tuners.BaseHyperparameterTuner import BaseHyperparameterTuner
 
 param_spaces = {
     'default': {
-        'alphas': Real(1e-4, 1.0, prior='log-uniform'),  # Regularization strength; range of values to search over
-        'cv': Integer(3, 10)  # Number of cross-validation folds
+        'alphas': Categorical([0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0]),  # Array of alpha values to try
     }
 }
 
@@ -24,5 +23,5 @@ class RidgeCVHyperparameterTuner(BaseHyperparameterTuner):
             return None
         return param_spaces[search_space] if search_space in param_spaces.keys() else param_spaces['default']
 
-    def fit(self, X, y):
-        super().fit(X=X, y=y)
+    def fit(self, X_train, y_train, X_test=None, y_test=None):
+        super().fit(X_train, y_train, X_test, y_test)

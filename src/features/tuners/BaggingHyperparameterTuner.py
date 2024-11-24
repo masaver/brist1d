@@ -30,5 +30,5 @@ class BaggingHyperparameterTuner(BaseHyperparameterTuner):
             return None
         return param_spaces[search_space] if search_space in param_spaces.keys() else param_spaces['default']
 
-    def fit(self, X, y):
-        super().fit(X=X, y=y)
+    def fit(self, X_train, y_train, X_test=None, y_test=None):
+        super().fit(X_train, y_train, X_test, y_test)

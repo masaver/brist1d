@@ -21,13 +21,12 @@ param_spaces = {
         'min_samples_split': Integer(2, 50),                # Higher minimum split values
         'min_samples_leaf': Integer(1, 50),                 # Higher range for min samples at leaf
         'max_features': Categorical(['sqrt', 'log2', None]),  # Standard feature options
-        'bootstrap': Categorical([True, False]),  # Bootstrap sampling option
         'max_leaf_nodes': Integer(10, 1000),  # Maximum number of leaf nodes per tree
         'min_impurity_decrease': Real(0.0, 0.5, 'uniform'),  # Minimum impurity decrease for splitting
         'ccp_alpha': Real(0.0, 0.1, 'uniform')  # Complexity parameter for Minimal Cost-Complexity Pruning
     },
     'no': {
-        'n_estimators': Integer(10, 100),
+        'n_estimators': Integer(100, 200),
     }
 }
 
@@ -45,5 +44,5 @@ class ExtraTreesHyperparameterTuner(BaseHyperparameterTuner):
             return None
         return param_spaces[search_space] if search_space in param_spaces.keys() else param_spaces['default']
 
-    def fit(self, X, y):
-        super().fit(X=X, y=y)
+    def fit(self, X_train, y_train, X_test=None, y_test=None):
+        super().fit(X_train, y_train, X_test, y_test)

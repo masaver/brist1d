@@ -26,4 +26,6 @@ chapters:
     sections:
       - file: 03-preprocessing-and-modelling/01-preprocessing-steps
       - file: 03-preprocessing-and-modelling/02-preliminary-modelling
+      - file: 03-preprocessing-and-modelling/03.1-modelling-based-on-train-data
+      - file: 03-preprocessing-and-modelling/03.2-modelling-based-on-train-and-test-data
   - file: bibliography
