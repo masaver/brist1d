@@ -41,13 +41,13 @@ class FakeDateCreator:
         Returns:
             pd.DataFrame: Filtered data for the given patient and day.
         """
-        # If "all", don't filter by patient ID
-        if p_num != "all":
-            patients = patients[patients['p_num'] == p_num]
-
+       
         # Ensure 'pseudo_datetime' is in datetime format
         patients_data = patients.copy()
         patients_data['pseudo_datetime'] = pd.to_datetime(patients_data['pseudo_datetime'], errors='coerce')
+
+         # Drop rows with invalid 'pseudo_datetime'
+        patients_data = patients_data.dropna(subset=['pseudo_datetime'])
 
         # Define the time range for the specific day
         start_datetime = pd.to_datetime(specific_day)
@@ -59,4 +59,24 @@ class FakeDateCreator:
             (patients_data['pseudo_datetime'] < end_datetime)
         ]
 
-        return filtered_data
+        # If "all", calculate mean values for each timestamp
+        if p_num == "all":
+
+            if not filtered_data.empty:
+                # Group by time and compute mean
+                aggregated_data = (
+                    filtered_data
+                    .groupby('pseudo_datetime', as_index=False)['bg+1:00']
+                    .mean()  
+                )
+
+                return aggregated_data
+            else:
+                return pd.DataFrame()  # Return empty DataFrame if no data
+
+        # Otherwise, filter for the specific patient
+        else:
+            return filtered_data[filtered_data['p_num'] == p_num]
+
+            
+
