@@ -35,6 +35,17 @@ param_spaces = {
         'subsample': [0.8],  # Fixed sampling value; often effective
         'colsample_bytree': [0.8],  # Fixed column sampling
         'gamma': [0, 1],  # Light regularization for basic pruning
+    },
+    'custom': {
+        'n_estimators': Integer(1500, 5000),  # Allow for more boosting rounds
+        'learning_rate': Real(0.01, 0.05, 'log-uniform'),  # Slightly higher learning rates
+        'max_depth': Integer(5, 7),  # Allow deeper trees
+        'min_child_weight': Integer(2, 7),  # Explore smaller values
+        'subsample': Real(0.5, 0.8),  # Light subsampling for diversity while preserving data
+        'colsample_bytree': Real(0.6, 0.9),  # Common column sampling range
+        'gamma': Real(0.1, 2, 'log-uniform'),  # Small gamma range for light regularization
+        'alpha': Real(1, 50, 'log-uniform'),  # Increase upper bound for L1 regularization
+        'lambda': Real(1, 20, 'log-uniform'),  # Default L2 regularization
     }
 }
 

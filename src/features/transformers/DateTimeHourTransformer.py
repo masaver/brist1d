@@ -31,8 +31,10 @@ class DateTimeHourTransformer(BaseEstimator, TransformerMixin):
 
         if self._type == 'sin_cos':
             hour_values = pd.to_datetime(X[self._time_column], format=self._source_time_format).dt.hour
-            X[f'{self._result_column}_sin'] = np.sin(2 * np.pi * hour_values / 24)
-            X[f'{self._result_column}_cos'] = np.cos(2 * np.pi * hour_values / 24)
+            minute_values = pd.to_datetime(X[self._time_column], format=self._source_time_format).dt.minute
+
+            X[f'{self._result_column}_sin'] = np.sin(2 * np.pi * (hour_values + minute_values / 60) / 24)
+            X[f'{self._result_column}_cos'] = np.cos(2 * np.pi * (hour_values + minute_values / 60) / 24)
             columns = list(X.columns)
             columns.remove(f'{self._result_column}_sin')
             columns.remove(f'{self._result_column}_cos')

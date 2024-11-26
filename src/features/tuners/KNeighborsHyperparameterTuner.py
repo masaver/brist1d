@@ -10,7 +10,16 @@ param_spaces = {
         'p': Categorical([1, 2]),  # Power parameter for Minkowski distance, with 1 being Manhattan and 2 being Euclidean
         'leaf_size': Integer(10, 50),  # Leaf size for the tree-based neighbor search, affects efficiency
     },
+    'custom': {
+        'n_neighbors': Integer(1, 50),  # Extended to include smaller k values
+        'weights': Categorical(['uniform', 'distance']),  # Added 'distance' weighting
+        'p': Categorical([1, 2, 3]),  # Added Manhattan distance
+        'leaf_size': Integer(10, 100),  # Broader range for flexibility
+        'metric': Categorical(['minkowski', 'euclidean', 'manhattan', 'chebyshev']),  # Added diverse distance metrics
+        'algorithm': Categorical(['auto', 'ball_tree', 'kd_tree', 'brute']),  # Optional algorithm selection
+    }
 }
+
 
 class KNeighborsHyperparameterTuner(BaseHyperparameterTuner):
     __name__ = 'KNeighborsRegressor'

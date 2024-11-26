@@ -176,4 +176,5 @@ cython_debug/
 /reports/*/_build/
 
 # Models
-*.model.pkl
+*.pkl
+/notebooks/ralf/modelling/3.30-global-model-bg-insulin-cals-hr-steps-1hs-5min/models/2024-11-25_13-43-45-baseline-model.pkl
