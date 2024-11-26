@@ -7,6 +7,12 @@ param_spaces = {
     'default': {
         'alpha': Real(1e-4, 10.0, prior='log-uniform'),
         'l1_ratio': Real(0.0, 1.0, prior='uniform'),
+    },
+    'custom': {
+        'alpha': Real(1e-6, 1e+1, prior='log-uniform'),  # Regularization strength (log-uniform distribution)
+        'l1_ratio': Real(0.0, 1.0),  # Mix between Lasso (L1) and Ridge (L2)
+        'max_iter': Integer(100, 10000),  # Maximum number of iterations
+        'tol': Real(1e-5, 1e-1),  # Tolerance for optimization (smaller means more precise)
     }
 }
 

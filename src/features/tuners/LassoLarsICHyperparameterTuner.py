@@ -10,6 +10,13 @@ param_spaces = {
         'max_iter': Integer(1000, 5000),  # Maximum number of iterations
         'noise_variance': Real(1e-6, 1e-2),  # Noise variance
         'positive': Categorical([True, False]),  # Restrict coefficients to be positive
+    },
+    'custom': {
+        'criterion': Categorical(['aic', 'bic']),  # Criterion for model selection
+        'eps': Real(1e-6, 1e-1, prior='log-uniform'),  # Length of the path (log-uniform for finer control)
+        'max_iter': Integer(1000, 10000),  # Maximum number of iterations (larger range for better convergence)
+        'noise_variance': Real(1e-6, 1e-2, prior='log-uniform'),  # Noise variance (log-uniform for finer control)
+        'positive': Categorical([True, False]), # Restrict coefficients to be positive or both positive and negative
     }
 }
 
