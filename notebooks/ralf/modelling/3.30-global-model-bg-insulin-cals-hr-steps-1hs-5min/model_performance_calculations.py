@@ -1,6 +1,7 @@
 import json
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Callable
 
 import joblib
 import matplotlib.pyplot as plt
@@ -136,11 +137,12 @@ def calculate_stacking_regressor_performance(model: StackingRegressor, X_train, 
     return model_scores
 
 
-def calculate_dnn_performance(model: Sequential, X_train, y_train, X_additional_train, y_additional_train, verbose=True, n_splits=5, epochs=50, groups=None):
+def calculate_dnn_performance(create_model_fn: Callable, X_train, y_train, X_additional_train, y_additional_train, verbose=True, n_splits=5, epochs=50, groups=None,
+                              callbacks=None):
     print_conditionally(f'Start training DNN', verbose)
 
     if verbose:
-        model.summary()
+        create_model_fn(X_train.shape[1]).summary()
 
     splitter = ShuffleSplit(n_splits=n_splits, test_size=0.2, random_state=42)
     if groups is not None:
@@ -149,6 +151,7 @@ def calculate_dnn_performance(model: Sequential, X_train, y_train, X_additional_
     print_conditionally(f'Selected splitter: {splitter}', verbose)
 
     score = {}
+    histories = []
     split_index = 0
     for train_index, test_index in splitter.split(X=X_additional_train, groups=groups):
         split_index += 1
@@ -162,15 +165,18 @@ def calculate_dnn_performance(model: Sequential, X_train, y_train, X_additional_
             restore_best_weights=True
         )
 
+        model = create_model_fn(X_train.shape[1])
+
         model.fit(
             pd.concat([X_train, X_train_split]),
             pd.concat([y_train, y_train_split]),
             validation_data=(X_test_split, y_test_split),
             epochs=epochs,
-            callbacks=[early_stop],
+            callbacks=[early_stop] + (callbacks or []),
             verbose=2
         )
 
+        histories.append(model.history.history)
         y_pred = model.predict(X_test_split)
 
         r_squared = r2_score(y_test_split, y_pred)
@@ -200,7 +206,7 @@ def calculate_dnn_performance(model: Sequential, X_train, y_train, X_additional_
     model_score.rmse = score['rmse']
     model_score.mae = score['mae']
     model_score.mse = score['mse']
-    return model_score
+    return model_score, histories
 
 
 def get_rmse_boxplot_chart(scores: list[ModelScore] | ModelScore):
@@ -222,6 +228,17 @@ def get_rmse_boxplot_chart(scores: list[ModelScore] | ModelScore):
     plt.xlabel(f'Final estimator RMSE: {final_estimator_mean}')
     plt.ylabel('RMSE')
     plt.title('RMSE values for each estimator and the final estimator')
+    return plt
+
+
+def get_history_line_chart(histories: list[dict]):
+    for history in histories:
+        plt.plot(history['rmse'], label='train')
+        plt.plot(history['val_rmse'], label='test')
+    plt.legend()
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.title('Model loss')
     return plt
 
 
