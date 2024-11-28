@@ -173,7 +173,7 @@ def calculate_dnn_performance(create_model_fn: Callable, X_train, y_train, X_add
             validation_data=(X_test_split, y_test_split),
             epochs=epochs,
             callbacks=[early_stop] + (callbacks or []),
-            verbose=2
+            verbose=2 if verbose else 0
         )
 
         histories.append(model.history.history)
@@ -236,7 +236,7 @@ def get_history_line_chart(histories: list[dict]):
         plt.plot(history['rmse'], label='train')
         plt.plot(history['val_rmse'], label='test')
     plt.legend()
-    plt.ylabel('Loss')
+    plt.ylabel('RMSE')
     plt.xlabel('Epoch')
     plt.title('Model loss')
     return plt
