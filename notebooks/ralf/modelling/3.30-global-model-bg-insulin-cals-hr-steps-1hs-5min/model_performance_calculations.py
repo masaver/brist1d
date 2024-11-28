@@ -232,13 +232,17 @@ def get_rmse_boxplot_chart(scores: list[ModelScore] | ModelScore):
 
 
 def get_history_line_chart(histories: list[dict]):
+    final_rmse = np.round(np.mean([history['val_rmse'][-1] for history in histories]), 4)
+    plt.figure(figsize=(10, 5))
+    plt.plot(np.mean([history['rmse'] for history in histories], axis=0), label='Training RMSE', color='b')
+    plt.plot(np.mean([history['val_rmse'] for history in histories], axis=0), label='Test RMSE', color='r')
     for history in histories:
-        plt.plot(history['rmse'], label='train')
-        plt.plot(history['val_rmse'], label='test')
+        plt.plot(history['val_rmse'], linestyle='--', color='r', alpha=0.3)
     plt.legend()
     plt.ylabel('RMSE')
     plt.xlabel('Epoch')
-    plt.title('Model loss')
+    plt.gca().xaxis.set_major_locator(plt.MaxNLocator(integer=True))
+    plt.title(f'RMSE over epochs (Final: {final_rmse})')
     return plt
 
 
