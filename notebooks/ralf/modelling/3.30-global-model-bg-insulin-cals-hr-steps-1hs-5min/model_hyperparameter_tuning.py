@@ -57,7 +57,7 @@ def tune_hyperparameters(model, param_space, X_train, y_train, X_additional_trai
     splitter = CustomSplitter(test_size=0.2, n_splits=n_splits, random_state=42)
     splitter.fit(X_all_train, groups=[0] * len(X_train) + [1] * len(X_additional_train))
 
-    _, X_eval, _, y_eval = train_test_split(X_train, y_train, test_size=0.2, random_state=42, shuffle=True)
+    _, X_eval, _, y_eval = train_test_split(X_additional_train, y_additional_train, test_size=0.2, random_state=42, shuffle=True)
     fit_params = {
         "eval_set": [(X_eval, y_eval)],
         "early_stopping_rounds": 50,
