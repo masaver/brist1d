@@ -5,12 +5,13 @@ from typing import Callable
 
 import joblib
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
 from jedi.inference.gradual.typing import TypedDict
+
 from sklearn.ensemble import StackingRegressor
-from sklearn.model_selection import ShuffleSplit, LeaveOneGroupOut
+from sklearn.model_selection import ShuffleSplit, LeaveOneGroupOut, KFold
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, mean_squared_error, r2_score
+from tensorflow.keras.callbacks import EarlyStopping
 
 
 class ModelScoreParameter(TypedDict):
@@ -69,7 +70,7 @@ def print_conditionally(message, verbose=True):
         print(f'{get_date_time_now()} - {message}')
 
 
-def calculate_stacking_regressor_performance(model: StackingRegressor, X_train, y_train, X_additional_train, y_additional_train, verbose=True, n_splits=5, groups=None):
+def calculate_stacking_regressor_performance(model: StackingRegressor, X_train, y_train, verbose=True, n_splits=5):
     print_conditionally(f'Start training', verbose)
 
     models = model.estimators + [('final_estimator', model.final_estimator), ('stacking_regressor', model)]
@@ -78,30 +79,23 @@ def calculate_stacking_regressor_performance(model: StackingRegressor, X_train, 
     for model_name, model in models:
         print_conditionally(f'Calculate performance for {model_name}', verbose)
 
-        splitter = ShuffleSplit(n_splits=n_splits, test_size=0.2, random_state=42)
-        if groups is not None:
-            splitter = LeaveOneGroupOut()
-            print(f'Number of splits: {splitter.get_n_splits(groups=groups)}')
-
-        print_conditionally(f'Selected splitter: {splitter}', verbose)
-
+        splitter = KFold(n_splits=n_splits, shuffle=True, random_state=42)
         score = {}
         split_index = 0
-        for train_index, test_index in splitter.split(X_additional_train, groups=groups):
+        for train_index, test_index in splitter.split(X_train, y_train):
             split_index += 1
             print_conditionally(f'Split {split_index} - Model: {model_name}', verbose)
 
-            X_train_split, X_test_split = X_additional_train.iloc[train_index], X_additional_train.iloc[test_index]
-            y_train_split, y_test_split = y_additional_train.iloc[train_index], y_additional_train.iloc[test_index]
+            X_train_split, X_test_split = X_train.iloc[train_index], X_train.iloc[test_index]
+            y_train_split, y_test_split = y_train.iloc[train_index], y_train.iloc[test_index]
 
             print_conditionally(f'Fitting the model')
-            model.fit(pd.concat([X_train, X_train_split]), pd.concat([y_train, y_train_split]))
+            model.fit(X_train_split, y_train_split)
 
             print_conditionally(f'Predicting')
             y_pred = model.predict(X_test_split)
 
             print_conditionally(f'Calculating scores')
-
             r_squared = r2_score(y_test_split, y_pred)
             rmse = root_mean_squared_error(y_test_split, y_pred)
             mae = mean_absolute_error(y_test_split, y_pred)
@@ -135,37 +129,36 @@ def calculate_stacking_regressor_performance(model: StackingRegressor, X_train, 
     return model_scores
 
 
-def calculate_dnn_performance(create_model_fn: Callable, X_train, y_train, X_additional_train, y_additional_train, verbose=True, n_splits=5, epochs=50, groups=None,
-                              callbacks=None):
+def calculate_dnn_performance(create_model_fn: Callable, X_train, y_train, verbose=True, n_splits=5, epochs=50, groups=None, callbacks=None, early_stopping=True):
     print_conditionally(f'Start training DNN', verbose)
 
     if verbose:
         create_model_fn(X_train.shape[1]).summary()
 
-    splitter = ShuffleSplit(n_splits=n_splits, test_size=0.2, random_state=42)
-    if groups is not None:
-        splitter = LeaveOneGroupOut()
-
-    print_conditionally(f'Selected splitter: {splitter}', verbose)
-
+    splitter = KFold(n_splits=n_splits, shuffle=True, random_state=42)
     score = {}
     histories = []
     split_index = 0
-    for train_index, test_index in splitter.split(X=X_additional_train, groups=groups):
+    for train_index, test_index in splitter.split(X_train, y_train, groups=groups):
         split_index += 1
         print_conditionally(f'Split {split_index}/{n_splits}', verbose)
-        X_train_split, X_test_split = X_additional_train.iloc[train_index], X_additional_train.iloc[test_index]
-        y_train_split, y_test_split = y_additional_train.iloc[train_index], y_additional_train.iloc[test_index]
+
+        X_train_split, X_test_split = X_train.iloc[train_index], X_train.iloc[test_index]
+        y_train_split, y_test_split = y_train.iloc[train_index], y_train.iloc[test_index]
 
         model = create_model_fn(X_train.shape[1])
 
+        callbacks = callbacks or []
+        if early_stopping:
+            callbacks.append(EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True))
+
         model.fit(
-            pd.concat([X_train, X_train_split]),
-            pd.concat([y_train, y_train_split]),
+            X_train_split,
+            y_train_split,
             validation_data=(X_test_split, y_test_split),
             epochs=epochs,
-            callbacks=(callbacks or []),
-            verbose=2 if verbose else 0
+            callbacks=callbacks,
+            verbose=2 if verbose else 0,
         )
 
         histories.append(model.history.history)
@@ -224,6 +217,15 @@ def get_rmse_boxplot_chart(scores: list[ModelScore] | ModelScore):
 
 
 def get_history_line_chart(histories: list[dict]):
+    # histories can have different lengths, so we need to find the max length and fill the shorter ones
+    max_length = max([len(history['rmse']) for history in histories])
+
+    # we fill the histories with their last value to have the same length
+    for history in histories:
+        if len(history['rmse']) < max_length:
+            history['rmse'] += [history['rmse'][-1]] * (max_length - len(history['rmse']))
+            history['val_rmse'] += [history['val_rmse'][-1]] * (max_length - len(history['val_rmse']))
+
     final_rmse = np.round(np.mean([history['val_rmse'][-1] for history in histories]), 4)
     plt.figure(figsize=(10, 5))
     plt.plot(np.mean([history['rmse'] for history in histories], axis=0), label='Training RMSE', color='b')
