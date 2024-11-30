@@ -8,7 +8,7 @@ The preliminary modelling is done to understand the data better and to get a sen
 
 In this section we outline the pre-processing steps that we think will be required in order to correctly format the data before different forms of modelling.
 
-We wrote a bunch of [transformers](src/features/transformers) highly adapted to our data. We will use them to preprocess the data before modelling and before predicting.
+We wrote a bunch of [transformers](https://scikit-learn.org/stable/data_transforms.html) highly adapted to our data. We will use them to preprocess the data before modelling and before predicting.
 
 see: [Preprocessing steps](01-preprocessing-steps.md)
 
