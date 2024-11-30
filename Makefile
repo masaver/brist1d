@@ -55,6 +55,11 @@ preprocess: .activate
 	$(done)
 .PHONY: preprocess
 
+## Prepare data
+prepare-data: .activate
+	source "$(VENV_PATH)/bin/activate" && python src/features/02-prepare-patient-data.py
+	$(done)
+
 ## Build documentation
 build-docs: .activate
 	source "$(VENV_PATH)/bin/activate" && jupyter-book clean reports/rendering-1
