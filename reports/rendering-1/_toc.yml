@@ -27,11 +27,12 @@ chapters:
       - file: 03-preprocessing-and-modelling/00-3-intro
       - file: 03-preprocessing-and-modelling/01-preprocessing-steps
       - file: 03-preprocessing-and-modelling/02-HyperParameter-tuner-classes
-      - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/00-3a-intro
-      - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.1-prelim-modelling_with-LP
-      - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.2-feature-importance-with-SHAP
-      - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.3-LP-with feature-subset
-      - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.4-model-sellection-and-HyperParameterTunning
-      - file: 03-preprocessing-and-modelling/03b-modelling-with-augmented-train-data/00-3b-intro
+        sections:
+          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/00-3a-intro
+          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.1-prelim-modelling_with-LP
+          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.2-feature-importance-with-SHAP
+          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.3-LP-with feature-subset
+          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.4-model-sellection-and-HyperParameterTunning
+          - file: 03-preprocessing-and-modelling/03b-modelling-with-augmented-train-data/00-3b-intro
 
   - file: bibliography
