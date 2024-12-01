@@ -55,6 +55,21 @@ preprocess: .activate
 	$(done)
 .PHONY: preprocess
 
+## Prepare data
+prepare-data: .activate
+	source "$(VENV_PATH)/bin/activate" && python src/features/02-prepare-data.py
+	$(done)
+
+## Train model
+train-model: .activate
+	source "$(VENV_PATH)/bin/activate" && python -m src.models.train_model
+	$(done)
+
+## Predict model
+predict-model: .activate
+	source "$(VENV_PATH)/bin/activate" && python -m src.models.predict_model
+	$(done)
+
 ## Build documentation
 build-docs: .activate
 	source "$(VENV_PATH)/bin/activate" && jupyter-book clean reports/rendering-1

@@ -179,3 +179,4 @@ cython_debug/
 *.pkl
 *.model.pkl
 *.weights.h5
+/src/models/data/*.csv
