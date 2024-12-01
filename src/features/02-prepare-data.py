@@ -47,10 +47,12 @@ if __name__ == '__main__':
     df = pd.read_csv(os.path.join(RAW_DATA_DIR, 'test.csv'), na_values=np.nan, low_memory=False)
 
     # fill bg NaN values with median
-    df = FillPropertyNaNsTransformer(parameter='bg', how=['interpolate', 'median'], precision=2, interpolate=3, ffill=1, bfill=1).fit_transform(df)
+    df = FillPropertyNaNsTransformer(parameter='bg', how=['interpolate', 'median'], precision=2, interpolate=3, ffill=1,
+                                     bfill=1).fit_transform(df)
 
     # fill insulin NaN values with median
-    df = FillPropertyNaNsTransformer(parameter='insulin', how=['interpolate', 'median'], precision=2, interpolate=3, ffill=1, bfill=1).fit_transform(df)
+    df = FillPropertyNaNsTransformer(parameter='insulin', how=['interpolate', 'median'], precision=2, interpolate=3,
+                                     ffill=1, bfill=1).fit_transform(df)
 
     patients = df['p_num'].unique()
     print(f'{bcolors.OKCYAN}{get_time()} - Found {len(patients)} patients{bcolors.ENDC}')
@@ -100,7 +102,8 @@ if __name__ == '__main__':
         for time_diff in time_diffs:
             print(f'{bcolors.OKGREEN}{get_time()} - Create lag feature \'{parameter}{time_diff}\'{bcolors.ENDC}')
             col_name = f"{parameter}{time_diff}"
-            df_augmented_with_all_lag_features[col_name] = df_all[parameter].shift(periods=-1, freq=parse_time_diff(time_diff))
+            df_augmented_with_all_lag_features[col_name] = df_all[parameter].shift(periods=-1,
+                                                                                   freq=parse_time_diff(time_diff))
 
     # drop all parameter columns
     df_augmented_with_all_lag_features = df_augmented_with_all_lag_features.drop(columns=parameters)
@@ -116,7 +119,9 @@ if __name__ == '__main__':
 
     print(f'{bcolors.OKGREEN}{get_time()} - Create id column{bcolors.ENDC}')
     # create a id column with: p_num + autoincrement per patient
-    df_augmented_with_all_lag_features['id'] = (df_augmented_with_all_lag_features['p_num'] + '_test_' + df_augmented_with_all_lag_features.groupby('p_num').cumcount().astype(str))
+    df_augmented_with_all_lag_features['id'] = (
+            df_augmented_with_all_lag_features['p_num'] + '_test_' + df_augmented_with_all_lag_features.groupby(
+        'p_num').cumcount().astype(str))
     df_augmented_with_all_lag_features = df_augmented_with_all_lag_features.reset_index(drop=True).set_index('id')
     print(f'{bcolors.OKGREEN}{get_time()} - finished - {bcolors.ENDC}')
 
@@ -125,7 +130,7 @@ if __name__ == '__main__':
     result_df = df_augmented_with_all_lag_features.dropna(subset=['bg+1:00', 'bg-0:00'])
     print(f'{bcolors.OKGREEN}{get_time()} - finished - {bcolors.ENDC}')
 
-    filename = os.path.join(CLEAN_DATA_DIR, 'augmented_4_55.csv')
+    filename = os.path.join(CLEAN_DATA_DIR, 'augmented_4_55h.csv')
     print(f'{bcolors.OKGREEN}{get_time()} - Save data for all patients into {filename}{bcolors.ENDC}')
     result_df_4_55h = result_df.dropna(subset=['bg-4:55'])
     result_df_4_55h.to_csv(filename)

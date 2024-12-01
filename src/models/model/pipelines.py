@@ -1,6 +1,6 @@
 from sklearn.pipeline import Pipeline
 
-from src.features.transformers import DropColumnsTransformer, ExtractColumnsTransformer, FillPropertyNaNsTransformer, GetDummiesTransformer, PropertyOutlierTransformer, \
+from ...features.transformers import DropColumnsTransformer, ExtractColumnsTransformer, FillPropertyNaNsTransformer, GetDummiesTransformer, PropertyOutlierTransformer, \
     StandardScalerTransformer, DateTimeHourTransformer
 
 columns_to_extract = [
@@ -89,7 +89,7 @@ preprocessing_pipeline = Pipeline(steps=[
 ])
 
 standardization_pipeline = Pipeline(steps=[
-    ('get_dummies', GetDummiesTransformer(columns=['hour', 'p_num'])),
+    ('get_dummies', GetDummiesTransformer(columns=['p_num'])),
     ('standard_scaler', StandardScalerTransformer(columns=columns_to_extract[3:-1]))
 ])
 
