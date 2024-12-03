@@ -1,4 +1,4 @@
-# Modelling based on train data
+# Model 1
 
 Our first approach was  to take  only the data contained in `train.csv` to train/tune our models. 
 The overall workflow of this section was:

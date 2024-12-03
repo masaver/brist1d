@@ -83,6 +83,7 @@ class BaseHyperparameterTuner:
         if self._best_params is None:
             raise ValueError('No model has been fitted yet')
 
+        print(f'Best Parameters for {self.__name__}')
         return self._best_params
 
     def get_r2_score(self):
@@ -121,10 +122,12 @@ class BaseHyperparameterTuner:
     def show_chart(self):
         if self._best_model is None:
             raise ValueError('No model has been fitted yet')
-        if self._y_test is not None and self._y_pred_test is not None:
-            self.result_summary(y_true=self._y_test, y_pred=self._y_pred_test)
         if self._y_train is not None and self._y_pred_train is not None:
+            print('Train Set')
             self.result_summary(y_true=self._y_train, y_pred=self._y_pred_train)
+        if self._y_test is not None and self._y_pred_test is not None:
+            print('Test Set')
+            self.result_summary(y_true=self._y_test, y_pred=self._y_pred_test)
 
     @staticmethod
     def result_summary(y_true, y_pred, title=None):

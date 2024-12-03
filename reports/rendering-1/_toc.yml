@@ -22,16 +22,33 @@ chapters:
       - file: 02-exploratory-data-analysis/04-data-distribution
       - file: 02-exploratory-data-analysis/05-data-correlation
       - file: 02-exploratory-data-analysis/06-eda-conclusions
-  - file: 03-preprocessing-and-modelling/00-intro
+  - file: 03-preprocessing/00-intro
     sections:
-      - file: 03-preprocessing-and-modelling/01-preprocessing-steps
-      - file: 03-preprocessing-and-modelling/02-HyperParameter-tuner-classes
-      - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/00-3a-intro
+      - file: 03-preprocessing/01-preprocessing-steps
+  - file: 04-modelling/00-intro
+    sections:
+      - file: 04-modelling/01-model-1/00-intro
         sections:
-          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.1-prelim-modelling_with-LP
-          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.2-feature-importance-with-SHAP
-          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.3-LP-with feature-subset
-          - file: 03-preprocessing-and-modelling/03a-modelling-based-on-train-data/0.3.4-model-selection-and-HyperParameterTuning
-      - file: 03-preprocessing-and-modelling/03b-modelling-with-augmented-train-data/00-3b-intro
+          - file: 04-modelling/01-model-1/01-prelim-modelling_with-LP
+          - file: 04-modelling/01-model-1/02-feature-importance-with-SHAP
+          - file: 04-modelling/01-model-1/03-LP-with feature-subset
+          - file: 04-modelling/01-model-1/04-model-selection-and-HyperParameterTuning
+      - file: 04-modelling/02-model-2/00-intro
+        sections:
+          - file: 04-modelling/02-model-2/01-data-augmentation
+          - file: 04-modelling/02-model-2/02-preprocessing-and-standardization
+          - file: 04-modelling/02-model-2/03-preliminary-modelling-and-model-selection
+          - file: 04-modelling/02-model-2/04-feature-selection
+          - file: 04-modelling/02-model-2/05-hyperparameter-tuning
+          - file: 04-modelling/02-model-2/06-modelling
+          - file: 04-modelling/02-model-2/07-conclusions
+
+
+
+  - file: 05-conclusions/00-intro
+  - file: 06-appendix/00-intro
+    sections:
+      - file: 06-appendix/01-transformer-classes
+      - file: 06-appendix/02-hyperparameter-tuner-classes
 
   - file: bibliography
