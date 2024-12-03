@@ -24,7 +24,6 @@ chapters:
       - file: 02-exploratory-data-analysis/06-eda-conclusions
   - file: 03-preprocessing-and-modelling/00-intro
     sections:
-      - file: 03-preprocessing-and-modelling/00-3-intro
       - file: 03-preprocessing-and-modelling/01-preprocessing-steps
       - file: 03-preprocessing-and-modelling/02-HyperParameter-tuner-classes
         sections:
