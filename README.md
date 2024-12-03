@@ -66,22 +66,25 @@ Reset the environment:
 $ make reset
 ```
 
-## Data
+## Final model and data preparation
 
-The data is available in the `data` folder.
+The data is available in the `data` folder.  
+The final model is in the `src/models` folder.
 
-### Run preprocessing steps
-
-To run the preprocessing script, use the following command:
+To prepare the data and run the final model, use the following commands:
 
 ```bash
-$ make preprocess
+$ make prepare-data
+$ make train-final-model
+$ make predict-final-model
 ```
 
 or
 
 ```bash
-python src/features/01-extract-patient-data.py
+$ python src/features/02-prepare-data.py
+$ python -m src.models.train_model
+$ python -m src.models.predict_model
 ```
 
 ## Documentation and Reports
