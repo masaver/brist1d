@@ -1,6 +1,6 @@
 from sklearn.pipeline import Pipeline
 
-from ...features.transformers import DropColumnsTransformer, ExtractColumnsTransformer, FillPropertyNaNsTransformer, GetDummiesTransformer, PropertyOutlierTransformer, \
+from src.features.transformers import DropColumnsTransformer, ExtractColumnsTransformer, FillPropertyNaNsTransformer, GetDummiesTransformer, PropertyOutlierTransformer, \
     StandardScalerTransformer, DateTimeHourTransformer
 
 columns_to_extract = [

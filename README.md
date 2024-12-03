@@ -75,8 +75,8 @@ To prepare the data and run the final model, use the following commands:
 
 ```bash
 $ make prepare-data
-$ make train-model
-$ make predict-model
+$ make train-final-model
+$ make predict-final-model
 ```
 
 or
