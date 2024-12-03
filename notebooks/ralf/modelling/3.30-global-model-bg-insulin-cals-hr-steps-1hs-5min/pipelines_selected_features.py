@@ -90,7 +90,7 @@ preprocessing_pipeline = Pipeline(steps=[
 
 standardization_pipeline = Pipeline(steps=[
     ('get_dummies', GetDummiesTransformer(columns=['hour', 'p_num'])),
-    ('standard_scaler', StandardScalerTransformer(columns=columns_to_extract[1:-1]))
+    ('standard_scaler', StandardScalerTransformer(columns=columns_to_extract[3:-1]))
 ])
 
 pipeline = Pipeline(steps=[
