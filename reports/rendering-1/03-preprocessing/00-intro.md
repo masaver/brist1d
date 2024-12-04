@@ -1,15 +1,19 @@
 # Preprocessing
 
-The objective of this section is to show and explain the different preprocessing steps and feature engineering that we have done in the context of the Kaggle competition.
-
-The preprocessing steps are crucial to ensure that the data is in a format that can be used for modelling.
+The objective of this section is to show and to explain the various preprocessing steps and feature engineering techniques that have been applied by our team in the context of the Kaggle competition. These steps are essential to transform the raw data into a format suitable for modelling and to maximize the performance of predictive models.
 
 ## Preprocessing steps
 
-In this section we outline the pre-processing steps that we think will be required in order to correctly format the data before different forms of modelling.
+This section outlines the key preprocessing steps, carried out by our team, which, in our opinion, were necessary to properly prepare the dataset for different types of modelling.
 
-We wrote a bunch of [transformers](https://scikit-learn.org/stable/data_transforms.html) highly adapted to our data. We will use them to preprocess the data before modelling and
-before predicting.
+We developed a bunch of custom [transformers](https://scikit-learn.org/stable/data_transforms.html) tailored to the structure and characteristics of our dataset. These transformers are used to preprocess the data both during training and prediction phases, ensuring consistency and efficiency.
 
+* Objectives of custom transformers:
+    * Handle missing values and anomalies.
+    * Format the data to align with the requirements of time series.
+    * Generate additional features that might improve the model's predictive performance.
+
+<!--
 see: [Preprocessing steps](01-preprocessing-steps.md)
+-->
 

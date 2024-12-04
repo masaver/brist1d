@@ -1,31 +1,28 @@
 # Modelling
 
-In this section we show and describe two different approaches to modelling the data. The first approach is mainly based on the train data given by the competition, while the second
-approach uses the test data to create augmented train data.
+In this section, we present and explain two different approaches to modelling the data. The first approach is based on the train data given by the competition, while the second one uses the test data for a creation of augmented train data.
 
 ## Approaches based on the raw data
 
-We found two possible approaches to preprocess the data and model it.
+We drove two different approaches to preprocess the data and to model them.
 
 1. **Traditional Train Data Approach**
+* A global model was created using only the given train data (from 8 patients) to predict blood glucose levels for all participants.
+* This approach does not account for individual patient characteristics but provides a baseline model for comparison.
 
-We used the train data (from 8 patients) to create a global model that can be used to predict the blood glucose levels for all the participants.
+2. **Train and Test Data Approach** 
+* To address the limitations of the traditional approach, this method incorporates test data to capture individual patient characteristics.
+* Synthetic train data were created from the test data by shifting lag features to the right, using previous hours of data to predict future hours. This leverages the time-series nature of the dataset to augment the training process.
 
-2. **Train and Test Data Approach** using the train data
 
-As the traditional approach does not take in consideration the individual characteristics of each patient, we will take into account the test data to get more information about the
-individual characteristics of each patient.
-As the given data is based on lag features for each parameter, we can create synthetic train data from test data, shifting the lag features to the right and using previous hours of
-data to predict the next hours.
+## Steps for Both Approaches
 
-## Steps for the two approaches
+For both approaches, we'll perform the following steps:
 
-For both approaches, we will use the following steps:
-
-* Relevant preprocessing steps
-* Running LazyPredict with a large subset of the features (up to 300 columns)
-* Defining the most important features with SHAP or other feature importance methods
-* Get the most promising models running LazyPredict with the most important features
-* Hyperparameter tuning with SciKit-Optimize
-* Ensemble models
-* Predicting the test data
+* Apply relevant preprocessing steps to prepare the data.
+* Run LazyPredict on a large subset of the features (up to 300 columns).
+* Define the most important features using SHAP (SHapley Additive exPlanations) or other feature importance methods.
+* Identify the most promising models running LazyPredict again, but now with the most important features.
+* Perform hyperparameter optimization on the most promising models using SciKit-Optimize for fine-tuning.
+* Combine the best-performing models into **ensembles** to enhance prediction accuracy.
+* Use the final models to predict blood glucose levels on the test data.

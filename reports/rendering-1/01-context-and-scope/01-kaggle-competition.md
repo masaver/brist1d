@@ -16,7 +16,7 @@ An essential part of managing type 1 diabetes is predicting how blood glucose le
 
 ### The Dataset
 
-The dataset used in this competition is part of a newly collected, real-world data, collected from young adults in the UK whith type 1 diabetes. All participants used continuous glucose monitors and insulin pumps, and a smartwatch was provided to collect activity data during the study. The complete dataset will be published after the competition for research purposes. Additional details about the study can be found in this [blog post](https://jeangoldinginstitute.blogs.bristol.ac.uk/2024/08/19/how-smartwatches-could-help-people-with-type-1-diabetes/).
+The dataset used in this competition is part of a newly collected, real-world data from young adults in the UK whith type 1 diabetes. All participants used continuous glucose monitors and insulin pumps, and a smartwatch was provided to collect activity data during the study. The complete dataset will be published after the competition for research purposes. Additional details about the study can be found in this [blog post](https://jeangoldinginstitute.blogs.bristol.ac.uk/2024/08/19/how-smartwatches-could-help-people-with-type-1-diabetes/).
 
 ### Evaluation
 
