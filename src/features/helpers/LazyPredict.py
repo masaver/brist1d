@@ -1,12 +1,12 @@
 from statistics import LinearRegression
 
-from lazypredict import LazyRegressor
+from lazypredict import LazyClassifier, LazyRegressor
 from lightgbm import LGBMRegressor
 from matplotlib.widgets import Lasso
 from sklearn.compose import TransformedTargetRegressor
 from sklearn.dummy import DummyRegressor
 from sklearn.ensemble import GradientBoostingRegressor, HistGradientBoostingRegressor, RandomForestClassifier
-from sklearn.ensemble._weight_boosting import AdaBoostRegressor
+from sklearn.ensemble._weight_boosting import AdaBoostClassifier, AdaBoostRegressor
 from sklearn.ensemble._bagging import BaggingClassifier, BaggingRegressor
 from sklearn.linear_model import ElasticNet, ElasticNetCV, GammaRegressor, HuberRegressor, Lars, LarsCV, LassoCV, LassoLars, LassoLarsCV, LassoLarsIC, OrthogonalMatchingPursuit, \
     OrthogonalMatchingPursuitCV, PassiveAggressiveRegressor, PoissonRegressor, QuantileRegressor, RANSACRegressor, Ridge, RidgeCV, SGDClassifier, SGDRegressor, TweedieRegressor
@@ -28,8 +28,9 @@ regressors_whitelist = [
 ]
 
 
-def get_lazy_regressor(verbose=0, ignore_warnings=True, custom_metric=None, exclude: list[str] = None, predictions=False):
+def get_lazy_regressor(verbose=0, ignore_warnings=True, custom_metric=None, exclude: list[str] = None, predictions=False) -> LazyRegressor:
     whitelist = regressors_whitelist
     if exclude:
         whitelist = [regressor for regressor in regressors_whitelist if regressor.__name__ not in exclude]
+
     return LazyRegressor(verbose=verbose, ignore_warnings=ignore_warnings, custom_metric=custom_metric, regressors=whitelist, predictions=predictions)
