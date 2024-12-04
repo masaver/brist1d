@@ -1,6 +1,7 @@
 # Exploratory Data Analysis
 
-In this section, we will analyse the raw data and try to understand the structure and consistency of the data.
+
+In this section, we will examine the raw dataset to gain insights into its structure, consistency, and key characteristics. This analysis aims to identify patterns, detect anomalies, and evaluate data quality, which are critical steps in preparing the dataset for further modeling and analysis.
 
 ## Dataset description and structure
 
@@ -20,12 +21,13 @@ In this section, we will analyse the raw data and try to understand the structur
   * Target variable visualization
 * Data correlation
   * Correlation between lag-features and target variable
-  * Correlation between lag-features
 * Data distribution
   * Distribution of the target variable
   * Distribution of the lag-features
+
+<!--
 * Preprocessing
   * Create time series data for each patient
   * Set the same time resolution of the time series data for each patient
   * Check and combine the lag-features for each patient into one column for each variable
-
+-->
