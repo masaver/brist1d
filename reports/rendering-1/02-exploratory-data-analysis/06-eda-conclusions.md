@@ -1,28 +1,37 @@
-# Exploratory Data analysis conclusions
+# Exploratory Data Analysis Conclusions
 
-Our Exploratory data analysis  has so far revealed that:
-* Only a minor anomaly was detected for p12, where we found two value
-* Only one patient (p11) shows small inconsistencies across continuous  rows in the raw data
-* Feature columns in tha raw data have moderate fractions of NAs. However, columns related to **activity** and **carbs** have a substantial ammount of NAs (>95%)
-* With minor exceptions, the distribution of features and target variable is comparable across patients
-* The distribution for all variables are right-skewed. 
-* Most features ( whole time series or lag features ) are poorly correlated to bg+1:00
-
-
-## Business relevant insights
-
-In theory, the main advantage of the dataset we are working with is that it provides high-throughput measurements for seveal variables that are know to affect blood glucose. However, directly using some of the information provided will be challenging. More concretely:
-
-* Using the columns related to **activity** and **carbs** will more difficult, if not impractica, given that they are almost all NAs. The **activity**  also contain information for multiple types of activity. So using it for modelling would requiere some kind of encoding
-  
-* Except for prior blood glucose (**bg**) levels, all variables show a very poor correlation with the outcome variable, so it's entirely possible that a good performingl model can already be achieved with with prior blood glucose levels alone. This can mean  that a good product/technology might requiere extra complicated devices and measuremens.
-
-## Planned steps for upcomming analysis
-
-### Preprocessing & Preliminary Modelling:
-* Impute the raw data with the columns median ( recall that most distributions are skewed ) and Run LazyPredict
-* Impute the processed data ( long format ) with column meadian or time series interpolation and run LazyPredict
+* Anomalies:
+    * A minor anomaly was detected for ``p12``, where two negativ values were identified as irregular.
+    * Only one patient (``p11``) shows small inconsistencies in continuous rows within the raw data.
+* Missing Data:
+    * Feature columns in the raw data generally have moderate fractions of missing values (NAs). 
+    * The columns related to ``activity`` and ``carbs`` have a substantial missing values with over 95%.
+* Feature Distributions:
+    * With only minor exceptions, the distribution of features and target variable is largely comparable across patients.
+    * All variables exhibit right-skewed distributions.
+* Correlations:
+    * Most features, whether considered as whole time series or lagged features, show weak correlations with ``bg+1:00``, emphasizing the predictive dominance of recent ``bg`` values.
 
 
-### NOTE/Ref:
-(Lazy Predict)[https://github.com/shankarpandala/lazypredict] helps build a lot of basic models ( for Classification or Regression) without much code and helps understand which models works better without any parameter tuning.
+## Business Relevant Insights
+
+* **Data challenges:**
+The dataset provides valuable variables known to influence blood glucose levels, but using some of them directly is challenging. For instance, columns related to activity and carbohydrates have over 95% missing values, making them difficult to include in modeling without substantial data imputation. Additionally, the activity data includes multiple activity types, requiring specialized encoding methods to make the data usable.
+
+* **Predictive power of prior blood glucose:**
+Prior blood glucose (``bg``) levels are strongly correlated with future glucose (``bg+1:00``), while other variables show weak correlations. This suggests that a well-performing model could be built using only prior glucose levels, potentially reducing the need for additional data or complex devices. However, integrating other variables could still enhance the model's performance if the challenges related to their data quality and usability are resolved.
+
+This analysis underscores the importance of balancing data complexity with practicality in designing products or technologies for blood glucose prediction.
+
+
+## Planned Steps for Upcomming Analysis
+
+### Preprocessing & Preliminary Modeling:
+1. Raw data preprocessing
+    * Impute the raw data using the column median (to address skewed distributions) and run LazyPredict.
+2. Processed data preprocessing
+    * Impute the processed data ("long format") using either the column median or time series interpolation and run LazyPredict.
+
+
+### Note/Reference
+(Lazy Predict)[https://github.com/shankarpandala/lazypredict] is a Python library designed to build a variety of basic models for both classification and regression tasks with minimal coding effort. It allows for a quick comparison of models to understand which ones perform better on a given dataset, all without requiring parameter tuning. This makes it a valuable tool for exploratory modeling and baseline performance evaluation.
