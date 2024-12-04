@@ -60,6 +60,31 @@ prepare-data: .activate
 	source "$(VENV_PATH)/bin/activate" && python src/features/02-prepare-data.py
 	$(done)
 
+## Train model 1
+train-model-1: .activate
+	source "$(VENV_PATH)/bin/activate" && python -m src.models.train_model 1
+	$(done)
+
+## Predict model
+predict-model-1: .activate
+	source "$(VENV_PATH)/bin/activate" && python -m src.models.predict_model 1
+	$(done)
+
+## Train model
+train-final-model: .activate
+	source "$(VENV_PATH)/bin/activate" && python -m src.models.train_model 2
+	$(done)
+
+## Predict model
+predict-final-model: .activate
+	source "$(VENV_PATH)/bin/activate" && python -m src.models.predict_model 2
+	$(done)
+
+## Prepare data
+prepare-data: .activate
+	source "$(VENV_PATH)/bin/activate" && python src/features/02-prepare-data.py
+	$(done)
+
 ## Train model
 train-model: .activate
 	source "$(VENV_PATH)/bin/activate" && python -m src.models.train_model

@@ -36,9 +36,6 @@ with open(os.path.join(root_directory, 'settings.json')) as f:
 RAW_DATA_DIR = str(os.path.join(root_directory, settings['RAW_DATA_DIR']))
 CLEAN_DATA_DIR = str(os.path.join(root_directory, settings['CLEAN_DATA_DIR']))
 
-# Create CLEAN_DATA_DIR if it doesn't exist
-os.makedirs( CLEAN_DATA_DIR , exist_ok = True )
-
 print(f'{bcolors.OKGREEN}{get_time()} - Raw data directory: {RAW_DATA_DIR}{bcolors.ENDC}')
 print(f'{bcolors.OKGREEN}{get_time()} - Clean data directory: {CLEAN_DATA_DIR}{bcolors.ENDC}')
 
