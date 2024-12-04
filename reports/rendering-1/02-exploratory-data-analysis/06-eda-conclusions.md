@@ -16,7 +16,7 @@
 ## Business Relevant Insights
 
 * **Data challenges:**
-The dataset provides valuable variables known to influence blood glucose levels, but using some of them directly is challenging. For instance, columns related to activity and carbohydrates have over 95% missing values, making them difficult to include in modeling without substantial data imputation. Additionally, the activity data includes multiple activity types, requiring specialized encoding methods to make the data usable.
+The dataset provides valuable variables known to influence blood glucose levels, but using some of them directly is challenging. For instance, columns related to activity and carbohydrates have over 95% missing values, making them difficult to include in modelling without substantial data imputation. Additionally, the activity data includes multiple activity types, requiring specialized encoding methods to make the data usable.
 
 * **Predictive power of prior blood glucose:**
 Prior blood glucose (``bg``) levels are strongly correlated with future glucose (``bg+1:00``), while other variables show weak correlations. This suggests that a well-performing model could be built using only prior glucose levels, potentially reducing the need for additional data or complex devices. However, integrating other variables could still enhance the model's performance if the challenges related to their data quality and usability are resolved.
@@ -26,7 +26,7 @@ This analysis underscores the importance of balancing data complexity with pract
 
 ## Planned Steps for Upcomming Analysis
 
-### Preprocessing & Preliminary Modeling:
+### Preprocessing & Preliminary Modelling:
 1. Raw data preprocessing
     * Impute the raw data using the column median (to address skewed distributions) and run LazyPredict.
 2. Processed data preprocessing
@@ -34,4 +34,4 @@ This analysis underscores the importance of balancing data complexity with pract
 
 
 ### Note/Reference
-(Lazy Predict)[https://github.com/shankarpandala/lazypredict] is a Python library designed to build a variety of basic models for both classification and regression tasks with minimal coding effort. It allows for a quick comparison of models to understand which ones perform better on a given dataset, all without requiring parameter tuning. This makes it a valuable tool for exploratory modeling and baseline performance evaluation.
+(Lazy Predict)[https://github.com/shankarpandala/lazypredict] is a Python library designed to build a variety of basic models for both classification and regression tasks with minimal coding effort. It allows for a quick comparison of models to understand which ones perform better on a given dataset, all without requiring parameter tuning. This makes it a valuable tool for exploratory modelling and baseline performance evaluation.

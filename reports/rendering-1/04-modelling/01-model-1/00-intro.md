@@ -1,15 +1,20 @@
 # Model 1
 
-Our first approach was  to take  only the data contained in `train.csv` to train/tune our models. 
-The overall workflow of this section was:
+## Overview
+Our first approach uses only the data contained in `train.csv` to train and tune our models. 
+The workflow for this approach includes:
 
-* **3a.1**: Testing Multiple regressor models with default parameters via LazyPredict
+* **3a.1**: Testing multiple regressor models with default parameters using LazyPredict
 * **3a.2**: Feature importance based on SHAP values
-* **3a.3**: LazyPredict Modelling on feature subset
-* **3a.4**: Model Tuning on Feature Set, Ensemble Regressor & Kaggle submissions
+* **3a.3**: Re-running LazyPredict on the feature subset derived from the SHAP analysis
+* **3a.4**: Hyperparameter Tuning on Feature Set, Ensemble Regressor & Kaggle submissions
 
 ## Usage of LazyPredict
+* We are using LazyPredict nightly in the project.
+* Why LazyPredict?
+    LazyPredict (LP) is an AutoML tool designed for quick testing of multiple estimators (classifiers or regressors) from Scikit-learn. Under the hood, LP defines a list of models to test. It simplifies initial model selection by providing performance metrics for a variety of models without requiring parameter tuning.
+* Challenges LazyPredict:   
+    In case of Regression, two models from the default list took an unusually long time to process and even caused Jupyter kernels to crash. To circumvent this, the list of regressors was modified to exclude these problematic models.
+* Customizing LazyPredict:
+To streamline the process and customize the list of regressors tested, a helper function get_lazy_regressor() was created. This function can be imported from ``LazyPredict.py`` in the ``src/helpers`` folder. It provides a convenient instantiation of ``LazyRegressor()`` with a tailored list of regressors.
 
-* We are using lazyPredict nightly in the project.
-* LazyPredict (LP) is a type of AutoML tool, that allows you to test multiple extimators( Classifiers or Regressors ) from sci-kit learn. Under the hood, LP defines a list of models to test. In the case of Regression, two of the models were talking a relly loong time and even crashed the jupyter kernels. To circumvent that, modifiedd slightly the list of regressors to test.
-* To conveniently instantiate a `LazyRegressor()` and to custumize the list of individual regressors tested, you can import `get_lazy_regressor()` from `LazyPredict.py` in the helpers folder (see `src/helpers` ). 
