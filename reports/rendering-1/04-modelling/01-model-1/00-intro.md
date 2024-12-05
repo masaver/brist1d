@@ -18,7 +18,7 @@ The workflow for this approach includes:
 * Customizing LazyPredict:
 To streamline the process and customize the list of regressors tested, a helper function get_lazy_regressor() was created. This function can be imported from ``LazyPredict.py`` in the ``src/helpers`` folder. It provides a convenient instantiation of ``LazyRegressor()`` with a tailored list of regressors.
 
-## Feature importance via SHAP (SHapley Additive exPlanations) analysis
+## Feature Importance via SHAP (SHapley Additive exPlanations) Analysis
 * SHAP (SHapley Additive exPlanations) is a framework for interpreting machine learning model predictions by attributing the influence of each input feature to the output. SHAP analysis is especially valuable in improving model transparency, identifying key features, and building trust in machine learning applications. It is widely used in critical fields like healthcare, finance, and regulatory environments where interpretability is essential.
   
 * **Key Concepts**:

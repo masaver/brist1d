@@ -2,7 +2,7 @@
 
 In this section, we present and explain two different approaches to modelling the data. The first approach is based on the train data given by the competition, while the second one uses the test data for a creation of augmented train data.
 
-## Approaches based on the raw data
+## Approaches Based on the Raw Data
 
 We drove two different approaches to preprocess the data and to model them.
 
