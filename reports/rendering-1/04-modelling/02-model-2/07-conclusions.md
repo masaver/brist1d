@@ -7,8 +7,8 @@ This was done by shifting the test data by minimum 1 hour and maximum 4 hours to
 
 We started by exploring the dataset and understanding the features, then we preprocessed the data and engineered new features to improve the model's performance.
 
-We evaluated the performance of several models using Lazy Predict and selected the best performing ones for further tuning. We created a series of HyperParameter Tuner classes for
-the best performing models identified from Lazy Predict, which automatically performed Grid Search using BayesSearchCV and a 5-fold cross-validation to identify an optimal set of
+We evaluated the performance of several models using LazyPredict and selected the best performing ones for further tuning. We created a series of HyperParameter Tuner classes for
+the best performing models identified from LazyPredict, which automatically performed Grid Search using BayesSearchCV and a 5-fold cross-validation to identify an optimal set of
 hyper-parameters. We then fine-tuned the models using the optimal hyper-parameters and evaluated their performance. Finally, we selected the best performing models from different
 categories.
 With these models we could determine the most important features. We found that the most important features are within the last 1 hour of data.

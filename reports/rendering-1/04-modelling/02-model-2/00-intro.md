@@ -1,9 +1,10 @@
-# Model 2 - Data augmentation
-
-Modelling based on train and augmented train data
+# Model 2 - Data Augmentation
 
 ## Overview
 
-In this notebook we focus on create more date from the given test dataset by augmenting blood glucose level predictions. We will then use the augmented data to additionally train
-the model and predict the test data.
+This notebook explores a data augmentation approach, where the given test dataset is used to generate additional training data. By leveraging predicted blood glucose levels, we augment the dataset to enhance the model's training process and improve its performance when predicting the test data.
+
+### Objective:
+
+To assess whether data augmentation via test data predictions can improve model performance by providing additional information for training.
 
