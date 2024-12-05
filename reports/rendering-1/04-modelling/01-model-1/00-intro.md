@@ -1,4 +1,4 @@
-# Model 1 - **`train.csv`** data only
+# Model 1 - Train Data Only
 
 ## Overview
 Our first approach uses only the data contained in `train.csv` to train and tune our models. 
