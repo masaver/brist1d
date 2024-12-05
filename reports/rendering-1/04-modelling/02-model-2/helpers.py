@@ -9,8 +9,12 @@ import pandas as pd
 import numpy as np
 from jedi.inference.gradual.typing import TypedDict
 from sklearn.ensemble import StackingRegressor
-from sklearn.model_selection import ShuffleSplit, LeaveOneGroupOut
-from sklearn.metrics import root_mean_squared_error, mean_absolute_error, mean_squared_error, r2_score
+from sklearn.model_selection import ShuffleSplit, LeaveOneGroupOut, train_test_split
+from sklearn.metrics import root_mean_squared_error, mean_absolute_error, mean_squared_error, r2_score, \
+    PredictionErrorDisplay
+from skopt import BayesSearchCV
+
+from src.features.helpers import CustomSplitter
 
 
 class ModelScoreParameter(TypedDict):
@@ -29,7 +33,8 @@ class ModelScore:
     mae: ModelScoreParameter | None
     mse: ModelScoreParameter | None
 
-    def __init__(self, name: str = '', r_squared: ModelScoreParameter | None = None, rmse: ModelScoreParameter | None = None, mae: ModelScoreParameter | None = None,
+    def __init__(self, name: str = '', r_squared: ModelScoreParameter | None = None,
+                 rmse: ModelScoreParameter | None = None, mae: ModelScoreParameter | None = None,
                  mse: ModelScoreParameter | None = None):
         self.name = name
         self.r_squared = r_squared
@@ -69,7 +74,8 @@ def print_conditionally(message, verbose=True):
         print(f'{get_date_time_now()} - {message}')
 
 
-def calculate_stacking_regressor_performance(model: StackingRegressor, X_train, y_train, X_additional_train, y_additional_train, verbose=True, n_splits=5, groups=None):
+def calculate_stacking_regressor_performance(model: StackingRegressor, X_train, y_train, X_additional_train,
+                                             y_additional_train, verbose=True, n_splits=5, groups=None):
     print_conditionally(f'Start training', verbose=verbose)
 
     models = model.estimators + [('final_estimator', model.final_estimator), ('stacking_regressor', model)]
@@ -135,7 +141,8 @@ def calculate_stacking_regressor_performance(model: StackingRegressor, X_train, 
     return model_scores
 
 
-def calculate_dnn_performance(create_model_fn: Callable, X_train, y_train, X_additional_train, y_additional_train, verbose=True, n_splits=5, epochs=50, groups=None,
+def calculate_dnn_performance(create_model_fn: Callable, X_train, y_train, X_additional_train, y_additional_train,
+                              verbose=True, n_splits=5, epochs=50, groups=None,
                               callbacks=None):
     print_conditionally(f'Start training DNN', verbose)
 
@@ -284,7 +291,8 @@ def plot_feature_importance_chart(feature_importances: pd.DataFrame):
     feature_importances.loc[feature_importances.index.str.startswith('bg')].plot(kind='bar', ax=ax1, stacked=True)
     ax1.set_title('Feature importance blood glucose')
     ax1.set_xlabel('Feature')
-    ax1.set_xticklabels([item.get_text()[-5:] for item in ax1.get_xticklabels()], rotation=45, horizontalalignment='right')
+    ax1.set_xticklabels([item.get_text()[-5:] for item in ax1.get_xticklabels()], rotation=45,
+                        horizontalalignment='right')
     ax1.set_ylabel('Importance')
     ax1.legend()
 
@@ -292,7 +300,8 @@ def plot_feature_importance_chart(feature_importances: pd.DataFrame):
     feature_importances.loc[feature_importances.index.str.startswith('insulin')].plot(kind='bar', ax=ax2, stacked=True)
     ax2.set_title('Feature importance insulin')
     ax2.set_xlabel('Feature')
-    ax2.set_xticklabels([item.get_text()[-5:] for item in ax2.get_xticklabels()], rotation=45, horizontalalignment='right')
+    ax2.set_xticklabels([item.get_text()[-5:] for item in ax2.get_xticklabels()], rotation=45,
+                        horizontalalignment='right')
     ax2.set_ylabel('Importance')
     ax2.legend()
 
@@ -301,7 +310,8 @@ def plot_feature_importance_chart(feature_importances: pd.DataFrame):
     feature_importances.loc[feature_importances.index.str.startswith('hr')].plot(kind='bar', ax=ax3, stacked=True)
     ax3.set_title('Feature importance heart rate')
     ax3.set_xlabel('Feature')
-    ax3.set_xticklabels([item.get_text()[-5:] for item in ax3.get_xticklabels()], rotation=45, horizontalalignment='right')
+    ax3.set_xticklabels([item.get_text()[-5:] for item in ax3.get_xticklabels()], rotation=45,
+                        horizontalalignment='right')
     ax3.set_ylabel('Importance')
     ax3.legend()
 
@@ -310,7 +320,8 @@ def plot_feature_importance_chart(feature_importances: pd.DataFrame):
     feature_importances.loc[feature_importances.index.str.startswith('steps')].plot(kind='bar', ax=ax4, stacked=True)
     ax4.set_title('Feature importance steps')
     ax4.set_xlabel('Feature')
-    ax4.set_xticklabels([item.get_text()[-5:] for item in ax4.get_xticklabels()], rotation=45, horizontalalignment='right')
+    ax4.set_xticklabels([item.get_text()[-5:] for item in ax4.get_xticklabels()], rotation=45,
+                        horizontalalignment='right')
     ax4.set_ylabel('Importance')
     ax4.legend()
 
@@ -319,10 +330,84 @@ def plot_feature_importance_chart(feature_importances: pd.DataFrame):
     feature_importances.loc[feature_importances.index.str.startswith('cals')].plot(kind='bar', ax=ax5, stacked=True)
     ax5.set_title('Feature importance calories')
     ax5.set_xlabel('Feature')
-    ax5.set_xticklabels([item.get_text()[-5:] for item in ax5.get_xticklabels()], rotation=45, horizontalalignment='right')
+    ax5.set_xticklabels([item.get_text()[-5:] for item in ax5.get_xticklabels()], rotation=45,
+                        horizontalalignment='right')
     ax5.set_ylabel('Importance')
     ax5.legend()
 
     # Adjust layout
     plt.tight_layout()
     plt.show()
+
+
+def show_tune_hyperparameter_stats(y_true, y_pred):
+    print(f'RMSE: {root_mean_squared_error(y_true, y_pred)}')
+    print(f'R2 Score: {r2_score(y_true, y_pred)}')
+
+    fig, axs = plt.subplots(ncols=2, figsize=(8, 4))
+    PredictionErrorDisplay.from_predictions(
+        y_true=y_true,
+        y_pred=y_pred,
+        kind="actual_vs_predicted",
+        subsample=100,
+        ax=axs[0],
+        random_state=0,
+    )
+    axs[0].set_title("Actual vs. Predicted values")
+    PredictionErrorDisplay.from_predictions(
+        y_true=y_true,
+        y_pred=y_pred,
+        kind="residual_vs_predicted",
+        subsample=100,
+        ax=axs[1],
+        random_state=0,
+    )
+    axs[1].set_title("Residuals vs. Predicted Values")
+    fig.suptitle("Plotting cross-validated predictions")
+    plt.tight_layout()
+    plt.show()
+
+
+def tune_hyperparameters(model, param_space, X_train, y_train, X_additional_train, y_additional_train, verbose=True,
+                         num_iter=50, n_splits=5, show_results=True):
+    print_conditionally(f'Start tuning {model.__class__.__name__}', verbose)
+    print_conditionally(f'Parameters: {param_space}', verbose)
+
+    X_all_train = pd.concat([X_train, X_additional_train])
+    y_all_train = pd.concat([y_train, y_additional_train])
+
+    splitter = CustomSplitter(test_size=0.2, n_splits=n_splits, random_state=42)
+    splitter.fit(X_all_train, groups=[0] * len(X_train) + [1] * len(X_additional_train))
+
+    _, X_eval, _, y_eval = train_test_split(X_additional_train, y_additional_train, test_size=0.2, random_state=42,
+                                            shuffle=True)
+    fit_params = {
+        "eval_set": [(X_eval, y_eval)],
+        "early_stopping_rounds": 50,
+        "verbose": True
+    }
+
+    np.int = int
+    search_cv = BayesSearchCV(
+        estimator=model,
+        search_spaces=param_space,
+        n_iter=num_iter,
+        scoring='neg_mean_squared_error',
+        cv=splitter,
+        n_jobs=-1,
+        random_state=42,
+        verbose=1 if verbose else 0,
+        fit_params=fit_params
+    )
+
+    print_conditionally(f'Fitting the model', verbose)
+    search_cv.fit(X_all_train, y_all_train)
+
+    print_conditionally(f'Best hyperparameters found.', verbose)
+    print_conditionally(search_cv.best_params_, verbose)
+
+    if show_results:
+        y_all_pred = search_cv.predict(X_all_train)
+        show_tune_hyperparameter_stats(y_all_train, y_all_pred)
+
+    return search_cv.best_estimator_, search_cv.best_params_

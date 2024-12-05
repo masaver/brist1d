@@ -11,12 +11,11 @@ param_spaces = {
         'leaf_size': Integer(10, 50),  # Leaf size for the tree-based neighbor search, affects efficiency
     },
     'custom': {
-        'n_neighbors': Integer(1, 10),  # Extended to include smaller k values
+        'n_neighbors': Integer(3, 15),  # Extended to include smaller k values
         'weights': Categorical(['uniform', 'distance']),  # Added 'distance' weighting
-        'p': Categorical([1, 2, 3]),  # Added Manhattan distance
-        'leaf_size': Integer(10, 100),  # Broader range for flexibility
-        'metric': Categorical(['minkowski', 'euclidean', 'manhattan', 'chebyshev']),  # Added diverse distance metrics
-        'algorithm': Categorical(['auto', 'ball_tree', 'kd_tree', 'brute']),  # Optional algorithm selection
+        'p': Categorical([1, 2]),  # Added Manhattan distance
+        'leaf_size': Integer(10, 50),  # Broader range for flexibility
+        'metric': Categorical(['minkowski', 'euclidean', 'chebyshev']),  # Added diverse distance metrics
     }
 }
 
