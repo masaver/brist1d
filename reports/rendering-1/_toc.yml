@@ -42,13 +42,11 @@ chapters:
           - file: 04-modelling/02-model-2/05-hyperparameter-tuning
           - file: 04-modelling/02-model-2/06-modelling
           - file: 04-modelling/02-model-2/07-conclusions
-
-
-
   - file: 05-conclusions/00-intro
   - file: 06-appendix/00-intro
     sections:
       - file: 06-appendix/01-transformer-classes
       - file: 06-appendix/02-hyperparameter-tuner-classes
+      - file: 06-appendix/03-custom-splitter-class
 
   - file: bibliography
