@@ -88,80 +88,8 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     # organize the columns
     meta_columns = ['p_num']
     parameters = ['bg', 'insulin', 'carbs', 'hr', 'steps', 'cals', 'activity']
-    time_diffs = [
-        '-0:00',
-        '-0:05',
-        '-0:10',
-        '-0:15',
-        '-0:20',
-        '-0:25',
-        '-0:30',
-        '-0:35',
-        '-0:40',
-        '-0:45',
-        '-0:50',
-        '-0:55',
-        '-1:00',
-        '-1:05',
-        '-1:10',
-        '-1:15',
-        '-1:20',
-        '-1:25',
-        '-1:30',
-        '-1:35',
-        '-1:40',
-        '-1:45',
-        '-1:50',
-        '-1:55',
-        '-2:00',
-        '-2:05',
-        '-2:10',
-        '-2:15',
-        '-2:20',
-        '-2:25',
-        '-2:30',
-        '-2:35',
-        '-2:40',
-        '-2:45',
-        '-2:50',
-        '-2:55',
-        '-3:00',
-        '-3:05',
-        '-3:10',
-        '-3:15',
-        '-3:20',
-        '-3:25',
-        '-3:30',
-        '-3:35',
-        '-3:40',
-        '-3:45',
-        '-3:50',
-        '-3:55',
-        '-4:00',
-        '-4:05',
-        '-4:10',
-        '-4:15',
-        '-4:20',
-        '-4:25',
-        '-4:30',
-        '-4:35',
-        '-4:40',
-        '-4:45',
-        '-4:50',
-        '-4:55',
-        '-5:00',
-        '-5:05',
-        '-5:10',
-        '-5:15',
-        '-5:20',
-        '-5:25',
-        '-5:30',
-        '-5:35',
-        '-5:40',
-        '-5:45',
-        '-5:50',
-        '-5:55'
-    ]
+    time_diffs = [f'-{i}:{j:02}' for i in range(6) for j in range(0, 60, 5)]
+
     target_columns = ['bg+1:00'] if 'bg+1:00' in df_patient.columns else []
 
     df_patient_combined_values = df_patient[meta_columns + [f"{parameter}{time_diffs[0]}" for parameter in parameters] + target_columns].copy()
@@ -198,9 +126,9 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
 
 
 if __name__ == '__main__':
-    #print(f'{bcolors.OKGREEN}{get_time()} - Cleanup interim folder{bcolors.ENDC}')
+    # print(f'{bcolors.OKGREEN}{get_time()} - Cleanup interim folder{bcolors.ENDC}')
     print(f'{bcolors.OKGREEN}{"=" * 50}{bcolors.ENDC}')
-    #for file in os.listdir(interim_folder):
+    # for file in os.listdir(interim_folder):
     #    if file.endswith(".csv"):
     #        os.remove(os.path.join(interim_folder, file))
     #        print(f'{bcolors.OKCYAN}{get_time()} - Delete {file}{bcolors.ENDC}')
