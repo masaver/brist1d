@@ -24,7 +24,7 @@ The Kaggle competition finished and our model achieved a RMSE of 2.4224 on the t
 
 With this score we achieved a rank of 4 on the public leaderboard and a rank of 10 on the private leaderboard.
 
-![img.png](../../../figures/kaggle-leaderboard-private-score.png)
+![kaggle-private-leaderboard.png](../../../figures/kaggle-private-leaderboard.png)
 
 In conclusion, we have successfully developed a remarkable model that can predict blood glucose levels one hour ahead with a high degree of accuracy. This model can be used to help
 individuals with type 1 diabetes manage their condition more effectively.
