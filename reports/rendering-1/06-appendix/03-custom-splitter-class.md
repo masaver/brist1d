@@ -1,9 +1,9 @@
 # Custom Splitter
 
-The custom splitter is a class that extends the `BaseCrossValidator` class from scikit-learn. It is used to split the data into training and test sets based on the group values
+The custom splitter is a class that extends the `BaseCrossValidator` class from ``scikit-learn``. It is used to split the data into training and test sets based on the group values
 provided during fitting. The custom splitter is used in the `BayesSearchCV` class to perform cross-validation with group-based splits.
 
-Groups set to 0 are always included in the training set, while groups set to 1 are split into training and test sets based on the specified test size. The custom splitter uses the
+Groups set to ``0`` are always included in the training set, while groups set to ``1`` are split into training and test sets based on the specified test size. The custom splitter uses the
 `ShuffleSplit` class from scikit-learn to randomly split the group 1 data into training and test sets.
 
 With the help of the custom splitter, we can ensure that the train data is always included in the training set, while the augmented data is used with 80% in the training set and

@@ -46,9 +46,9 @@ pipeline = Pipeline(steps=[
 ])
 ```
 
-## Preprocessing steps
+## Preprocessing Steps
 
-Based on the insights gained from exploratory data analysis, the following preprocessing steps have been identified as the most appropriate for preparing the dataset for modeling:
+Based on the insights gained from exploratory data analysis, the following preprocessing steps have been identified as the most appropriate for preparing the dataset for modelling:
 
 1. Handling columns with high missing values:
     * Columns related to ``carbs`` and ``activity`` are removed due to their high fraction of missing values (>95%).

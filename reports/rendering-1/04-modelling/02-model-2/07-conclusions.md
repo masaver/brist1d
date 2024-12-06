@@ -29,14 +29,3 @@ The approach involved extensive data exploration, feature engineering, and model
 ![kaggle-private-leaderboard.png](../../../figures/kaggle-private-leaderboard.png)
 
 > In conclusion, we successfully developed a remarkable model that predicts blood glucose levels one hour ahead with a high degree of accuracy. This predictive capability can significantly aid individuals with type 1 diabetes in managing their condition more effectively.
-
-
-## Further Work
-
-To enhance the model's performance and generalization, the following areas could be explored in the future:
-
-- **Feature Reduction**: We could explore further feature reduction techniques to identify the most important features and reduce the dimensionality of the dataset.
-- **Noise Reduction**: We could explore techniques to reduce noise in the data and improve the quality of the predictions.
-- **Cross-Validation**: We could explore different cross-validation techniques which reflect better the Kaggle score.
-
-By addressing these areas, the model could achieve even greater accuracy and reliability, providing more value for users and competitive performance in future challenges.

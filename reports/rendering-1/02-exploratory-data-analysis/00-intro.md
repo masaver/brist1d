@@ -2,7 +2,7 @@
 
 In this section, we will examine the raw dataset to gain insights into its structure, consistency, and key characteristics. This analysis aims to identify patterns, detect anomalies, and evaluate data quality, which are critical steps in preparing the dataset for further modelling and analysis.
 
-## Dataset description and structure
+## Dataset Description and Structure
 
 * Dataset description and structure
 * Dataset consistency checks
