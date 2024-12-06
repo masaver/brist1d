@@ -29,7 +29,17 @@ Another big challenge was the discrepancy between local RMSE scores and Kaggle l
 * The model is overfitting the training data (Trees too deep, KNeighbors too low) and not generalizing well to the test data on Kaggle.
 * The model is not able to capture the underlying patterns in the data.
 
+## Future Directions
 
+This project successfully demonstrated the utility of data augmentation and ensemble modelling.
+To enhance the model's performance and generalization, the following areas could be explored deeper in the future:
+
+- **Feature Reduction**: We could explore further feature reduction techniques to identify the most important features and reduce the dimensionality of the dataset.
+- **Noise Reduction**: We could explore techniques to reduce noise in the data and improve the quality of the predictions.
+- **Cross-Validation**: We could explore different cross-validation techniques which reflect better the Kaggle score.
+- **Deep Learning Approaches:** Although our attempt to integrate a basic Deep Neural Network (DNN) into the Stacking Ensemble model did not yield significant improvements, more sophisticated deep learning architectures and strategies could be explored in the future to unlock additional potential.
+
+By addressing these areas, the model could achieve even greater accuracy and reliability, providing more value to users and competitive performance in future challenges.
 
 ## Final Thoughts
 

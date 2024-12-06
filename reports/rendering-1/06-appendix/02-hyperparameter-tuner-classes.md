@@ -1,8 +1,8 @@
 # Model HyperParameter tunning
 
-In order to conveniently and consistently tune the different mnodels we tested, we created a series of HyperParameter Tuner clasess for the best performing models identified from Lazy Predict. This different classes automatically perform Grid Search using BayesSearchCV and a 5-fold cross-validation, and identified an optimal set of hyper-parameter
+To ensure consistent and efficient tuning of different models tested, we created a series of **HyperParameter Tuner** classes for the best-performing models identified through LazyPredict. These different classes automatically perform Grid Search using BayesSearchCV and apply a **5-fold cross-validation** strategy to identify an optimal set of hyperparameters.
 
-## Example of Tuner Class : XGBoost
+## Example of Tuner Class: XGBoost
 
 ``` python
 from xgboost import XGBRegressor

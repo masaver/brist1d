@@ -19,7 +19,7 @@ Blood glucose levels indicate the amount of glucose in the blood and are typical
 
 Managing blood glucose levels is a key part of managing diabetes. Individuals with diabetes need to maintain their blood glucose levels within a target range to minimize the risk of complications.
 
-## Known complications of unmanaged diabetes
+## Known Complications of Unmanaged Diabetes
 
 * Hyperglycemia (high blood sugar)
   * Fatigue, dehydration, increased thirst, frequent urination, blurred vision, and headaches.

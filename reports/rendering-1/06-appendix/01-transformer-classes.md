@@ -7,7 +7,7 @@
 The `DateTimeHourTransformer` has two different modes of operation.
 
 * `sin_cos`, which converts the hour of the day into two features, `hour_sin` and `hour_cos`, which represent the hour of the day as a sine and cosine wave.
-* `bins`, which converts the hour of the day into a categorical feature with a specified number of bins
+* `bins`, which converts the hour of the day into a categorical feature with a specified number of bins.
 
 ```python
 from typing import Literal
