@@ -54,3 +54,14 @@ def extract_notebook_images(notebook_path):
                     image = Image.open(io.BytesIO(image_data))
                     images.append(image)
     return images
+
+# Function to extract images from the notebook
+def extract_code_cells(notebook_path):
+    with open(notebook_path, "r", encoding="utf-8") as f:
+        notebook = nbformat.read(f, as_version=4)
+
+    code_cells = []
+    for cell in notebook.cells:
+        if cell.cell_type == "code":
+            code_cells.append(cell.source)
+    return code_cells
