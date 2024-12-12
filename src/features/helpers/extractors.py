@@ -47,7 +47,7 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     df_patient.loc[:, "datetime"] = df_patient.apply(lambda row: datetime.combine(row['date'], row['time']), axis=1)
     df_patient = df_patient.set_index("datetime")
     df_patient = df_patient.drop(columns=["date"])
-    df_patient = df_patient.drop(columns=["id"])
+    df_patient = df_patient.drop(columns=["id"]) if 'id' in df_patient.columns else df_patient
 
     # change the frequency to 5 minutes
     full_date_range = pd.date_range(start=df_patient.index.min(), end=df_patient.index.max(), freq='5min')
@@ -87,3 +87,28 @@ def extract_patient_data(df: pd.DataFrame, patient_num: str, start_date: datetim
     df_patient_combined_values = df_patient_combined_values[column_order]
 
     return df_patient_combined_values
+
+
+def create_lag_features(df: pd.DataFrame, columns_to_extract: list[str], result_time_diff: str = '-1:00') -> pd.DataFrame:
+    df_augmented_with_all_lag_features = df.copy()
+    df_augmented_with_all_lag_features['bg+1:00'] = df['bg'].shift(periods=-1, freq="1h")
+    for parameter in parameters:
+        df_augmented_with_all_lag_features = df_augmented_with_all_lag_features.copy()
+        for time_diff in time_diffs:
+            col_name = f"{parameter}{time_diff}"
+            df_augmented_with_all_lag_features[col_name] = df[parameter].shift(periods=-1, freq=parse_time_diff(time_diff))
+
+    df_augmented_with_all_lag_features = df_augmented_with_all_lag_features.drop(columns=parameters)
+    df_augmented_with_all_lag_features = df_augmented_with_all_lag_features[columns_to_extract]
+    df_augmented_with_all_lag_features['id'] = (df_augmented_with_all_lag_features['p_num'] + '_test_' + df_augmented_with_all_lag_features.groupby('p_num').cumcount().astype(str))
+    df_augmented_with_all_lag_features = df_augmented_with_all_lag_features.reset_index().set_index('index')
+
+    # drop all rows where bg-0:00 or bg+1:00 is NaN
+    subset = ['bg-0:00', 'bg+1:00'] if 'bg+1:00' in df_augmented_with_all_lag_features.columns else ['bg-0:00']
+    result_df = df_augmented_with_all_lag_features.dropna(subset=subset)
+
+    if result_time_diff == '-1:00':
+        result_df_1h = result_df.dropna(subset=['bg-1:00'])
+        return result_df_1h
+
+    raise ValueError(f'Invalid time diff: {result_time_diff}. Available time diffs: {["-1:00"]}')

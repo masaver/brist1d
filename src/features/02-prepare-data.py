@@ -119,9 +119,7 @@ if __name__ == '__main__':
 
     print(f'{bcolors.OKGREEN}{get_time()} - Create id column{bcolors.ENDC}')
     # create a id column with: p_num + autoincrement per patient
-    df_augmented_with_all_lag_features['id'] = (
-            df_augmented_with_all_lag_features['p_num'] + '_test_' + df_augmented_with_all_lag_features.groupby(
-        'p_num').cumcount().astype(str))
+    df_augmented_with_all_lag_features['id'] = (df_augmented_with_all_lag_features['p_num'] + '_test_' + df_augmented_with_all_lag_features.groupby('p_num').cumcount().astype(str))
     df_augmented_with_all_lag_features = df_augmented_with_all_lag_features.reset_index(drop=True).set_index('id')
     print(f'{bcolors.OKGREEN}{get_time()} - finished - {bcolors.ENDC}')
 

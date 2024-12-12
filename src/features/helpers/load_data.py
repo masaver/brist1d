@@ -34,3 +34,17 @@ def load_data(time_frame: AvailableTimeFrame, only_patients_in_test: bool = True
         test_data = test_data[test_data['p_num'].isin(unique_patients)]
 
     return train_data, augmented_data, test_data
+
+
+def load_train_data() -> pd.DataFrame:
+    train_data_file = os.path.join(CLEAN_DATA_DIR, 'train.csv')
+    train_data = pd.read_csv(train_data_file, index_col=0, low_memory=False)
+
+    return train_data
+
+
+def load_test_data() -> pd.DataFrame:
+    test_data_file = os.path.join(CLEAN_DATA_DIR, 'test.csv')
+    test_data = pd.read_csv(test_data_file, index_col=0, low_memory=False)
+
+    return test_data
