@@ -1,3 +1,6 @@
+import base64
+import io
+from PIL import Image
 import streamlit as st
 import nbformat
 
@@ -31,6 +34,23 @@ def display_notebook(notebook_path):
                         if 'text/html' in output['data']:
                             st.markdown(output['data']['text/html'], unsafe_allow_html=True)
                         if 'image/png' in output['data']:
-                            import base64
                             image_data = base64.b64decode(output['data']['image/png'])
                             st.image(image_data)
+
+
+# Function to extract images from the notebook
+def extract_notebook_images(notebook_path):
+    with open(notebook_path, "r", encoding="utf-8") as f:
+        notebook = nbformat.read(f, as_version=4)
+
+    images = []
+    for cell in notebook.cells:
+        if cell.cell_type == "code":
+            for output in cell.get("outputs", []):
+                if "image/png" in output.get("data", {}):
+                    # Decode the base64 image data
+                    image_data = base64.b64decode(output["data"]["image/png"])
+                    # Open the image using PIL and append it to the list
+                    image = Image.open(io.BytesIO(image_data))
+                    images.append(image)
+    return images
