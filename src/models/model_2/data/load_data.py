@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 from src.features.helpers.load_data import load_data as common_load_data
-from src.models.model_1.model.pipelines import pipeline
+from src.models.model_2.model.pipelines import pipeline
 
 filename_x_train = os.path.join(os.path.dirname(__file__), 'X_train.csv')
 filename_y_train = os.path.join(os.path.dirname(__file__), 'y_train.csv')
