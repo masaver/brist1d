@@ -301,9 +301,9 @@ if page == pages[1] :
   # Extract images from the notebook
   images = extract_notebook_images(os.path.join(current_dir, "notebooks", "04-data-distribution.ipynb"))
 
-  with st.expander("📈 Numeric Features and the Target Variable"):
+  with st.expander("🔢 Numeric Features and the Target Variable"):
      
-    tab1, tab2 = st.tabs(["🔢 Feature Distributions", "💻 Code"])
+    tab1, tab2 = st.tabs(["📈 Feature Distributions", "💻 Code"])
     with tab2:
       code = '''metrics_l = ['bg+1:00','bg','insulin','carbs','hr','steps','cals']
 
@@ -383,21 +383,97 @@ if page == pages[1] :
       """)
 
   # =======================================
-  st.markdown("# Data Correlation")
+  st.markdown("### Data Correlation")
+
+  st.markdown("""
+    This section analyzes and visualizes relationships between independent variables and the target variable **``bg+1:00``**. 
+    Correlations help identify features with the strongest influence on predicting future blood glucose levels, guiding feature selection for modeling.
+    """)
+  
+  # Extract images from the notebook
+  images = extract_notebook_images(os.path.join(current_dir, "notebooks", "05-data-correlation.ipynb"))
+  with st.expander("🔗 Global Correlations Between Lag Features and Target Variable"):
+     st.image(images[0], use_container_width=True)
+
+     st.markdown("#### Key Observations")
+     st.markdown("""
+      Heatmap of all numerical variables shows strong self-correlations (e.g., ``bg`` lag features) and weaker inter-variable relationships.
+      """)
+     
+  with st.expander("🔗 Correlation of the Target Variable Against All Features"):
+     st.image(images[1], use_container_width=True)
+
+     st.markdown("#### Key Observations")
+     st.markdown("""
+      This heatmap focuses on ``bg+1:00``, highlighting the dominance of lagged bg features.
+      """)
+     
+  with st.expander("🔗 Correlation Between All Numeric Variables as a Time Series"):
+     st.image(images[4], use_container_width=True)
+
+  # Key Observations
+  st.markdown("#### Summary")
+  st.markdown("""
+    1. **Lagged ``bg`` Features**:
+        - Strong correlations with ``bg+1:00`` highlight the temporal dependency of blood glucose levels.
+    2. **Carbs and Insulin**:
+        - Moderate correlations with ``bg+1:00`` reflect their role in glucose regulation.
+        - A notable correlation between carbs and insulin emphasizes their dietary relationship.
+    3. **Activity Metrics (Steps, Cals, HR)**:
+        - Weak correlations with ``bg+1:00`` indicate an indirect or limited impact.
+    """)
 
   # =======================================
-  st.markdown("# Data Vizualization")
+  st.markdown("### Data Vizualization")
+
+  # Patient Time Series Overview Section
+  with st.expander("⏳ Patient Time Series Overview"):    
+    st.markdown("""
+    This section explores individual patients' time series data to uncover daily and weekly patterns, 
+    providing insights into fluctuations and trends in key metrics such as blood glucose, heart rate, and activity levels.
+    """)
+
+    st.markdown("#### Key Observations")
+    st.markdown("""
+    1. **Blood Glucose (BG):**
+        - Significant fluctuations observed throughout the day.
+        - Spikes in BG levels align with meal times, managed through insulin doses and carbohydrate intake.
+    2. **Carbs and Insulin:**
+        - Insulin closely aligns with carbohydrate intake to stabilize post-meal glucose levels.
+        - Reflects typical diabetes management practices.
+    3. **Calories and Heart Rate:**
+        - Morning activity shows increased calories burned and elevated heart rate.
+        - Suggests physical activity contributes to glucose stability.
+    """)
+
+    # Visualization Section
+    st.markdown("#### Example Visualization: Patient p01 - Day 21")
+    st.markdown("""
+    The following plot illustrates the relationships between blood glucose levels, carbs and insulin intake, 
+    calories burned, and heart rate for Patient p01 on Day 21.
+    """)
+
+    # Placeholder for visualization (replace with actual plotting code if applicable)
+    st.image("path_to_your_visualization.png", caption="Patient p01 - Day 21", use_container_width=True)
+
+    # Summary
+    st.markdown("#### Summary")
+    st.markdown("""
+    - Blood glucose fluctuations highlight the complexity of daily glucose management.
+    - Close alignment between insulin doses and carbohydrate intake reflects effective diabetes management.
+    - Physical activity, as indicated by calorie burn and heart rate, contributes to glucose stability.
+    """)
 
     
   # Inputs for filtering
   # 1. Dropdown for p_num
   available_patients = list(patients_d['p_num'].unique()) + ["all"] # Get all unique patient IDs and additional 'all' option
-  patient_id = st.selectbox("Select patient ID", options=available_patients, index=0)
+  patient_id = st.selectbox("Select Patient ID", options=available_patients, index=0)
 
   # 2. Calendar widget for 'specific_day'
   min_date = patients_d['pseudo_datetime'].min().date()  # Earliest date in the dataset
   max_date = patients_d['pseudo_datetime'].max().date()  # Latest date in the dataset
-  specific_day = st.date_input("Select a day", value=min_date, min_value=min_date, max_value=max_date)
+  specific_day = st.date_input("Select a Day", value=min_date, min_value=min_date, max_value=max_date)
 
   # Filter the data
   filtered_data = FakeDateCreator.filter_patient_data(patients_d, patient_id, specific_day)
