@@ -10,6 +10,7 @@ from .MinMaxScalerTransformer import MinMaxScalerTransformer
 from .PropertyOutlierTransformer import PropertyOutlierTransformer
 from .RollingAverageTransformer import RollingAverageTransformer
 from .StandardScalerTransformer import StandardScalerTransformer
+from .RenameColumnsTransformer import RenameColumnsTransformer
 
 __all__ = [
     'DateTimeHourTransformer',
@@ -23,5 +24,6 @@ __all__ = [
     'Log1pTransformer',
     'PropertyOutlierTransformer',
     'RollingAverageTransformer',
-    'StandardScalerTransformer'
+    'StandardScalerTransformer',
+    'RenameColumnsTransformer'
 ]
