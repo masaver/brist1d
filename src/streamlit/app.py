@@ -16,8 +16,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(current_dir, "..", "..", "data", "raw", "train.csv")
 
 # setup the menu structure
-st.sidebar.title("BrisT1D Blood Glucose Prediction Competition")
-pages=["Kaggle Challenge", "Data Exploration", "Data Vizualization", "Modelling", "Predictions", "Conclusion & Perspectives"]
+st.sidebar.title("BrisT1D Blood Glucose Prediction")
+pages=["Introduction", "Data Exploration", "Data Visualization", "Modelling", "Predictions", "Conclusion & Perspectives"]
 page=st.sidebar.radio("Menu", pages)
 
 

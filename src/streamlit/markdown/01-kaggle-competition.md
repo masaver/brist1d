@@ -1,4 +1,4 @@
-# Kaggle Challenge
+# Introduction
 
 Predicting blood glucose fluctuations is crucial for managing type 1 diabetes. Developing effective algorithms for this can alleviate some of the challenges faced by individuals with the condition.
 
