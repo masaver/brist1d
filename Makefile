@@ -94,6 +94,11 @@ build-pdf: .activate
 	$(done)
 .PHONY: doc
 
+## Start streamlit app
+start-app: .activate
+	source "$(VENV_PATH)/bin/activate" && python -m streamlit run src/streamlit/app.py
+.PHONY: start-app
+
 ## Deploy documentation
 deploy-docs:
 	source "$(VENV_PATH)/bin/activate" && jupyter-book clean reports/final-report
