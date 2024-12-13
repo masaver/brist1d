@@ -11,7 +11,7 @@ def train_model_1():
     model = Model1(load=False)
 
     print('Load and transform train data...')
-    X_train, y_train, _ = load_data_1()
+    X_train, y_train, _ , _ = load_data_1()
 
     print('Fitting model...')
     model.fit(X_train, y_train)
@@ -29,7 +29,7 @@ def train_model_2():
     model = Model2(load=False)
 
     print('Load and transform train data...')
-    X_train, y_train, _ = load_data_2()
+    X_train, y_train, _ , _ = load_data_2()
 
     print('Fitting model...')
     model.fit(X_train, y_train)
