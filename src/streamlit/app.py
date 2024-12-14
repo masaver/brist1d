@@ -39,8 +39,6 @@ if page == pages[1] :
 
   display_notebook(os.path.join(current_dir, "notebooks", "04-data-distribution.ipynb"))
 
-  
-
 if page == pages[2] : 
   st.write("# Data Vizualization")
 
