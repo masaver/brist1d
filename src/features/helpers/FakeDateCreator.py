@@ -7,7 +7,8 @@ class FakeDateCreator:
         fake_start_date = '2020-01-01'
 
         # Convert 'time' to timedelta (duration since midnight)
-        patients_df['time_delta'] = pd.to_timedelta(patients_df['time'])
+        transformed_df = patients_df.copy()
+        transformed_df['time_delta'] = pd.to_timedelta(patients_df['time'])
 
         # Function to create pseudo datetime
         def transform_group(group):
@@ -23,7 +24,7 @@ class FakeDateCreator:
             return group
 
         # Apply the transformation
-        transformed_df = patients_df.groupby('p_num', group_keys=False).apply(transform_group).reset_index(drop=True)
+        transformed_df = transformed_df.groupby('p_num', group_keys=False).apply(transform_group).reset_index(drop=True)
         
         return transformed_df
 

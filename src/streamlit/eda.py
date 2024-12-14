@@ -21,16 +21,27 @@ file_path = os.path.join(project_root, "data", "raw", "train.csv")
 # load the dataset
 @st.cache_data
 def load_data(): 
-  return pd.read_csv(file_path, low_memory=False)
+  return pd.read_csv(file_path, low_memory=False, index_col=0)
 
 
 def display_page():
+      # Anchor at the top
+      st.markdown("<a name='top'></a>", unsafe_allow_html=True)
       
       st.title("Exploratory Data Analysis") 
 
+      st.markdown("### 🔍 Overview")
+      st.markdown("""
+        - [Dataset description and structure](#dataset-description-and-structure)
+        - [Quality control and assurance (consistency, ouliers, missing values)](#quality-control-and-assurance)
+        - [Data distributions](#data-distributions)
+        - [Data correlation](#data-correlation)
+        - [Data vizualization](#data-vizualization)
+        """)
+
 
       # =======================================
-      st.markdown("## Dataset Description and Structure")
+      st.markdown("## <a name='dataset-description-and-structure'></a> Dataset Description and Structure", unsafe_allow_html=True)
 
       st.markdown("""
         We're provided with two datasets: **Train** and **Test**, tailored for blood glucose prediction and for the model evaluation. 
@@ -131,7 +142,7 @@ def display_page():
             st.pyplot(plt)
 
         # =======================================
-      st.markdown("## Quality Control and Assurance")
+      st.markdown("## <a name='quality-control-and-assurance'></a> Quality Control and Assurance", unsafe_allow_html=True)
       st.markdown("### Data Consistency")
 
       st.markdown("""
@@ -281,7 +292,7 @@ def display_page():
 
 
       # =======================================
-      st.markdown("## Data Distribution")
+      st.markdown("## <a name='data-distributions'></a> Data Distribution", unsafe_allow_html=True)
 
       st.markdown("""
             This section provides insights into the distributions of both independent variables (features) and the target variable across the dataset. 
@@ -347,7 +358,7 @@ def display_page():
             """)
 
       # =======================================
-      st.markdown("## Data Correlation")
+      st.markdown("## <a name='data-correlation'></a>  Data Correlation", unsafe_allow_html=True)
 
       st.markdown("""
             This section analyzes and visualizes relationships between independent variables and the target variable **``bg+1:00``**. 
@@ -392,7 +403,7 @@ def display_page():
             """)
 
       # =======================================
-      st.markdown("## Data Vizualization")
+      st.markdown("## <a name='data-vizualization'></a>  Data Vizualization", unsafe_allow_html=True)
 
       # Patient Time Series Overview Section
       with st.expander("⏳ Patient Time Series Overview"):  
@@ -484,4 +495,8 @@ def display_page():
                 st.pyplot(fig)
         else:
                 st.write(f"No data available for patient {patient_id} on {specific_day}.")
+
+
+      # Link to the top at the bottom of the page
+      st.markdown("<p style='text-align: right; font-size: 12px;'><a href='#top'>⬆️ To the Top</a></p>", unsafe_allow_html=True)
             
