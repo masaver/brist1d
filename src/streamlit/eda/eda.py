@@ -15,7 +15,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')
 
 # define paths
 current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(current_dir, "..", ".."))
+project_root = os.path.abspath(os.path.join(current_dir, "..", "..", ".."))
 file_path = os.path.join(project_root, "data", "raw", "train.csv")
 
 # load the dataset
