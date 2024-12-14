@@ -10,7 +10,7 @@ def predict_model_1():
     model = Model1(load=True)
 
     print('Load test data...')
-    _, _, X_test = load_data_1()
+    _, _, X_test, _ = load_data_1()
 
     print('Predicting...')
     y_pred = model.predict(X_test)
