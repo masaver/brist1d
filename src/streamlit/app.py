@@ -10,11 +10,11 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # setup the menu structure
 st.sidebar.title("BrisT1D Blood Glucose Prediction")
 pages=["Introduction", "Data Exploration", "Data Visualization", "Modelling", "Predictions", "Conclusion & Perspectives"]
-page=st.sidebar.radio("Menu", pages)
 
+selected_page = st.sidebar.radio("Menu", pages)
 # Define a mapping for pages and their corresponding module files
 page_modules = {
-    #"Kaggle Challenge": "???",  
+    "Introduction": "intro",  
     "Exploratory Data Analysis": "eda", 
     #"Modelling": "???", 
     #"Predictions": "???", 
@@ -24,9 +24,9 @@ page_modules = {
 st.sidebar.info(load_markdown(os.path.join(current_dir, "markdown", "team.md")))
 
 # Cache the dynamic module loader
-@st.cache_resource
-def load_module(module_name):
-    return import_module(module_name)
+#@st.cache_resource
+#def load_module(module_name):
+#    return import_module(module_name)
 
 # Dynamically load and display the selected page
 if selected_page in page_modules:
