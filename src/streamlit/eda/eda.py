@@ -8,7 +8,6 @@ import os
 import sys
 
 from src.features.helpers.FakeDateCreator import FakeDateCreator
-#from src.features.helpers.streamlit_helpers import load_markdown, display_notebook
 from src.features.helpers.streamlit_helpers import extract_notebook_images, extract_code_cells
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
@@ -31,8 +30,8 @@ def display_page():
       st.title("Exploratory Data Analysis") 
 
       st.markdown("### 🔍 Overview")
+   
       st.markdown("""
-        - [Dataset description and structure](#dataset-description-and-structure)
         - [Data quality (consistency, ouliers, missing values)](#quality-control-and-assurance)
         - [Data distributions](#data-distributions)
         - [Data correlation](#data-correlation)
@@ -40,107 +39,12 @@ def display_page():
         """)
 
 
-      # =======================================
-      st.markdown("## <a name='dataset-description-and-structure'></a> Dataset Description and Structure", unsafe_allow_html=True)
-
-      st.markdown("""
-        We're provided with two datasets: **Train** and **Test**, tailored for blood glucose prediction and for the model evaluation. 
-
-        **Training Set:**
-        - Comprises the first three months for 9 participants.
-        - Includes future blood glucose values for model training.
-        - Samples are chronological with overlap.
-
-        **Testing Set:**
-        - Covers randomized samples for 15 participants, some of them are **unseen** before.
-        """)
-    #   st.markdown("""
-    #     ### Challenges:
-    #     - **Unseen Participants:** Test set includes participants absent from training, adding complexity.
-    #     - **Missing Data:** Incomplete or noisy medical data.
-    #     - **Time Resolution:** Different time resolutions among patients.
-    #     """)
-
       # Load the data
       patients = load_data()
       # Transform the data using the Helper class
       patients_d = FakeDateCreator.create_pseudo_datetime(patients)
 
-      # Display dataset with toggle
-      with st.expander("🔍 View Training Dataset (Top 10 Rows)"):
-            st.dataframe(patients.head(10), use_container_width=True)
-
-      # Compact statistics for quick insights
-      with st.expander("🔢 Quick Insights"):
-            
-            col1, col2 = st.columns(2)
-
-            with col1:
-                st.write("**Total Records:**")
-                st.write(f"📊 `{len(patients):,}`")
-
-                st.write("**Number of Columns:**")  
-                st.write(f"📋 `{patients.shape[1]}`")
-
-            with col2:
-                st.write("**Unique Participants:**")
-                st.write(f"👤 `{patients['p_num'].nunique()}`")
-
-                st.write("**Date Range:**")
-                st.write(f"📅 `{patients_d['pseudo_datetime'].min().date()} - {patients_d['pseudo_datetime'].max().date()}`")
-
-      # Column Desciption
-      # Define column description data as a dictionary
-      column_data = {
-            "#Column": ["1", "2", "3", "4-75", "76-147", "148-219", "220-291", "292-363", "364-435", "436-507", "508"],
-            "Name": ["id", "p_num", "time", "bg-X:XX", "insulin-X:XX", "carbs-X:XX", "hr-X:XX", "steps-X:XX", "cals-X:XX", "activity-X:XX", "bg+1:00"],
-            "Description": [
-                "row id consisting of participant number and a count for that participant",
-                "participant number",
-                "time of day in the format HH:MM:SS",
-                "blood glucose reading in mmol/L, X:XX(H:MM) time in the past",
-                "total insulin dose received in units in the last 5 minutes, X:XX(H:MM) time in the past",
-                "total carbohydrate value consumed in grammes in the last 5 minutes, X:XX(H:MM) time in the past",
-                "mean heart rate in beats per minute in the last 5 minutes, X:XX(H:MM) time in the past",
-                "total steps walked in the last 5 minutes, X:XX(H:MM) time in the past",
-                "total calories burnt in the last 5 minutes, X:XX(H:MM) time in the past",
-                "self-declared activity performed in the last 5 minutes, X:XX(H:MM) time in the past",
-                "blood glucose levels 1 hour in the future, not provided in test.csv",               
-            ],
-            "Type": ["string", "string", "string", "float", "float", "float", "float", "float", "string", "string", "float"]
-        }
-
-      # Convert to DataFrame
-      column_description_df = pd.DataFrame(column_data)
-
-      # Display column description in an expander
-      with st.expander("📋 Column Description"):
-          st.table(column_description_df)
-
-        
-      # Simulated DataFrame for Time Resolution
-      resolutions = pd.DataFrame({
-            "p_num": ["p01", "p02", "p03", "p04", "p05", "p06", "p10", "p11", "p12"],
-            "time_resolution_in_minutes": [15, 5, 5, 5, 15, 5, 15, 5, 5]
-        })
-      # Add a column for color grouping
-      resolutions['color_group'] = resolutions['time_resolution_in_minutes'].map({5: "5 min", 15: "15 min"})
-
-      # Display "Time Resolution" Section
-      with st.expander("⏱️ Time Resolution"):
-            #st.markdown("### Time Resolution per Patient in Training Data")
-            
-            plt.figure(figsize=(6, 4))
-            sns.barplot(x="p_num", y="time_resolution_in_minutes", data=resolutions, hue="color_group", palette={"5 min": "skyblue", "15 min": "orange"})
-            plt.title("Time Resolution per Patient in Training Data")
-            plt.xlabel("Patient Number")
-            plt.ylabel("Time Resolution (Minutes)")
-            plt.tight_layout()
-            
-            # Render the plot in Streamlit
-            st.pyplot(plt)
-
-        # =======================================
+      # =======================================
       st.markdown("## <a name='quality-control-and-assurance'></a> Data Quality and Consistency", unsafe_allow_html=True)
       st.markdown("### Data Consistency")
 
