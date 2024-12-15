@@ -23,11 +23,11 @@ The data used in this project was part of a kaggle competition (https://www.kagg
 
 ### Evaluation
 
-Submissions are evaluated on Root Mean Square Error (RMSE) between the predicted blood glucose levels an hour into the future and the actual values that were then collected.
+The metric to evaluate the performance of our models will be the Root Mean Square Error (RMSE) of the predicted blood glucose levels an hour into the future and the actual values at that time.
 
-RMSE is defined as: 
+The RMSE is defined as: 
 
-$$ \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2} $$
+$$ \text{RMSE}c = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2} $$
 
 where $\hat{y}_i$ is the $i$-th predicted value, $y_i$ is the $i$-th true value and $n$ is the number of samples.
 
