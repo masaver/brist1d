@@ -5,18 +5,19 @@ from src.features.helpers.streamlit_helpers import load_markdown
 from importlib import import_module
 from eda import eda
 from modelling import modelling
+from intro import intro
 
 # define paths
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # setup the menu structure
 st.sidebar.title("Forecast Blood Glucose Levels for T1D Patients")
-pages = ["Kaggle Challenge", "Exploratory Data Analysis", "Modelling", "Predictions", "Conclusion & Perspectives"]
+pages = ["Introduction", "Exploratory Data Analysis", "Modelling", "Predictions", "Conclusion & Perspectives"]
 
 selected_page = st.sidebar.radio("Menu", pages)
 # Define a mapping for pages and their corresponding module files
 page_modules = {
-    # "Kaggle Challenge": "???",
+    "Introduction": intro,
     "Exploratory Data Analysis": eda,
     "Modelling": modelling,
     # "Predictions": "???",

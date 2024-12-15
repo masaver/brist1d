@@ -27,8 +27,8 @@ The metric to evaluate the performance of our models will be the Root Mean Squar
 
 The RMSE is defined as: 
 
-$$ \text{RMSE}c = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2} $$
+$$ \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2} $$
 
-where $\hat{y}_i$ is the $i$-th predicted value, $y_i$ is the $i$-th true value and $n$ is the number of samples.
+where $n$ is the number of samples, $\hat{y}_i$ is the $i$-th predicted value and $y_i$ is the $i$-th actual value.
 
-The RMSE value is calculated from the bg+1:00(future blood glucose) prediction values in the submission file against the true future blood glucose values. The RMSE values for the public and private leaderboards are calculated from unknown and non-overlapping samples from the submission file across all of the participants.
+++++++++++ The RMSE value is calculated from the bg+1:00(future blood glucose) prediction values in the submission file against the true future blood glucose values. The RMSE values for the public and private leaderboards are calculated from unknown and non-overlapping samples from the submission file across all of the participants.
