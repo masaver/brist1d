@@ -372,17 +372,17 @@ def display_page():
       with st.expander("🔗 Correlation Between All Numeric Variables as a Time Series"):
             st.image(images[4])
 
-      # Key Observations
-      st.markdown("#### 📝 Notes:")
-      st.markdown("""
-            1. **Lagged ``bg`` Features**:
-                - Strong correlations with ``bg+1:00`` highlight the temporal dependency of blood glucose levels.
-            2. **Carbs and Insulin**:
-                - Moderate correlations with ``bg+1:00`` reflect their role in glucose regulation.
-                - A notable correlation between carbs and insulin emphasizes their dietary relationship.
-            3. **Activity Metrics (Steps, Cals, HR)**:
-                - Weak correlations with ``bg+1:00`` indicate an indirect or limited impact.
-            """)
+            # Key Observations
+            st.markdown("#### 📝 Notes:")
+            st.markdown("""
+                    1. **Lagged ``bg`` Features**:
+                        - Strong correlations with ``bg+1:00`` highlight the temporal dependency of blood glucose levels.
+                    2. **Carbs and Insulin**:
+                        - Moderate correlations with ``bg+1:00`` reflect their role in glucose regulation.
+                        - A notable correlation between carbs and insulin emphasizes their dietary relationship.
+                    3. **Activity Metrics (Steps, Cals, HR)**:
+                        - Weak correlations with ``bg+1:00`` indicate an indirect or limited impact.
+                    """)
 
       # =======================================
       st.markdown("## <a name='data-vizualization'></a>  Data Vizualization", unsafe_allow_html=True)
