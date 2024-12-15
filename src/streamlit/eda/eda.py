@@ -33,7 +33,7 @@ def display_page():
       st.markdown("### 🔍 Overview")
       st.markdown("""
         - [Dataset description and structure](#dataset-description-and-structure)
-        - [Quality control and assurance (consistency, ouliers, missing values)](#quality-control-and-assurance)
+        - [Data quality (consistency, ouliers, missing values)](#quality-control-and-assurance)
         - [Data distributions](#data-distributions)
         - [Data correlation](#data-correlation)
         - [Data vizualization](#data-vizualization)
@@ -141,7 +141,7 @@ def display_page():
             st.pyplot(plt)
 
         # =======================================
-      st.markdown("## <a name='quality-control-and-assurance'></a> Quality Control and Assurance", unsafe_allow_html=True)
+      st.markdown("## <a name='quality-control-and-assurance'></a> Data Quality and Consistency", unsafe_allow_html=True)
       st.markdown("### Data Consistency")
 
       st.markdown("""
@@ -153,7 +153,7 @@ def display_page():
             - Flagged gaps or inconsistencies in the time series data.
             """)
         
-      with st.expander("✅ Data Consitency Control"):
+      with st.expander("✅ Data Consistency Control"):
             # Simulated Validation Results DataFrame
             validation_results = pd.DataFrame({
                 "hr": [0, 0, 0, 0, 0, 0, 0, 68, 0],
@@ -327,11 +327,6 @@ def display_page():
                 st.code(code, language="python")       
             
       # Summary
-      st.markdown("### Summary")
-      st.markdown("""
-            This dataset presents challenges such as inconsistent time intervals, missing data, outliers and skewed distributions. 
-            The proposed solution is to resample data to 5-minute intervals while addressing missing values, outliers, and multicollinearity during preprocessing. 
-            """)
       with st.expander("📜 Summary Key Points"):
             st.markdown("""
             1. **Data Inconsistencies**:
