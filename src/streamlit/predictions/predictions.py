@@ -37,9 +37,11 @@ def display_page():
 
     # =======================================
     st.markdown("#### Random daily profile")
+    output_dir = os.path.dirname( __file__ )
+    common_preds_df = global_predictions( output_dir )
     p_id_options = ['p01', 'p02', 'p04', 'p05', 'p06', 'p10', 'p11', 'p12']
     p_id_selected_option = st.selectbox("Choose a patient ID", p_id_options)
-    common_preds_df = global_predictions()
+    
 
     st.markdown("""Click the button below to predict on a random data point ( time stamp )""")
     if st.button("'Display random daily profile'",key='random_daily_profile'):

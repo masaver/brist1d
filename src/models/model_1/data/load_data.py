@@ -18,7 +18,7 @@ def load_data(recreate: bool = False) -> tuple[pd.DataFrame, pd.Series, pd.DataF
            os.path.exists(filename_y_train) and \
            os.path.exists(filename_x_test) and \
            os.path.exists(data_pipeline_file) and \
-           os.path.exists(time_stamps_df)
+           os.path.exists(timestamps_file)
     
     if cond:
         if not recreate:
