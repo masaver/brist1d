@@ -39,11 +39,6 @@ def display_page():
         """)
 
 
-      # Load the data
-      patients = load_data()
-      # Transform the data using the Helper class
-      patients_d = FakeDateCreator.create_pseudo_datetime(patients)
-
       # =======================================
       st.markdown("## <a name='quality-control-and-assurance'></a> Data Quality and Consistency", unsafe_allow_html=True)
       st.markdown("### Data Consistency")
@@ -343,7 +338,12 @@ def display_page():
                 st.code(code_cells[1], language="python")     
                 st.code(code_cells[2], language="python")         
 
-            
+
+     # Load the data
+      patients = load_data()
+      # Transform the data using the Helper class
+      patients_d = FakeDateCreator.create_pseudo_datetime(patients)
+       
 
       with st.expander("📅 Interactive Plot for Spotting Daily BG Trends"):       
         # Inputs for filtering
