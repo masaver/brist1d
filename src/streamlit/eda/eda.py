@@ -19,23 +19,23 @@ file_path = os.path.join(project_root, "data", "raw", "train.csv")
 
 # load the dataset
 @st.cache_data
-def load_data(): 
+def load_data():
   return pd.read_csv(file_path, low_memory=False, index_col=0)
 
 
 def display_page():
       # Anchor at the top
       st.markdown("<a name='top'></a>", unsafe_allow_html=True)
-      
-      st.title("Exploratory Data Analysis") 
+
+      st.title("Exploratory Data Analysis")
 
       st.markdown("### 🔍 Overview")
-   
+
       st.markdown("""
-        - [Data quality (consistency, ouliers, missing values)](#quality-control-and-assurance)
+        - [Data quality (consistency, outliers, missing values)](#quality-control-and-assurance)
         - [Data distributions](#data-distributions)
         - [Data correlation](#data-correlation)
-        - [Data vizualization](#data-vizualization)
+        - [Data visualisation](#data-visualisation)
         """)
 
 
@@ -44,14 +44,14 @@ def display_page():
       st.markdown("### Data Consistency")
 
       st.markdown("""
-            Before starting the analysis, we validated the dataset to ensure consistency and reliability. 
+            Before starting the analysis, we validated the dataset to ensure consistency and reliability.
             The training dataset consists of daily time series for each patient, and the validation focused on checking the sequential order of rows and consistency of lag features.
-            
+
             **Validation Approach:**
             - Compared lag features row-by-row with the preceding rows.
             - Flagged gaps or inconsistencies in the time series data.
             """)
-        
+
       with st.expander("✅ Data Consistency Control"):
             # Simulated Validation Results DataFrame
             validation_results = pd.DataFrame({
@@ -60,7 +60,7 @@ def display_page():
                 "cals": [0, 0, 0, 0, 0, 0, 0, 45, 0],
                 "total": [16865, 26335, 26427, 25047, 16248, 16674, 25874, 25205, 26048]
             }, index=["p01", "p02", "p03", "p04", "p05", "p06", "p10", "p11", "p12"])
-            
+
             st.table(validation_results)
 
             # Plotting the inconsistencies for visualization
@@ -87,8 +87,8 @@ def display_page():
       # Outlier and Anomaly Section
       st.markdown("### Extreme Values and Outliers")
       st.markdown("""
-            Extreme values and outliers were analyzed for all variable groups (**time series**) to identify extreme values or ouliers. 
-            Below are the key findings for each variable group.           
+            Extreme values and outliers were analyzed for all variable groups (**time series**) to identify extreme values or ouliers.
+            Below are the key findings for each variable group.
             """)
 
       # Simulated summary of outlier analysis (replace with actual data as needed)
@@ -105,14 +105,14 @@ def display_page():
         })
 
       with st.expander("📊 Extreme Values and Outliers Overview"):
-            
+
             # Display the Summary Table
             st.table(outlier_summary)
 
             # Notes
             st.markdown("""
             #### 📝 Notes:
-            - **IQR Method Limitation**: The commonly used IQR (Interquartile Range) method for outlier detection was not applicable 
+            - **IQR Method Limitation**: The commonly used IQR (Interquartile Range) method for outlier detection was not applicable
                 to this dataset due to its **skewed distribution**.
             - **Alternative Approach**: Instead, statistical and visual methods were used:
                 - Extreme values were inspected using `describe()` to identify minimum, maximum, and statistical ranges.
@@ -121,7 +121,7 @@ def display_page():
       # Missing Values
       st.markdown("### Missing Values")
       st.markdown("""
-            Missing values were analyzed across all variable groups to ensure data completeness, a fundamental aspect of data quality. 
+            Missing values were analyzed across all variable groups to ensure data completeness, a fundamental aspect of data quality.
             Handling missing values appropriately is crucial for ensuring robust model performance.
             Below is a summary of missing values for each variable group along with the proposed handling strategies:
             """)
@@ -130,13 +130,13 @@ def display_page():
       missing_summary = pd.DataFrame({
             "Variable Group": ["bg", "insulin", "carbs", "hr", "steps", "cals", "activity", "bg+1:00"],
             "Missing Percentage": [
-                "1.5% - 15.4%", 
-                "~5.3%", 
-                "~98.5%", 
-                "~29.1%", 
-                "~54%", 
-                "~20%", 
-                "~98.4%", 
+                "1.5% - 15.4%",
+                "~5.3%",
+                "~98.5%",
+                "~29.1%",
+                "~54%",
+                "~20%",
+                "~98.4%",
                 "0%"
             ],
             "Handling Strategy": [
@@ -161,18 +161,18 @@ def display_page():
                     #### 📝 Notes:
                     - The **bg+1:00** target variable has no missing values, requiring no further action.
                     - The **carbs** and **activity** groups have the highest missing percentages (~98.5% and ~98.4%). These variables may be excluded if they do not improve model predictions.
-                    - For all other variables, interpolation and imputation methods will be applied during the preprocessing phase to address missing values.            
+                    - For all other variables, interpolation and imputation methods will be applied during the preprocessing phase to address missing values.
                     """)
-        
+
       # =======================================
       st.markdown("## <a name='data-distributions'></a> Data Distribution", unsafe_allow_html=True)
 
       st.markdown("""
-            This section provides insights into the distributions of both independent variables (features) and the target variable across the dataset. 
+            This section provides insights into the distributions of both independent variables (features) and the target variable across the dataset.
             Visualizations highlight variability, skewness, and patterns within patient data, helping to identify key trends and relationships.
             """)
-    
-      
+
+
       relative_path = os.path.join("reports", "final-report", "02-exploratory-data-analysis", "04-data-distribution.ipynb")
       ntbk_path = os.path.join(project_root, relative_path)
 
@@ -182,9 +182,9 @@ def display_page():
       code_cells = extract_code_cells(ntbk_path)
 
       with st.expander("🔢 Numeric Features and the Target Variable"):
-            
+
             tab1, tab2 = st.tabs(["📈 Feature Distributions", "💻 Code"])
-            
+
             with tab1:
                 st.image(images[0])
                 st.markdown("""
@@ -201,17 +201,17 @@ def display_page():
                         - Positively skewed distributions with finer granularity for 5 min resolution.
                     5. **Calories Burned (cals)**:
                         - Consistent across patients with fewer outliers.
-                        - Most values cluster in lower ranges, with the 5 min resolution capturing finer details.        
+                        - Most values cluster in lower ranges, with the 5 min resolution capturing finer details.
                 """)
 
                 with tab2:
-                    code = code_cells[2]                    
-                    st.code(code, language="python")       
+                    code = code_cells[2]
+                    st.code(code, language="python")
 
       with st.expander("🏃 Activity Levels"):
-            
+
             tab1, tab2 = st.tabs(["🔥 Heatmap", "💻 Code"])
-            
+
             with tab1:
                 st.image(images[1])
 
@@ -220,11 +220,11 @@ def display_page():
                     - Activities like “Walk” are commonly logged across patients, with distinct patterns for individuals.
                     - Heatmap shows diverse activity patterns, e.g., patient p01 logs many activities, while p10 specializes in running.
                     """)
-            
+
             with tab2:
                 code = code_cells[3]
-                st.code(code, language="python")       
-            
+                st.code(code, language="python")
+
       # Summary
       with st.expander("📜 Summary Key Points"):
             st.markdown("""
@@ -237,15 +237,15 @@ def display_page():
             3. **Skewed Distributions**:
                 - The most date are right-skewed which will be addressed during the data preprocessing phase.
             """)
-    
+
       # =======================================
       st.markdown("## <a name='data-correlation'></a>  Data Correlation", unsafe_allow_html=True)
 
       st.markdown("""
-            This section analyzes and visualizes relationships between independent variables and the target variable **``bg+1:00``**. 
+            This section analyzes and visualizes relationships between independent variables and the target variable **``bg+1:00``**.
             Correlations help identify features with the strongest influence on predicting future blood glucose levels, guiding feature selection for modelling.
             """)
-        
+
       relative_path = os.path.join("reports", "final-report", "02-exploratory-data-analysis", "05-data-correlation.ipynb")
       ntbk_path = os.path.join(project_root, relative_path)
 
@@ -259,7 +259,7 @@ def display_page():
             st.markdown("""
             Heatmap of all numerical variables shows strong self-correlations (e.g., ``bg`` lag features) and weaker inter-variable relationships.
             """)
-            
+
       with st.expander("🔗 Correlation of the Target Variable Against All Features"):
             st.image(images[1])
 
@@ -267,7 +267,7 @@ def display_page():
             st.markdown("""
             This heatmap focuses on ``bg+1:00``, highlighting the dominance of lagged bg features.
             """)
-            
+
       with st.expander("🔗 Correlation Between All Numeric Variables as a Time Series"):
             st.image(images[4])
 
@@ -284,11 +284,11 @@ def display_page():
                     """)
 
       # =======================================
-      st.markdown("## <a name='data-vizualization'></a>  Data Vizualization", unsafe_allow_html=True)
+      st.markdown("## <a name='data-visualisation'></a>  Data Visualisation", unsafe_allow_html=True)
 
       # Patient Time Series Overview Section
-      with st.expander("⏳ Patient Time Series Overview"):  
-              
+      with st.expander("⏳ Patient Time Series Overview"):
+
             relative_path = os.path.join("reports", "final-report", "02-exploratory-data-analysis", "03-patient-timeseries-overview.ipynb")
             ntbk_path = os.path.join(project_root, relative_path)
 
@@ -298,17 +298,17 @@ def display_page():
             code_cells = extract_code_cells(ntbk_path)
 
             st.markdown("""
-            This section explores individual patients' time series data to uncover daily and weekly patterns, 
+            This section explores individual patients' time series data to uncover daily and weekly patterns,
             providing insights into fluctuations and trends in key metrics such as blood glucose, heart rate, and activity levels.
             """)
 
             tab1, tab2 = st.tabs(["👤📊 Individual Trends", "💻 Code"])
-            
+
             with tab1:
                  # Visualization Section
                 st.markdown("#### Example Visualization: Patient p01 - Day 21")
                 st.markdown("""
-                The following plot illustrates the relationships between blood glucose levels, carbs and insulin intake, 
+                The following plot illustrates the relationships between blood glucose levels, carbs and insulin intake,
                 calories burned, and heart rate for Patient p01 on Day 21.
                 """)
 
@@ -326,26 +326,26 @@ def display_page():
                     - Morning activity shows increased calories burned and elevated heart rate.
                     - Suggests physical activity contributes to glucose stability.
                 """)
-                
+
                 st.markdown("#### Summary")
                 st.markdown("""
                 - Blood glucose fluctuations highlight the complexity of daily glucose management.
                 - Close alignment between insulin doses and carbohydrate intake reflects effective diabetes management.
                 - Physical activity, as indicated by calorie burn and heart rate, contributes to glucose stability.
                 """)
-            
+
             with tab2:
-                st.code(code_cells[1], language="python")     
-                st.code(code_cells[2], language="python")         
+                st.code(code_cells[1], language="python")
+                st.code(code_cells[2], language="python")
 
 
      # Load the data
       patients = load_data()
       # Transform the data using the Helper class
       patients_d = FakeDateCreator.create_pseudo_datetime(patients)
-       
 
-      with st.expander("📅 Interactive Plot for Spotting Daily BG Trends"):       
+
+      with st.expander("📅 Interactive Plot for Spotting Daily BG Trends"):
         # Inputs for filtering
         # 1. Dropdown for p_num
         available_patients = list(patients_d['p_num'].unique()) + ["all"] # Get all unique patient IDs and additional 'all' option
@@ -385,4 +385,4 @@ def display_page():
 
       # Link to the top at the bottom of the page
       st.markdown("<p style='text-align: right; font-size: 12px;'><a href='#top'>⬆️ To the Top</a></p>", unsafe_allow_html=True)
-            
+
