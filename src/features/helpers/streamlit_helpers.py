@@ -116,7 +116,7 @@ def load_model_data( model_name ):
     base_dir = os.path.dirname(__file__)
     train_file_name = os.path.join(base_dir,f'../../models/model_{model_id}/data/X_train.csv')
     test_file_name = os.path.join(base_dir,f'../../models/model_{model_id}/data/y_train.csv')
-    timestamps_file_name = os.path.join(base_dir,f'../../models/model_{model_id}/data/timestamps_ids.csv')
+    timestamps_file_name = os.path.join(base_dir,f'../../models/model_{model_id}/data/timestamps.csv')
 
     features = pd.read_csv( train_file_name , index_col=0 )
     target = pd.read_csv( test_file_name , index_col=0 )
