@@ -8,13 +8,17 @@ from modelling import modelling
 from predictions import predictions
 from intro import intro
 from conclusions import conclusions
+from theme_song import theme_song
 
 # define paths
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
+# set the page title
+st.set_page_config(page_title="BrisT1D on Kaggle", layout="wide")
+
 # setup the menu structure
 st.sidebar.title("Forecast Blood Glucose Levels for T1D Patients")
-pages = ["Introduction", "Exploratory Data Analysis", "Modelling", "Predictions", "Conclusion & Perspectives"]
+pages = ["Introduction", "Exploratory Data Analysis", "Modelling", "Predictions", "Conclusion & Perspectives", "Theme Song"]
 
 selected_page = st.sidebar.radio("Menu", pages)
 # Define a mapping for pages and their corresponding module files
@@ -23,7 +27,8 @@ page_modules = {
     "Exploratory Data Analysis": eda,
     "Modelling": modelling,
     "Predictions": predictions,
-    "Conclusion & Perspectives": conclusions
+    "Conclusion & Perspectives": conclusions,
+    "Theme Song": theme_song,
 }
 
 st.sidebar.info(load_markdown(os.path.join(current_dir, "markdown", "team.md")))

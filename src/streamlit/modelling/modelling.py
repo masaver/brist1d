@@ -11,9 +11,14 @@ report_path = os.path.join(project_root, 'reports', 'final-report')
 
 def display_page():
     st.title("Modelling")
-    st.markdown("## Tooling")
 
-    expand = st.expander("### 📋 **Custom Transformers and Pipelines**")
+    st.markdown("""
+    As team we decided to investigate individually different approaches to the problem. To handle data consistently we developed common helpers and tools for data preprocessing, feature engineering, and modelling.
+    """)
+
+    st.markdown("## Tools")
+
+    expand = st.expander("### ⚙️ **Custom Transformers and Pipelines**")
     with expand:
         col1, col2 = st.columns(2)
         with col1:
@@ -62,7 +67,7 @@ def display_page():
         ])
         """)
 
-    expand = st.expander("### 📊 **Hyper Parameter Optimizations**")
+    expand = st.expander("### 📈 **Hyper Parameter Optimizations**")
     with expand:
         col1, col2 = st.columns(2)
         with col1:
@@ -88,7 +93,7 @@ def display_page():
         xgb_model = xgb_tuner.best_model
         """)
 
-    expand = st.expander("### 📈 **Custom Splitter**")
+    expand = st.expander("### 🔀 **Custom Splitter**")
     with expand:
         col1, col2 = st.columns(2)
         with col1:
@@ -107,17 +112,21 @@ def display_page():
 
     st.markdown("## Modelling Steps")
 
+    st.markdown("""
+    From the four models we developed, the two best models were selected for this presentation.
+    """)
+
     # Header =======================================
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("### MaverickSensor (Model 1)")
+        st.markdown("#### MaverickSensor (Model 1)")
     with col2:
-        st.markdown("### RapidJuxtapose (Model 2)")
+        st.markdown("#### RapidJuxtapose (Model 2)")
 
     # Data Augmentation =======================================
     col1, col2 = st.columns(2)
     with col2:
-        expand = st.expander("Data Augmentation")
+        expand = st.expander(" ⏫ Data Augmentation")
         with expand:
             st.markdown("""
             - Use test data for unbiased model training
@@ -125,7 +134,7 @@ def display_page():
             """)
 
     # Data Cleaning and Feature Engineering =======================================
-    expand = st.expander("Data Cleaning and Feature Engineering")
+    expand = st.expander(" ❌ Data Cleaning and Feature Engineering")
     with expand:
         st.markdown("""
         - **Data Cleaning**: Remove parameters with high missing values (Carbs, Activity).
@@ -135,37 +144,37 @@ def display_page():
         """)
 
     # Data Preliminary Modelling =======================================
-    expand = st.expander("Preliminary Modelling (Lazy Predict)")
+    expand = st.expander(" 📝 Preliminary Modelling (Lazy Predict)")
     with expand:
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("""
             **Model Selection**
-            | Model       | RMSE | Time Taken |
-            | ----------- | ---- | ---------- |
-            | XGBRegressor | 1.82 | 5.80s |
-            | HGBRegressor | 1.90 | 9.92s |
+            | Model         | RMSE | Time Taken |
+            | ------------- | ---- | ---------- |
+            | XGBRegressor  | 1.82 | 5.80s |
+            | HGBRegressor  | 1.90 | 9.92s |
             | LGBMRegressor | 1.90 | 7.96s |
-            | Lasso | 2.06 | 2.93s |
-            | Ridge | 2.07 | 1.25s |
-            | KNNRegressor | 2.10 | 10.85s |
+            | Lasso         | 2.06 | 2.93s |
+            | Ridge         | 2.07 | 1.25s |
+            | KNNRegressor  | 2.10 | 10.85s |
 
             """)
         with col2:
             st.markdown("""
             **Model Selection**
-            | Model       | RMSE | Time Taken |
-            | ----------- | ---- | ---------- |
-            | HGBRegressor | 1.82 | 5.80s |
-            | LassoLarsIC | 1.90 | 9.92s |
-            | KNNRegressor | 1.90 | 7.96s |
-            | XGBRegressor | 2.06 | 2.93s |
+            | Model        | RMSE | Time Taken |
+            | ------------ | ---- | ---------- |
+            | XGBRegressor | 1.90 |  4.30s |
+            | KNNRegressor | 1.93 | 21.22s |
+            | HGBRegressor | 1.95 | 13.08s |
+            | LassoLarsIC  | 2.10 |  2.10s |
             """)
 
     # Feature Selection =======================================
     col1, col2 = st.columns(2)
     with col1:
-        expand = st.expander("Feature Selection (by SHAP)")
+        expand = st.expander(" ☑️ Feature Selection (by SHAP)")
         with expand:
             img_outputs_02 = extract_notebook_images(os.path.join(report_path, '04-modelling', '01-model-1', '02-feature-importance-with-SHAP.ipynb'))
             st.image(img_outputs_02[-3])
@@ -176,7 +185,7 @@ def display_page():
             - `day_phase_evening`, `day_phase_night`
             """)
     with col2:
-        expand = st.expander("Feature Selection (by importance)")
+        expand = st.expander(" ☑️ Feature Selection (by importance)")
         with expand:
             img_outputs_02 = extract_notebook_images(os.path.join(report_path, '04-modelling', '02-model-2', '04-feature-selection.ipynb'))
             st.image(img_outputs_02[0])
@@ -191,7 +200,7 @@ def display_page():
             """)
 
     # Modelling =======================================
-    expand = st.expander("Modelling")
+    expand = st.expander(" 🔮 Modelling")
     with expand:
         col1, col2 = st.columns(2)
         with col1:
@@ -214,7 +223,7 @@ def display_page():
             """)
 
     # Evaluation =======================================
-    expand = st.expander("Evaluation (Prediction and Submission)")
+    expand = st.expander(" ✅ Evaluation (Prediction and Submission)")
     with expand:
         col1, col2 = st.columns(2)
         with col1:

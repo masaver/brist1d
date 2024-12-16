@@ -5,7 +5,7 @@ Two Modelling Approaches
 
 We developed two different modelling approaches. The first approach utilized the training data as provided, while the second one augmented the training dataset by generating additional data from the test data, shifting it by one to four hours. This data augmentation strategy significantly improved the model’s performance by providing additional training examples.
 
-Our continious trials with different types of models achieved a Kaggle Score of 2.45 on the public leaderboard, which was a significant improvement over the baseline model. So we kept further validations using a custom cross-validation strategy, which showed consistent results across different folds. **Of note, our final solution was ranked in the top 1% of the Kaggle public Leaderboard**.
+Our continuous trials with different types of models achieved a Kaggle Score of 2.45 on the public leaderboard, which was a significant improvement over the baseline model. So we kept further validations using a custom cross-validation strategy, which showed consistent results across different folds. **Of note, our final solution was ranked in the top 1% of the Kaggle public Leaderboard**.
 
 # Future Directions
 
