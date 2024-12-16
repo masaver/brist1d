@@ -13,6 +13,9 @@ from theme_song import theme_song
 # define paths
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
+# set the page title
+st.set_page_config(page_title="BrisT1D on Kaggle", layout="wide")
+
 # setup the menu structure
 st.sidebar.title("Forecast Blood Glucose Levels for T1D Patients")
 pages = ["Introduction", "Exploratory Data Analysis", "Modelling", "Predictions", "Conclusion & Perspectives", "Theme Song"]
