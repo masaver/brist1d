@@ -1,20 +1,14 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import matplotlib.dates as mdates
 import os
-import sys
 
-from src.features.helpers.FakeDateCreator import FakeDateCreator
 # from src.features.helpers.streamlit_helpers import load_markdown, display_notebook
 from src.features.helpers.streamlit_helpers import  load_model_data, display_rand_row, rand_daily_profile, global_predictions
 
 # define paths
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..', '..'))
-
 
 def display_page():
     st.title("Predictions")

@@ -3,10 +3,8 @@ import io
 from PIL import Image
 import streamlit as st
 import nbformat
-import math
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-
 
 # Function to load Markdown content
 def load_markdown(file_path):
@@ -27,7 +25,7 @@ def display_notebook(notebook_path):
         elif cell['cell_type'] == 'code':
             # Render Code cells
             st.code(cell['source'])
-            
+
             # Display outputs if available
             if 'outputs' in cell:
                 for output in cell['outputs']:
@@ -56,7 +54,34 @@ def extract_notebook_images(notebook_path):
                     # Open the image using PIL and append it to the list
                     image = Image.open(io.BytesIO(image_data))
                     images.append(image)
+
     return images
+
+def extract_html_outputs(notebook_path):
+    with open(notebook_path, "r", encoding="utf-8") as f:
+        notebook = nbformat.read(f, as_version=4)
+
+    html_outputs = []
+    for cell in notebook.cells:
+        if cell.cell_type == "code":
+            for output in cell.get("outputs", []):
+                if "text/html" in output.get("data", {}):
+                    html_outputs.append(output["data"]["text/html"])
+
+    return html_outputs
+
+def extract_text_outputs(notebook_path):
+    with open(notebook_path, "r", encoding="utf-8") as f:
+        notebook = nbformat.read(f, as_version=4)
+
+    text_outputs = []
+    for cell in notebook.cells:
+        if cell.cell_type == "code":
+            for output in cell.get("outputs", []):
+                if "text/plain" in output.get("data", {}):
+                    text_outputs.append(output["data"]["text/plain"])
+
+    return text_outputs
 
 # Function to extract images from the notebook
 def extract_code_cells(notebook_path):
@@ -186,6 +211,9 @@ def global_predictions():
     # subset cols 
     common_preds_df = common_preds_df[['p_id','time','bg+1:00_m1','bg+1:00_pred_m1','bg+1:00_pred_m2']]
 
+    #Create PseudoDaytime
+    common_preds_df = create_pseudo_datetime( common_preds_df )
+
     return common_preds_df
 
 # Function to plot a random daily profile for a patient
@@ -193,7 +221,6 @@ def rand_daily_profile( p_id , common_preds_df ):
 
     import numpy as np
     import math 
-    from io import BytesIO
     import matplotlib.pyplot as plt
 
     dfs = common_preds_df[ common_preds_df['p_id'] == p_id ]
