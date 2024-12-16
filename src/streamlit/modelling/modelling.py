@@ -150,25 +150,25 @@ def display_page():
         with col1:
             st.markdown("""
             **Model Selection**
-            | Model       | RMSE | Time Taken |
-            | ----------- | ---- | ---------- |
-            | XGBRegressor | 1.82 | 5.80s |
-            | HGBRegressor | 1.90 | 9.92s |
+            | Model         | RMSE | Time Taken |
+            | ------------- | ---- | ---------- |
+            | XGBRegressor  | 1.82 | 5.80s |
+            | HGBRegressor  | 1.90 | 9.92s |
             | LGBMRegressor | 1.90 | 7.96s |
-            | Lasso | 2.06 | 2.93s |
-            | Ridge | 2.07 | 1.25s |
-            | KNNRegressor | 2.10 | 10.85s |
+            | Lasso         | 2.06 | 2.93s |
+            | Ridge         | 2.07 | 1.25s |
+            | KNNRegressor  | 2.10 | 10.85s |
 
             """)
         with col2:
             st.markdown("""
             **Model Selection**
-            | Model       | RMSE | Time Taken |
-            | ----------- | ---- | ---------- |
-            | HGBRegressor | 1.82 | 5.80s |
-            | LassoLarsIC | 1.90 | 9.92s |
-            | KNNRegressor | 1.90 | 7.96s |
-            | XGBRegressor | 2.06 | 2.93s |
+            | Model        | RMSE | Time Taken |
+            | ------------ | ---- | ---------- |
+            | XGBRegressor | 1.90 |  4.30s |
+            | KNNRegressor | 1.93 | 21.22s |
+            | HGBRegressor | 1.95 | 13.08s |
+            | LassoLarsIC  | 2.10 |  2.10s |
             """)
 
     # Feature Selection =======================================
