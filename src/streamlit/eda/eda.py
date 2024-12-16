@@ -8,7 +8,6 @@ import os
 import sys
 
 from src.features.helpers.FakeDateCreator import FakeDateCreator
-#from src.features.helpers.streamlit_helpers import load_markdown, display_notebook
 from src.features.helpers.streamlit_helpers import extract_notebook_images, extract_code_cells
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
@@ -31,9 +30,9 @@ def display_page():
       st.title("Exploratory Data Analysis") 
 
       st.markdown("### 🔍 Overview")
+   
       st.markdown("""
-        - [Dataset description and structure](#dataset-description-and-structure)
-        - [Quality control and assurance (consistency, ouliers, missing values)](#quality-control-and-assurance)
+        - [Data quality (consistency, ouliers, missing values)](#quality-control-and-assurance)
         - [Data distributions](#data-distributions)
         - [Data correlation](#data-correlation)
         - [Data vizualization](#data-vizualization)
@@ -41,120 +40,19 @@ def display_page():
 
 
       # =======================================
-      st.markdown("## <a name='dataset-description-and-structure'></a> Dataset Description and Structure", unsafe_allow_html=True)
-
-      st.markdown("""
-        We're provided with two datasets: **Train** and **Test**, tailored for blood glucose prediction and for the model evaluation. 
-
-        **Training Set:**
-        - Comprises the first three months for 9 participants.
-        - Includes future blood glucose values for model training.
-        - Samples are chronological with overlap.
-
-        **Testing Set:**
-        - Covers the later study period for 15 unseen participants.
-        - Randomized, non-overlapping samples.
-        """)
-      st.markdown("""
-        ### Challenges:
-        - **Missing Data:** Incomplete or noisy medical data.
-        - **Device Variability:** Different CGM, insulin pump, and smartwatch models introduce variability.
-        - **Unseen Participants:** Test set includes participants absent from training, adding complexity.
-        """)
-
-      # Load the data
-      patients = load_data()
-      # Transform the data using the Helper class
-      patients_d = FakeDateCreator.create_pseudo_datetime(patients)
-
-      # Display dataset with toggle
-      with st.expander("🔍 View Training Dataset (Top 10 Rows)"):
-            st.dataframe(patients.head(10), use_container_width=True)
-
-      # Compact statistics for quick insights
-      with st.expander("🔢 Quick Insights"):
-            
-            col1, col2 = st.columns(2)
-
-            with col1:
-                st.write("**Total Records:**")
-                st.write(f"📊 `{len(patients):,}`")
-
-                st.write("**Number of Columns:**")  
-                st.write(f"📋 `{patients.shape[1]}`")
-
-            with col2:
-                st.write("**Unique Participants:**")
-                st.write(f"👤 `{patients['p_num'].nunique()}`")
-
-                st.write("**Date Range:**")
-                st.write(f"📅 `{patients_d['pseudo_datetime'].min().date()} - {patients_d['pseudo_datetime'].max().date()}`")
-
-      # Column Desciption
-      # Define column description data as a dictionary
-      column_data = {
-            "#Column": ["1", "2", "3", "4-75", "76-147", "148-219", "220-291", "292-363", "364-435", "436-507", "508"],
-            "Name": ["id", "p_num", "time", "bg-X:XX", "insulin-X:XX", "carbs-X:XX", "hr-X:XX", "steps-X:XX", "cals-X:XX", "activity-X:XX", "bg-X:XX+1"],
-            "Description": [
-                "row id consisting of participant number and a count for that participant",
-                "participant number",
-                "time of day in the format HH:MM:SS",
-                "blood glucose reading in mmol/L, X:XX(H:MM) time in the past",
-                "total insulin dose received in units in the last 5 minutes, X:XX(H:MM) time in the past",
-                "total carbohydrate value consumed in grammes in the last 5 minutes, X:XX(H:MM) time in the past",
-                "mean heart rate in beats per minute in the last 5 minutes, X:XX(H:MM) time in the past",
-                "total steps walked in the last 5 minutes, X:XX(H:MM) time in the past",
-                "total calories burnt in the last 5 minutes, X:XX(H:MM) time in the past",
-                "self-declared activity performed in the last 5 minutes, X:XX(H:MM) time in the past",
-                "blood glucose reading in mmol/L, X:XX+1(H:MM) time in the future, not provided in test.csv",
-            ],
-            "Type": ["string", "string", "string", "float", "float", "float", "float", "float", "string", "string", "float"]
-        }
-
-      # Convert to DataFrame
-      column_description_df = pd.DataFrame(column_data)
-
-      # Display column description in an expander
-      with st.expander("📋 Column Description"):
-          st.table(column_description_df)
-
-        
-      # Simulated DataFrame for Time Resolution
-      resolutions = pd.DataFrame({
-            "p_num": ["p01", "p02", "p03", "p04", "p05", "p06", "p10", "p11", "p12"],
-            "time_resolution_in_minutes": [15, 5, 5, 5, 15, 5, 15, 5, 5]
-        })
-      # Add a column for color grouping
-      resolutions['color_group'] = resolutions['time_resolution_in_minutes'].map({5: "5 min", 15: "15 min"})
-
-      # Display "Time Resolution" Section
-      with st.expander("⏱️ Time Resolution"):
-            #st.markdown("### Time Resolution per Patient in Training Data")
-            
-            plt.figure(figsize=(6, 4))
-            sns.barplot(x="p_num", y="time_resolution_in_minutes", data=resolutions, hue="color_group", palette={"5 min": "skyblue", "15 min": "orange"})
-            plt.title("Time Resolution per Patient in Training Data")
-            plt.xlabel("Patient Number")
-            plt.ylabel("Time Resolution (Minutes)")
-            plt.tight_layout()
-            
-            # Render the plot in Streamlit
-            st.pyplot(plt)
-
-        # =======================================
-      st.markdown("## <a name='quality-control-and-assurance'></a> Quality Control and Assurance", unsafe_allow_html=True)
+      st.markdown("## <a name='quality-control-and-assurance'></a> Data Quality and Consistency", unsafe_allow_html=True)
       st.markdown("### Data Consistency")
 
       st.markdown("""
             Before starting the analysis, we validated the dataset to ensure consistency and reliability. 
             The training dataset consists of daily time series for each patient, and the validation focused on checking the sequential order of rows and consistency of lag features.
             
-            #### Validation Approach:
+            **Validation Approach:**
             - Compared lag features row-by-row with the preceding rows.
             - Flagged gaps or inconsistencies in the time series data.
             """)
         
-      with st.expander("✅ Data Consitency Control"):
+      with st.expander("✅ Data Consistency Control"):
             # Simulated Validation Results DataFrame
             validation_results = pd.DataFrame({
                 "hr": [0, 0, 0, 0, 0, 0, 0, 68, 0],
@@ -177,32 +75,26 @@ def display_page():
             plt.tight_layout()
             st.pyplot(plt)
 
-            # Conclusion
+            # Notes
             st.markdown("""
-            #### Conclusion
+            #### 📝 Notes:
             - The dataset is highly reliable, with only a few inconsistencies detected.
             - **Patient p11** shows minor issues in `hr`, `steps`, and `cals` due to overlapping time values.
             - These can be fixed by shifting the datetime index for specific rows.
             - No discrepancies were found in the target column (`bg+1:00`), confirming dataset validity.
             """)
 
-        # Outlier and Anomaly Section
-      st.markdown("### Outliers and Anomalies")
+      # Outlier and Anomaly Section
+      st.markdown("### Extreme Values and Outliers")
       st.markdown("""
-            Outliers and anomalies were analyzed for all variable groups to identify extreme values or ouliers. 
-            Below are the key findings for each variable group.
-            #### 📝 Notes:
-            - **IQR Method Limitation**: The commonly used IQR (Interquartile Range) method for outlier detection was not applicable 
-                to this dataset due to its **skewed distribution**.
-            - **Alternative Approach**: Instead, statistical and visual methods were used:
-                - Extreme values were inspected using `describe()` to identify minimum, maximum, and statistical ranges.
-                - Distributions were analyzed using histograms and density plots for more detailed insights.
+            Extreme values and outliers were analyzed for all variable groups (**time series**) to identify extreme values or ouliers. 
+            Below are the key findings for each variable group.           
             """)
 
       # Simulated summary of outlier analysis (replace with actual data as needed)
       outlier_summary = pd.DataFrame({
             "Variable Group": ["bg", "insulin", "carbs", "hr", "steps", "cals"],
-            "Key Findings": [
+            "Findings": [
                 "Extreme values (2.2 to 27.8 mmol/L) observed, but still realistic for some patients.",
                 "Negative values detected for Patient p12 (e.g., -0.3078). Positive extremes found up to 46.311 units.",
                 "Values range from 1.0 to 852.0 grams. Many missing values; potential exclusion from the model.",
@@ -212,17 +104,18 @@ def display_page():
             ]
         })
 
-      with st.expander("📊 Outliers and Anomalies"):
+      with st.expander("📊 Extreme Values and Outliers Overview"):
             
             # Display the Summary Table
             st.table(outlier_summary)
 
-            # Additional Notes or Visualizations
+            # Notes
             st.markdown("""
             #### 📝 Notes:
-            - Negative insulin values for Patient p12 are likely due to recording issues and will be replaced during preprocessing.
-            - Extreme values for heart rate (p06, p02) should be carefully considered in a real life, as they might indicate valid clinical signals.
-            - The `carbs` variable group has high missingness (98%) and may be excluded from modeling.
+            - **IQR Method Limitation**: The commonly used IQR (Interquartile Range) method for outlier detection was not applicable 
+                to this dataset due to its **skewed distribution**.
+            - **Alternative Approach**: Instead, statistical and visual methods were used:
+                - Extreme values were inspected using `describe()` to identify minimum, maximum, and statistical ranges.
             """)
 
       # Missing Values
@@ -259,38 +152,18 @@ def display_page():
         })
 
       # Missing Values Section
-      with st.expander("🚨 Missing Values"):
+      with st.expander("🚨 Missing Values Overview"):
             # Display the Summary Table
             st.table(missing_summary)
 
-      # Additional Notes
-      st.markdown("""
-            #### 📝 Notes:
-            - The **bg+1:00** target variable has no missing values, requiring no further action.
-            - The **carbs** and **activity** groups have the highest missing percentages (~98.5% and ~98.4%). These variables may be excluded if they do not improve model predictions.
-            - For all other variables, interpolation and imputation methods will be applied during the preprocessing phase to address missing values.
-            - The commonly used **IQR (Interquartile Range)** method for outlier detection was avoided due to skewed data distributions.
-            """)
-        
-      # Summary
-      st.markdown("### Summary")
-      st.markdown("""
-            This dataset presents challenges such as inconsistent time intervals, missing data, outliers, skewed distributions, and potential biases. 
-            The proposed solution is to resample data to 5-minute intervals while addressing missing values, outliers, and multicollinearity during preprocessing. Biases related to selection, measurement, and sampling will require careful interpretation of results.
-            """)
-      with st.expander("📜 Summary Key Points"):
+            # Additional Notes
             st.markdown("""
-            1. **Data Inconsistencies**:
-                - Different time intervals: Patient data recorded at either 5-minute or 15-minute intervals.
-                - **Solution**: Up-sampling to 5-minute intervals with interpolation for 15-minute patients.
-            2. **Missing Values**:
-                - High missingness in variables like `carbs-*` and `activity-*`, which will be dropped for modeling.
-                - Remaining missing values in other features will be imputed and interpolated accordingly.
-            3. **Potential Biases**:
-                - **Selection Bias**: Results may not generalize if participants are not diverse.
-            """)
-
-
+                    #### 📝 Notes:
+                    - The **bg+1:00** target variable has no missing values, requiring no further action.
+                    - The **carbs** and **activity** groups have the highest missing percentages (~98.5% and ~98.4%). These variables may be excluded if they do not improve model predictions.
+                    - For all other variables, interpolation and imputation methods will be applied during the preprocessing phase to address missing values.            
+                    """)
+        
       # =======================================
       st.markdown("## <a name='data-distributions'></a> Data Distribution", unsafe_allow_html=True)
 
@@ -351,18 +224,26 @@ def display_page():
             with tab2:
                 code = code_cells[3]
                 st.code(code, language="python")       
-      st.markdown("""
-            #### Conclusion:
-            The dataset reveals significant variability and skewed distributions across features, emphasizing the need for personalized analysis. 
-            Finer granularity from the 5 min resolution enhances detail, while individual activity patterns underline the complexity of patient behavior.
+            
+      # Summary
+      with st.expander("📜 Summary Key Points"):
+            st.markdown("""
+            1. **Data Inconsistencies**:
+                - Different time intervals: Patient data recorded at either 5-minute or 15-minute intervals.
+                - **Solution**: Up-sampling to 5-minute intervals with interpolation for 15-minute patients.
+            2. **Missing Values**:
+                - High missingness in variables like `carbs-*` and `activity-*`, which will be dropped for modelling.
+                - Remaining missing values in other features will be imputed and interpolated accordingly.
+            3. **Skewed Distributions**:
+                - The most date are right-skewed which will be addressed during the data preprocessing phase.
             """)
-
+    
       # =======================================
       st.markdown("## <a name='data-correlation'></a>  Data Correlation", unsafe_allow_html=True)
 
       st.markdown("""
             This section analyzes and visualizes relationships between independent variables and the target variable **``bg+1:00``**. 
-            Correlations help identify features with the strongest influence on predicting future blood glucose levels, guiding feature selection for modeling.
+            Correlations help identify features with the strongest influence on predicting future blood glucose levels, guiding feature selection for modelling.
             """)
         
       relative_path = os.path.join("reports", "final-report", "02-exploratory-data-analysis", "05-data-correlation.ipynb")
@@ -390,17 +271,17 @@ def display_page():
       with st.expander("🔗 Correlation Between All Numeric Variables as a Time Series"):
             st.image(images[4])
 
-      # Key Observations
-      st.markdown("#### Summary")
-      st.markdown("""
-            1. **Lagged ``bg`` Features**:
-                - Strong correlations with ``bg+1:00`` highlight the temporal dependency of blood glucose levels.
-            2. **Carbs and Insulin**:
-                - Moderate correlations with ``bg+1:00`` reflect their role in glucose regulation.
-                - A notable correlation between carbs and insulin emphasizes their dietary relationship.
-            3. **Activity Metrics (Steps, Cals, HR)**:
-                - Weak correlations with ``bg+1:00`` indicate an indirect or limited impact.
-            """)
+            # Key Observations
+            st.markdown("#### 📝 Notes:")
+            st.markdown("""
+                    1. **Lagged ``bg`` Features**:
+                        - Strong correlations with ``bg+1:00`` highlight the temporal dependency of blood glucose levels.
+                    2. **Carbs and Insulin**:
+                        - Moderate correlations with ``bg+1:00`` reflect their role in glucose regulation.
+                        - A notable correlation between carbs and insulin emphasizes their dietary relationship.
+                    3. **Activity Metrics (Steps, Cals, HR)**:
+                        - Weak correlations with ``bg+1:00`` indicate an indirect or limited impact.
+                    """)
 
       # =======================================
       st.markdown("## <a name='data-vizualization'></a>  Data Vizualization", unsafe_allow_html=True)
@@ -457,7 +338,12 @@ def display_page():
                 st.code(code_cells[1], language="python")     
                 st.code(code_cells[2], language="python")         
 
-            
+
+     # Load the data
+      patients = load_data()
+      # Transform the data using the Helper class
+      patients_d = FakeDateCreator.create_pseudo_datetime(patients)
+       
 
       with st.expander("📅 Interactive Plot for Spotting Daily BG Trends"):       
         # Inputs for filtering
