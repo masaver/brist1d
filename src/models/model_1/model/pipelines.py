@@ -4,7 +4,7 @@ from sklearn.pipeline import Pipeline
 from src.features.transformers import DayPhaseTransformer, DropColumnsTransformer, FillPropertyNaNsTransformer, GetDummiesTransformer, \
     StandardScalerTransformer, PropertyOutlierTransformer, RenameColumnsTransformer, ExtractColumnsTransformer
 
-cols_2_extract = ['hr_0_00', 'bg_0_15', 'day_phase_evening', 'bg_0_00', 'insulin_0_00', 'day_phase_night', 'bg_0_10']
+cols_2_extract = ['hr_0_00', 'bg_0_15', 'day_phase_evening', 'bg_0_00', 'insulin_0_00', 'day_phase_night', 'bg_0_10', 'bg+1:00']
 
 def filter_function(x): return x < 0
 

@@ -5,6 +5,7 @@ from src.features.helpers.streamlit_helpers import load_markdown
 from importlib import import_module
 from eda import eda
 from modelling import modelling
+from predictions import predictions
 
 # define paths
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +21,7 @@ page_modules = {
     # "Kaggle Challenge": "???",
     "Exploratory Data Analysis": eda,
     "Modelling": modelling,
-    # "Predictions": "???",
+    "Predictions": predictions,
     # "Conclusion & Perspectives": "???"
 }
 
