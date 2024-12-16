@@ -172,47 +172,59 @@ def create_pseudo_datetime(patients_df):
         return transformed_df
 
 # Function to generate a global data frames of bg+1:00 real and predicted values
-def global_predictions():
+def global_predictions( output_dir ):
 
     import pandas as pd
+    import os
 
-    # Read the data from models 1 & 2
-    model_1 , features_1 , target_1 , timeStamps_1 = load_model_data( model_name = "Model 1 - MaverickSensor" )
-    model_2 , features_2 , target_2 , timeStamps_2 = load_model_data( model_name = "Model 2 - RapidJuxtapose"  )
+    # File name for the output table
+    output_name = os.path.join( output_dir , 'global_predictions.csv' )
 
-    # Parse the data from the models & generate predictions
-    # NOTE: here you can only join points from the train.csv, because augmented points are not present in Model 1
+    #iRead or create a .csv file with global predictions
+    if os.path.exists( output_name ):
+        common_preds_df = pd.read_csv( output_name )
+        common_preds_df['pseudo_datetime'] = pd.to_datetime( common_preds_df['pseudo_datetime'] )
+    else:
+        # Read the data from models 1 & 2
+        model_1 , features_1 , target_1 , timeStamps_1 = load_model_data( model_name = "Model 1 - MaverickSensor" )
+        model_2 , features_2 , target_2 , timeStamps_2 = load_model_data( model_name = "Model 2 - RapidJuxtapose"  )
 
-    pred_df_1 = target_1.copy()
-    pred_df_1['bg+1:00_pred'] = model_1.predict( features_1 )
-    pred_df_1['abs_error'] = abs(pred_df_1['bg+1:00_pred']-pred_df_1['bg+1:00'])
-    pred_df_1 = pred_df_1.join( timeStamps_1 )
-    pred_df_1.index = pd.MultiIndex.from_arrays([pred_df_1.index, pred_df_1['time']], names=['id', 'time'])
-    pred_df_1 = pred_df_1.drop( 'time' , axis = 1 )
+        # Parse the data from the models & generate predictions
+        # NOTE: here you can only join points from the train.csv, because augmented points are not present in Model 1
 
-    pred_df_2 = target_2.copy()
-    pred_df_2['bg+1:00_pred'] = model_2.predict( features_2 )
-    pred_df_2['abs_error'] = abs(pred_df_2['bg+1:00_pred']-pred_df_2['bg+1:00'])
-    pred_df_2 = pred_df_2.join( timeStamps_2 )
-    pred_df_2.index = pd.MultiIndex.from_arrays([pred_df_2.index, pred_df_2['time']], names=['id', 'time'])
-    pred_df_2 = pred_df_2.drop( 'time' , axis = 1 )
+        pred_df_1 = target_1.copy()
+        pred_df_1['bg+1:00_pred'] = model_1.predict( features_1 )
+        pred_df_1['abs_error'] = abs(pred_df_1['bg+1:00_pred']-pred_df_1['bg+1:00'])
+        pred_df_1 = pred_df_1.join( timeStamps_1 )
+        pred_df_1.index = pd.MultiIndex.from_arrays([pred_df_1.index, pred_df_1['time']], names=['id', 'time'])
+        pred_df_1 = pred_df_1.drop( 'time' , axis = 1 )
 
-    # Join predictions
-    common_preds_df = pred_df_1.join( pred_df_2 , lsuffix='_m1', rsuffix='_m2' )
+        pred_df_2 = target_2.copy()
+        pred_df_2['bg+1:00_pred'] = model_2.predict( features_2 )
+        pred_df_2['abs_error'] = abs(pred_df_2['bg+1:00_pred']-pred_df_2['bg+1:00'])
+        pred_df_2 = pred_df_2.join( timeStamps_2 )
+        pred_df_2.index = pd.MultiIndex.from_arrays([pred_df_2.index, pred_df_2['time']], names=['id', 'time'])
+        pred_df_2 = pred_df_2.drop( 'time' , axis = 1 )
 
-    # If needed, add a column with patient ids
-    p_ids = common_preds_df.index.get_level_values('id').tolist()
-    p_ids = [id.split('_')[0] for id in p_ids]
-    common_preds_df['p_id'] = p_ids
+        # Join predictions
+        common_preds_df = pred_df_1.join( pred_df_2 , lsuffix='_m1', rsuffix='_m2' )
 
-    # bring the time back from the index
-    common_preds_df = common_preds_df.reset_index(level=1)
+        # If needed, add a column with patient ids
+        p_ids = common_preds_df.index.get_level_values('id').tolist()
+        p_ids = [id.split('_')[0] for id in p_ids]
+        common_preds_df['p_id'] = p_ids
 
-    # subset cols 
-    common_preds_df = common_preds_df[['p_id','time','bg+1:00_m1','bg+1:00_pred_m1','bg+1:00_pred_m2']]
+        # bring the time back from the index
+        common_preds_df = common_preds_df.reset_index(level=1)
 
-    #Create PseudoDaytime
-    common_preds_df = create_pseudo_datetime( common_preds_df )
+        # subset cols 
+        common_preds_df = common_preds_df[['p_id','time','bg+1:00_m1','bg+1:00_pred_m1','bg+1:00_pred_m2']]
+
+        #Create PseudoDaytime
+        common_preds_df = create_pseudo_datetime( common_preds_df )
+
+        #Save the table
+        common_preds_df.to_csv( output_name , index=False )
 
     return common_preds_df
 
