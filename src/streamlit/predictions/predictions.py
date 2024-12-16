@@ -37,7 +37,7 @@ def display_page():
     model , features , target, _ = load_model_data( selected_option )
 
     st.markdown("""Click the button below to predict on a random data point ( time stamp )""")
-    if st.button("Generate Prediction"):
+    if st.button( "Generate Prediction" , key = "generate_prediction" ):
         st.write( display_rand_row( features , target , model ) )
 
 
@@ -48,6 +48,6 @@ def display_page():
     common_preds_df = global_predictions()
 
     st.markdown("""Click the button below to predict on a random data point ( time stamp )""")
-    if st.button(" Display random daily profile"):
+    if st.button("'Display random daily profile'",key='random_daily_profile'):
         fig , _ = rand_daily_profile( p_id_selected_option , common_preds_df )
         st.pyplot( fig )
